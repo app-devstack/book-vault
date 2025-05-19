@@ -1,6 +1,6 @@
 import { IconSymbol } from "@/components/IconSymbol";
 import { Text } from "@/components/Text";
-import { Book } from "@/utils/types";
+import { Book } from "@/db/types";
 import { Image as ExpoImage } from "expo-image";
 // import { appwriteConfig, database } from "@/utils/appwrite";
 import { Link } from "expo-router";
@@ -44,8 +44,7 @@ export default function Index() {
           targetURL:
             "https://booklive.jp/product/index/title_id/206670/vol_no/026",
           imageURL: "https://res.booklive.jp/206670/026/thumbnail/2L.jpg",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          addedAt: new Date(),
         },
         {
           id: "2",
@@ -54,8 +53,7 @@ export default function Index() {
           targetURL:
             "https://booklive.jp/product/index/title_id/222604/vol_no/028",
           imageURL: "https://res.booklive.jp/222604/028/thumbnail/2L.jpg",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          addedAt: new Date(),
         },
         {
           id: "3",
@@ -64,8 +62,7 @@ export default function Index() {
           targetURL:
             "https://booklive.jp/product/index/title_id/514170/vol_no/021",
           imageURL: "https://res.booklive.jp/514170/021/thumbnail/2L.jpg",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          addedAt: new Date(),
         },
       ] satisfies Book[];
 
@@ -159,7 +156,7 @@ function ItemTitleAndDescription({
   description,
 }: {
   title: string;
-  description: string;
+  description?: string | null;
 }) {
   return (
     <View style={{ gap: 4 }}>
@@ -169,7 +166,7 @@ function ItemTitleAndDescription({
   );
 }
 
-function ItemBookImg({ imageURL }: { imageURL?: string }) {
+function ItemBookImg({ imageURL }: { imageURL?: string | null }) {
   if (!imageURL) {
     return (
       <View
