@@ -4,9 +4,7 @@
 
 ## todo
 
-- serverにhonoでapiを設置
-- expo sqliteでローカルDBを作成
-- google books apiへの検索リクエスト処理を作成
+[view 👀](./doc/todos.md)
 
 ## folder structure
 
@@ -19,9 +17,8 @@ book-vault/
 
 ```
 
-## tools stack
+## tools
 
-| application    | stack                |
-|-----------|---------------------|
-| client | React Native, Expo, Drizzle |
-| server  | Hono, Cloudflare D1 |
+- react native
+- expo
+- drizzle
