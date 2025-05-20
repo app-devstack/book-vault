@@ -1,7 +1,7 @@
+import { DrizzleConfig } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { openDatabaseSync } from "expo-sqlite";
 import * as schema from "./schema";
-import { DrizzleConfig } from "drizzle-orm";
 
 const options = {
   casing: "snake_case" as const,
@@ -9,7 +9,7 @@ const options = {
   logger: true,
 } satisfies DrizzleConfig<typeof schema>;
 
-const expo = openDatabaseSync("db.db");
+const expo = openDatabaseSync("db.db", { enableChangeListener: true });
 const db = drizzle(expo, options);
 
 export default db;
