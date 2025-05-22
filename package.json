@@ -9,7 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-		"db:generate": "npx drizzle-kit generate",
+    "db:generate": "npx drizzle-kit generate",
     "deploy": "eas build --platform android --profile development",
     "preview": "eas build --platform android --profile preview"
   },
@@ -42,6 +42,7 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
+    "react-native-toast-message": "^2.3.0",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
     "uuid": "^11.1.0"
