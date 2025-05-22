@@ -4,7 +4,7 @@ import type { Book } from "@/db/types";
 import { Image as ExpoImage } from "expo-image";
 import { ExternalPathString, Link } from "expo-router";
 
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function BookItem(item: Book) {
   return (
@@ -69,19 +69,19 @@ function ItemBookImg({ imageURL }: { imageURL?: string | null }) {
   return (
     <>
       {imageURL ? (
-        <ExpoImage source={imageURL} style={bookStyle.img} />
+        <ExpoImage source={imageURL} style={styles.img} />
       ) : (
-        <View style={bookStyle.img} />
+        <View style={styles.img} />
       )}
     </>
   );
 }
 
-const bookStyle = {
+const styles = StyleSheet.create({
   img: {
     width: 64,
     height: 90,
     backgroundColor: "#dcdcdc",
     borderRadius: 4,
   },
-};
+});
