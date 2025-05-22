@@ -1,5 +1,7 @@
 ## Cloudflare Durable Objectの設定方法
 
+参考: https://developers.cloudflare.com/durable-objects/get-started/
+
 ---
 
 ### ✅ 全体の流れ（Durable Objects + Hono + Expo）
