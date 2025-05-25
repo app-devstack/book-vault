@@ -1,5 +1,6 @@
 import { Text } from "@/components/Text";
 import Button from "@/components/ui/button";
+import SearchBooks from "@/feature/register/search-books";
 import { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import Toast from "react-native-toast-message";
@@ -57,9 +58,14 @@ export default function Register() {
     </View>
   );
 
+  const API_NAME = process.env.EXPO_PUBLIC_API_NAME;
   return (
     <View style={styles.container}>
       {inputFields.map(renderInputField)}
+
+      <Text> {API_NAME}</Text>
+
+      <SearchBooks />
 
       <Button style={styles.button} onPress={handlePress}>
         追加

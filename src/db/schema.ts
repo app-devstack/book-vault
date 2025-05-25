@@ -24,6 +24,7 @@ const _schemaBase = {
 export const book = sqliteTable("book", {
   id: _schemaBase.id,
   title: text("title").notNull(),
+  // publisher
   description: text("description"),
   targetURL: text("target_url").notNull(),
   imageURL: text("image_url"),

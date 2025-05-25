@@ -14,10 +14,6 @@ export default function Button({ children, ...props }: CustomButtonProps) {
     <TouchableOpacity
       style={styles.button}
       activeOpacity={0.7} // タップ時の透明度（0-1）
-      onPress={() => console.log("タップされました")}
-      onPressIn={() => console.log("タップ開始")} // 指が触れた時
-      onPressOut={() => console.log("タップ終了")} // 指が離れた時
-      onLongPress={() => console.log("長押し")} // 長押し時
       {...props}
     >
       <Text style={styles.text}>{children}</Text>
