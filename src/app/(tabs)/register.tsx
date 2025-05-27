@@ -1,8 +1,6 @@
-import { Text } from "@/components/Text";
-import Button from "@/components/ui/button";
 import SearchBooks from "@/feature/register/search-books";
 import { useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function Register() {
@@ -42,34 +40,34 @@ export default function Register() {
   };
 
   // 入力フィールドコンポーネント
-  const renderInputField = ({
-    key,
-    label,
-    placeholder,
-  }: (typeof inputFields)[number]) => (
-    <View key={key} style={styles.inputContainer}>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder={placeholder}
-        value={inputValue[key]}
-        onChangeText={(text) => handleInputChange(key, text)}
-      />
-    </View>
-  );
+  // const renderInputField = ({
+  //   key,
+  //   label,
+  //   placeholder,
+  // }: (typeof inputFields)[number]) => (
+  //   <View key={key} style={styles.inputContainer}>
+  //     <Text style={styles.label}>{label}</Text>
+  //     <TextInput
+  //       style={styles.input}
+  //       placeholder={placeholder}
+  //       value={inputValue[key]}
+  //       onChangeText={(text) => handleInputChange(key, text)}
+  //     />
+  //   </View>
+  // );
 
-  const API_NAME = process.env.EXPO_PUBLIC_API_NAME;
+  // const API_NAME = process.env.EXPO_PUBLIC_API_NAME;
   return (
     <View style={styles.container}>
-      {inputFields.map(renderInputField)}
+      {/* {inputFields.map(renderInputField)} */}
 
-      <Text> {API_NAME}</Text>
+      {/* <Text> {API_NAME}</Text> */}
 
       <SearchBooks />
 
-      <Button style={styles.button} onPress={handlePress}>
+      {/* <Button style={styles.button} onPress={handlePress}>
         追加
-      </Button>
+      </Button> */}
     </View>
   );
 }
