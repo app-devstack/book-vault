@@ -1,8 +1,10 @@
 import Button from "@/components/ui/button";
+import { bookService } from "@/utils/service/book-service";
 
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -31,7 +33,9 @@ import {
 
 const fetchBooks = async (query: string) => {
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(query)}&langRestrict=ja`
+    `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
+      query
+    )}&langRestrict=ja`
   );
   if (!response.ok) {
     throw new Error("データの取得に失敗しました");
@@ -39,15 +43,47 @@ const fetchBooks = async (query: string) => {
   return response.json();
 };
 
+type GoogleBooksResponse = {
+  items: {
+    id: string;
+    volumeInfo: {
+      title: string;
+      authors?: string[];
+      imageLinks?: {
+        thumbnail: string;
+      };
+    };
+  }[];
+};
+
 export default function BookSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedTerm, setSubmittedTerm] = useState("");
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<GoogleBooksResponse>({
     queryKey: ["books", submittedTerm],
     queryFn: () => fetchBooks(submittedTerm),
     enabled: !!submittedTerm,
   });
+
+  const handleBookRegister = async (
+    book: GoogleBooksResponse["items"][number]
+  ) => {
+    try {
+      await bookService.createBook({
+        id: book.id,
+        title: book.volumeInfo.title,
+        targetURL: `https://books.google.com/books?id=${book.id}`,
+        imageURL: book.volumeInfo.imageLinks?.thumbnail || "",
+        addedAt: new Date(),
+      });
+      // 成功メッセージの表示
+      Alert.alert("本が正常に登録されました");
+    } catch (error) {
+      console.error("登録エラー:", error);
+      Alert.alert("登録に失敗しました");
+    }
+  };
 
   return (
     <View style={styles.inputContainer}>
@@ -68,6 +104,10 @@ export default function BookSearch() {
       {isLoading && <Text>読み込み中...</Text>}
       {error && <Text>エラーが発生しました: {error.message}</Text>}
 
+      {data && data.items && data.items.length === 0 && (
+        <Text>検索結果が見つかりませんでした</Text>
+      )}
+
       {data && (
         <FlatList
           data={data.items}
@@ -85,6 +125,13 @@ export default function BookSearch() {
                   {item.volumeInfo.title}
                 </Text>
                 <Text>{item.volumeInfo.authors?.join(", ")}</Text>
+                <Button
+                  onPress={() => handleBookRegister(item)}
+                  style={{ marginTop: 8 }}
+                  textStyle={{ color: "##313131" }}
+                >
+                  登録
+                </Button>
               </View>
             </View>
           )}

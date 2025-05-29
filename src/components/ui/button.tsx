@@ -1,22 +1,29 @@
 import { Text } from "@/components/Text";
 import {
+  StyleProp,
   StyleSheet,
+  TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
 } from "react-native";
 
 interface CustomButtonProps extends TouchableOpacityProps {
   children: React.ReactNode;
+  textStyle?: StyleProp<TextStyle>;
 }
 
-export default function Button({ children, ...props }: CustomButtonProps) {
+export default function Button({
+  children,
+  textStyle,
+  ...props
+}: CustomButtonProps) {
   return (
     <TouchableOpacity
       style={styles.button}
       activeOpacity={0.7} // タップ時の透明度（0-1）
       {...props}
     >
-      <Text style={styles.text}>{children}</Text>
+      <Text style={[styles.text, textStyle]}>{children}</Text>
     </TouchableOpacity>
   );
 }
