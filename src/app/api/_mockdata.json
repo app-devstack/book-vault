@@ -1,0 +1,129 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 324,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "mN2sNAEACAAJ",
+      "etag": "GIAlHu98DEQ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/mN2sNAEACAAJ",
+      "volumeInfo": {
+        "title": "ノラネコぐんだんパンこうじょう",
+        "authors": ["工藤ノリコ"],
+        "publisher": "Hakusensha/Tsai Fong Books",
+        "publishedDate": "2012-11",
+        "description": "ノラネコぐんだんは、おいしそうなパンが気になり、ワンワンちゃんのパンこうじょうにしのびこみました。食いしん坊のノラネコぐんだんが見よう見まねでパンづくりに挑戦、大騒動を巻き起こします。",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "459276157X"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784592761570"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 1,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=mN2sNAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=mN2sNAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=mN2sNAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&cd=1&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=mN2sNAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93%E3%83%91%E3%83%B3%E3%81%93%E3%81%86%E3%81%98.html?hl=&id=mN2sNAEACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=mN2sNAEACAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "ノラネコぐんだんは、おいしそうなパンが気になり、ワンワンちゃんのパンこうじょうにしのびこみました。食いしん坊のノラネコぐんだんが見よう見まねでパンづくりに挑戦、 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "A_L8xAEACAAJ",
+      "etag": "kMe1bk8iK1E",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/A_L8xAEACAAJ",
+      "volumeInfo": {
+        "title": "ノラネコぐんだんコミック",
+        "authors": ["工藤ノリコ"],
+        "publishedDate": "2019",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "4592762495"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784592762492"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 143,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=A_L8xAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&cd=2&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=A_L8xAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF.html?hl=&id=A_L8xAEACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=A_L8xAEACAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    }
+  ]
+}

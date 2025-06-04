@@ -6,7 +6,7 @@ import { Text } from "@/components/Text";
 import migrations from "@/packages/drizzle/migrations";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { ActivityIndicator, View } from "react-native";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 
 export default function DBProvider({ children }: { children: ReactNode }) {
   const { success, error } = useMigrations(db, migrations);
@@ -18,11 +18,11 @@ export default function DBProvider({ children }: { children: ReactNode }) {
       // setItems(books);
     })();
 
-    Toast.show({
-      type: "success",
-      text1: "DB Migration",
-      text2: "Executed!!🤖",
-    });
+    // Toast.show({
+    //   type: "success",
+    //   text1: "DB Migration",
+    //   text2: "Executed!!🤖",
+    // });
   }, [success]);
 
   if (error) {

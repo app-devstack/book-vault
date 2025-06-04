@@ -2,51 +2,43 @@ import { IconSymbol } from "@/components/IconSymbol";
 import { Text } from "@/components/Text";
 import type { Book } from "@/db/types";
 import { Image as ExpoImage } from "expo-image";
-import { ExternalPathString, Link } from "expo-router";
 
-import { StyleSheet, View } from "react-native";
+import {
+  Alert,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function BookItem(item: Book) {
-  return (
-    <Link target="_blank" href={item.targetURL as ExternalPathString}>
-      <View
-        style={{
-          gap: 6,
-          padding: 16,
-          width: "100%",
-          // borderRadius: 16,
-          alignItems: "center",
-          flexDirection: "row",
-          // backgroundColor: "#262626",
-          backgroundColor: "#fffaf0",
-          justifyContent: "space-between",
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 16,
-          }}
-        >
-          <ItemBookImg imageURL={item.imageURL} />
+  const openExternalLink = async () => {
+    try {
+      const url = item.targetURL;
+      const supported = await Linking.canOpenURL(url); // URLが開けるかどうかをチェック
 
-          <ItemTitleAndDescription
-            title={item.title}
-            description={item.description}
-          />
-        </View>
-        <IconSymbol name="chevron.right" size={20} color="#666666" />
+      if (supported) await Linking.openURL(url);
+    } catch (error) {
+      Alert.alert("エラー", `リンクを開く際にエラーが発生しました \n${error}`);
+    }
+  };
+
+  return (
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.7}
+      onPress={openExternalLink}
+    >
+      <View style={styles.content}>
+        <ItemBookImg imageURL={item.imageURL} />
+
+        <ItemTitleAndDescription
+          title={item.title}
+          description={item.description}
+        />
       </View>
-    </Link>
-  );
-}
-
-function ItemTitle({ title }: { title: string }) {
-  return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-      <Text style={{ fontSize: 17, color: "#262626" }}>{title}</Text>
-    </View>
+      <IconSymbol name="chevron.right" size={20} color="#666666" />
+    </TouchableOpacity>
   );
 }
 
@@ -58,9 +50,11 @@ function ItemTitleAndDescription({
   description?: string | null;
 }) {
   return (
-    <View style={{ gap: 4 }}>
-      <ItemTitle title={title} />
-      <Text style={{ fontSize: 13, color: "#666666" }}>{description}</Text>
+    <View style={styles.info}>
+      <Text style={styles.title} numberOfLines={2}>
+        {title}
+      </Text>
+      {/* <Text style={{ fontSize: 13, color: "#666666" }}>{description}</Text> */}
     </View>
   );
 }
@@ -69,9 +63,9 @@ function ItemBookImg({ imageURL }: { imageURL?: string | null }) {
   return (
     <>
       {imageURL ? (
-        <ExpoImage source={imageURL} style={styles.img} />
+        <ExpoImage source={imageURL} style={styles.thumbnail} />
       ) : (
-        <View style={styles.img} />
+        <View style={styles.noThumbnail} />
       )}
     </>
   );
@@ -83,5 +77,52 @@ const styles = StyleSheet.create({
     height: 90,
     backgroundColor: "#dcdcdc",
     borderRadius: 4,
+  },
+
+  container: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    marginBottom: 12,
+    padding: 12,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  content: {
+    flexDirection: "row",
+  },
+  thumbnail: {
+    width: 50,
+    height: 75,
+    marginRight: 12,
+    borderRadius: 4,
+  },
+  noThumbnail: {
+    width: 50,
+    height: 75,
+    marginRight: 12,
+    borderRadius: 4,
+    backgroundColor: "#f0f0f0",
+  },
+  info: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 4,
+    color: "#333",
+  },
+  author: {
+    color: "#666",
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  tapHint: {
+    color: "#3868AA",
+    fontSize: 12,
+    fontStyle: "italic",
   },
 });
