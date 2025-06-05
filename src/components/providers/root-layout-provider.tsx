@@ -15,7 +15,10 @@ export default function RootLayoutProvider({
   return (
     <SafeAreaProvider>
       <BooksProvider>
-        <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
+        <SafeAreaView
+          style={{ flex: 1 }}
+          // edges={["top", "left", "right"]}
+        >
           <QueryClientProvider client={queryClient}>
             <DBProvider>{children}</DBProvider>
             <Toast />

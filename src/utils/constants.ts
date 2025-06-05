@@ -34,6 +34,7 @@ export const ICON_SIZES = {
 } as const;
 
 export const FONT_SIZES = {
+  xsmall: 10,
   small: 12,
   medium: 14,
   large: 16,
