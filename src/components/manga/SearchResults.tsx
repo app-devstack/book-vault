@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { BookSearchResult, StoreKey } from "../../types/book";
 import { COLORS, SHADOWS } from "../../utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, STORES } from "../../utils/constants";
+import { BORDER_RADIUS, FONT_SIZES } from "../../utils/constants";
 
 interface SearchResultsProps {
   results: BookSearchResult[];
@@ -50,7 +50,15 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
           {item.description}
         </Text>
 
-        <View style={styles.storeButtons}>
+        <TouchableOpacity
+          style={[styles.storeButton, { backgroundColor: "#00A0DC" }]}
+          onPress={() => handleAddBook("kindle" as StoreKey)}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.storeButtonText}>本を登録する</Text>
+        </TouchableOpacity>
+
+        {/* <View style={styles.storeButtons}>
           {Object.entries(STORES).map(([key, store]) => (
             <TouchableOpacity
               key={key}
@@ -61,7 +69,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
               <Text style={styles.storeButtonText}>{store.name}に登録</Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -146,6 +154,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
   storeButtonText: {
     color: "white",
