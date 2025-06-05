@@ -473,10 +473,10 @@ const MangaManagerApp = () => {
               color: COLORS.text,
             }}
           >
-            まだマンガが登録されていません
+            まだ本が登録されていません
           </div>
           <div style={{ fontSize: "14px", marginBottom: "24px" }}>
-            「登録」タブからお気に入りのマンガを追加してみましょう！
+            「登録」タブからお気に入りの本を追加してみましょう！
           </div>
           <button
             onClick={() => setActiveTab("register")}
@@ -492,7 +492,7 @@ const MangaManagerApp = () => {
               boxShadow: "0 4px 16px rgba(74, 144, 226, 0.3)",
             }}
           >
-            マンガを登録する
+            本を登録する
           </button>
         </div>
       ) : (
@@ -515,7 +515,7 @@ const MangaManagerApp = () => {
                 marginBottom: "8px",
               }}
             >
-              📚 マンガライブラリ
+              📚 本ライブラリ
             </div>
             <div
               style={{ fontSize: "16px", opacity: 0.9, marginBottom: "12px" }}
@@ -802,7 +802,7 @@ const MangaManagerApp = () => {
           >
             <input
               type="text"
-              placeholder="マンガタイトルを検索..."
+              placeholder="本タイトルを検索..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && searchBooks(searchQuery)}

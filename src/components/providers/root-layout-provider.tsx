@@ -1,4 +1,5 @@
 import DBProvider from "@/components/providers/db-provider";
+import { BooksProvider } from "@/provider/BooksProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -13,12 +14,14 @@ export default function RootLayoutProvider({
 }) {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
-        <QueryClientProvider client={queryClient}>
-          <DBProvider>{children}</DBProvider>
-          <Toast />
-        </QueryClientProvider>
-      </SafeAreaView>
+      <BooksProvider>
+        <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
+          <QueryClientProvider client={queryClient}>
+            <DBProvider>{children}</DBProvider>
+            <Toast />
+          </QueryClientProvider>
+        </SafeAreaView>
+      </BooksProvider>
     </SafeAreaProvider>
   );
 }

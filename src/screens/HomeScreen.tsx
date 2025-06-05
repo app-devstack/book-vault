@@ -43,9 +43,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         contentContainerStyle={styles.emptyContainer}
       >
         <Text style={styles.emptyIcon}>📚</Text>
-        <Text style={styles.emptyTitle}>まだマンガが登録されていません</Text>
+        <Text style={styles.emptyTitle}>まだ本が登録されていません</Text>
         <Text style={styles.emptyDescription}>
-          「登録」タブからお気に入りのマンガを追加してみましょう！
+          「登録」タブからお気に入りの本を追加してみましょう！
         </Text>
         <TouchableOpacity
           style={styles.emptyButton}
@@ -58,7 +58,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
-            <Text style={styles.emptyButtonText}>マンガを登録する</Text>
+            <Text style={styles.emptyButtonText}>本を登録する</Text>
           </LinearGradient>
         </TouchableOpacity>
       </ScrollView>
@@ -88,7 +88,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
-            <Text style={styles.headerTitle}>📚 マンガライブラリ</Text>
+            <Text style={styles.headerTitle}>📚 本ライブラリ</Text>
             <Text style={styles.headerSubtitle}>
               {totalStats.seriesCount}シリーズ • {totalStats.bookCount}冊
             </Text>

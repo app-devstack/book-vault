@@ -105,7 +105,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             <View style={styles.searchBar}>
               <TextInput
                 style={styles.searchInput}
-                placeholder="マンガタイトルを検索..."
+                placeholder="本タイトルを検索..."
                 placeholderTextColor={COLORS.textLight}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
