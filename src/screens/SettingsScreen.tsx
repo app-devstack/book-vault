@@ -9,7 +9,8 @@ export const SettingsScreen: React.FC = () => {
       <Text style={styles.icon}>⚙️</Text>
       <Text style={styles.title}>設定画面</Text>
       <Text style={styles.description}>
-        こちらは作成済みとのことなので、実装は省略しています。
+        設定画面は現在開発中です。{"\n"}
+        しばらくお待ちください。
       </Text>
     </ScrollView>
   );
