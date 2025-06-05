@@ -11,7 +11,8 @@
     "lint": "expo lint",
     "db:generate": "npx drizzle-kit generate",
     "deploy": "eas build --platform android --profile development",
-    "preview": "eas build --platform android --profile preview"
+    "preview": "eas build --platform android --profile preview",
+    "preview:nocache": "bun run preview --clear-cache"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
