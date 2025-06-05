@@ -1,53 +1,76 @@
-import { HapticTab } from "@/components/HapticTab";
-import { IconSymbol } from "@/components/IconSymbol";
-import TabBarBackground from "@/components/TabBarBackground";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { COLORS } from "@/utils/colors";
+import { FONT_SIZES } from "@/utils/constants";
+import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Platform } from "react-native";
-
-const appName = process.env.APP_NAME || "Book Vault";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            position: "absolute",
-          },
-          default: {},
-        }),
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: COLORS.card,
+          borderTopColor: COLORS.border,
+          borderTopWidth: 1,
+          borderBottomWidth: 1,
+          height: 60,
+          paddingBottom: 20,
+          paddingTop: 4,
+          shadowColor: COLORS.shadow,
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 8,
+        },
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.textLight,
+        tabBarLabelStyle: {
+          fontSize: FONT_SIZES.xsmall,
+          fontWeight: "bold",
+          marginTop: 2,
+        },
+        tabBarIconStyle: {
+          marginBottom: 0,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          // headerLargeTitle: true,
-          headerTitle: appName || "book store",
-          title: "Home",
-          // headerLeft: () => <IconSymbol name="house.fill" color="#666666" />,
-          headerRight: () => (
-            <IconSymbol name="plus" style={{ marginRight: 10 }} />
-          ),
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+          title: "ホーム",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="register"
         options={{
-          title: "Register",
-          headerTitle: "Register Book",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+          title: "登録",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "add" : "add-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "設定",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "settings" : "settings-outline"}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
