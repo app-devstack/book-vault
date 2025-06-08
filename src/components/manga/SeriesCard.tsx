@@ -31,7 +31,7 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
     >
       <View style={styles.content}>
         <Image
-          source={{ uri: latestBook.thumbnail }}
+          source={{ uri: latestBook.imageUrl || "" }}
           style={styles.thumbnail}
           resizeMode="cover"
         />
@@ -50,14 +50,14 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
               <Text style={styles.statText}>{stats.volumeCount}冊所有</Text>
             </View>
 
-            <View style={[styles.statBadge, styles.priceBadge]}>
+            {/* <View style={[styles.statBadge, styles.priceBadge]}>
               <Text style={[styles.statText, styles.priceText]}>
                 ¥{stats.totalPrice.toLocaleString()}
               </Text>
-            </View>
+            </View> */}
           </View>
 
-          <View style={styles.storesContainer}>
+          {/* <View style={styles.storesContainer}>
             {stats.stores.map((store) => (
               <View
                 key={store}
@@ -68,11 +68,11 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
               />
             ))}
             <Text style={styles.storeCount}>{stats.stores.length}ストア</Text>
-          </View>
+          </View> */}
         </View>
 
         <View style={styles.chevronContainer}>
-          <Icon name="chevron-forward" size="medium" color={COLORS.primary} />
+          <Icon name="chevron-forward" size="medium" color="white" />
         </View>
       </View>
     </TouchableOpacity>

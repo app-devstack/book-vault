@@ -1,6 +1,5 @@
 import { Icon } from "@/components/icons/Icons";
 import { SearchResults } from "@/components/manga/SearchResults";
-import { NewBook } from "@/db/types";
 import { BookSearchResult } from "@/types/book";
 import { RegisterTab } from "@/types/store";
 import { COLORS, SHADOWS } from "@/utils/colors";
@@ -24,7 +23,6 @@ interface RegisterScreenProps {
   searchResults: BookSearchResult[];
   isSearching: boolean;
   onSearch: (query: string) => void;
-  onAddBook: (bookData: NewBook) => void;
 }
 
 export const RegisterScreen: React.FC<RegisterScreenProps> = ({
@@ -35,7 +33,6 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   searchResults,
   isSearching,
   onSearch,
-  onAddBook,
 }) => {
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -128,7 +125,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             </View>
 
             {/* 検索結果 */}
-            <SearchResults results={searchResults} onAddBook={onAddBook} />
+            <SearchResults results={searchResults} />
           </View>
         )}
       </ScrollView>

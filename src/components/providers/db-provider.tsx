@@ -14,6 +14,10 @@ export default function DBProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!success) return;
     (async () => {
+      console.log("DB Migration executed successfully");
+      const data = await db.query.books.findMany();
+      console.log("Current books in DB:", JSON.stringify(data, null, 2));
+
       // const books = await createDummyBook();
       // setItems(books);
     })();
@@ -27,7 +31,7 @@ export default function DBProvider({ children }: { children: ReactNode }) {
 
   if (error) {
     return (
-      <View>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>Migration error: {error.message}</Text>
       </View>
     );

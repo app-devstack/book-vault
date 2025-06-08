@@ -12,18 +12,15 @@ import {
   View,
 } from "react-native";
 
-interface BookCardProps {
+type BookCardProps = {
   book: Book;
   showSeriesTitle?: boolean;
-}
+};
 
-export const BookCard: React.FC<BookCardProps> = ({
-  book,
-  showSeriesTitle = false,
-}) => {
+export const BookCard = ({ book, showSeriesTitle = false }: BookCardProps) => {
   const handlePress = async () => {
     try {
-      await Linking.openURL(book.url);
+      await Linking.openURL(book.targetUrl);
     } catch (error) {
       console.error("URLを開けませんでした:", error);
     }
@@ -33,14 +30,15 @@ export const BookCard: React.FC<BookCardProps> = ({
     <TouchableOpacity
       style={[
         styles.container,
-        { borderColor: STORES[book.store].color + "20" },
+        // { borderColor: STORES[book.store].color + "20" },
       ]}
       onPress={handlePress}
       activeOpacity={0.8}
     >
       <View style={styles.content}>
         <Image
-          source={{ uri: book.thumbnail }}
+          // TODO: 画像のURLがない場合はプレースホルダーを表示
+          source={{ uri: book.imageUrl || "" }}
           style={styles.thumbnail}
           resizeMode="cover"
         />
@@ -52,16 +50,18 @@ export const BookCard: React.FC<BookCardProps> = ({
             </Text>
           )}
 
-          <Text style={styles.volumeTitle}>第{book.volume}巻</Text>
+          {book.volume && (
+            <Text style={styles.volumeTitle}>{book.volume}巻</Text>
+          )}
 
-          <Text style={[styles.storeName, { color: STORES[book.store].color }]}>
+          {/* <Text style={[styles.storeName, { color: STORES[book.store].color }]}>
             {STORES[book.store].name}
-          </Text>
+          </Text> */}
 
-          <Text style={styles.purchaseInfo}>
+          {/* <Text style={styles.purchaseInfo}>
             {new Date(book.purchaseDate).toLocaleDateString("ja-JP")} • ¥
             {book.price}
-          </Text>
+          </Text> */}
         </View>
 
         <View style={styles.linkContainer}>

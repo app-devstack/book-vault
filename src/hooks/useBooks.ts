@@ -1,8 +1,20 @@
+import { Book, NewBook } from "@/db/types";
+import { GroupedBooks, SeriesStats } from "@/types/book";
+import { bookService } from "@/utils/service/book-service";
 import { useMemo, useState } from "react";
-import { Book, GroupedBooks, SeriesStats, StoreKey } from "../types/book";
 
 export const useBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
+
+  const initializeBooks = async () => {
+    try {
+      const initialBooks = await bookService.getAllBooks();
+      setBooks(initialBooks);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+      // エラーハンドリングの処理を追加すること
+    }
+  };
 
   // シリーズごとにグループ化
   const groupedBooks: GroupedBooks = useMemo(() => {
@@ -17,60 +29,39 @@ export const useBooks = () => {
 
   // 各シリーズの統計を計算
   const getSeriesStats = (seriesBooks: Book[]): SeriesStats => {
-    const volumes = seriesBooks
-      .map((book) => book.volume)
-      .sort((a, b) => a - b);
-    const stores = [...new Set(seriesBooks.map((book) => book.store))];
-    const totalPrice = seriesBooks.reduce((sum, book) => sum + book.price, 0);
-
     return {
-      volumeCount: volumes.length,
-      minVolume: Math.min(...volumes),
-      maxVolume: Math.max(...volumes),
-      stores,
-      totalPrice,
-      latestPurchase: new Date(
-        Math.max(
-          ...seriesBooks.map((book) => new Date(book.purchaseDate).getTime())
-        )
-      ),
+      volumeCount: seriesBooks.length,
     };
   };
 
   // 本を追加
-  const addBook = (
-    bookData: Omit<Book, "id" | "purchaseDate" | "price" | "url">,
-    store: StoreKey
-  ): void => {
-    const newBook: Book = {
-      id: Date.now(),
-      ...bookData,
-      store,
-      purchaseDate: new Date().toISOString().split("T")[0],
-      price: Math.floor(Math.random() * 500) + 400,
-      url: `https://example.com/${store}/${Date.now()}`,
-    };
-    setBooks((prev) => [...prev, newBook]);
+  const addBook = async (bookData: NewBook) => {
+    try {
+      const newBook = await bookService.createBook({ ...bookData });
+      setBooks((prev) => [...prev, newBook]);
+    } catch (error) {
+      console.error("Error adding book:", error);
+      //  後で処理追加
+    }
   };
 
   // 本を削除
-  const removeBook = (bookId: number): void => {
+  const removeBook = async (bookId: string) => {
     setBooks((prev) => prev.filter((book) => book.id !== bookId));
+    await bookService.deleteBook(bookId); // あとでロールバック処理も必要
   };
 
   // シリーズを削除
-  const removeSeries = (seriesTitle: string): void => {
+  const removeSeries = (seriesTitle: string) => {
     setBooks((prev) => prev.filter((book) => book.title !== seriesTitle));
   };
 
   // 統計情報
   const totalStats = useMemo(() => {
-    const totalPrice = books.reduce((sum, book) => sum + book.price, 0);
     const seriesCount = Object.keys(groupedBooks).length;
     const bookCount = books.length;
 
     return {
-      totalPrice,
       seriesCount,
       bookCount,
     };
@@ -78,6 +69,9 @@ export const useBooks = () => {
 
   return {
     books,
+
+    initializeBooks,
+
     groupedBooks,
     getSeriesStats,
     addBook,

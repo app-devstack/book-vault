@@ -69,13 +69,6 @@ export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
                 <Text style={styles.statNumber}>{stats.volumeCount}</Text>
                 <Text style={styles.statLabel}>所有巻数</Text>
               </View>
-
-              {/* <View style={styles.statItem}>
-                <Text style={styles.statNumber}>
-                  ¥{stats.totalPrice.toLocaleString()}
-                </Text>
-                <Text style={styles.statLabel}>総購入額</Text>
-              </View> */}
             </View>
 
             {/* <View style={styles.storesInfo}>

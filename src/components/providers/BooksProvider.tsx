@@ -1,19 +1,16 @@
-import React, { createContext, ReactNode, useContext } from "react";
-import { useBooks } from "../hooks/useBooks";
-import { Book, GroupedBooks, SeriesStats, StoreKey } from "../types/book";
+import { Book, NewBook } from "@/db/types";
+import { useBooks } from "@/hooks/useBooks";
+import { GroupedBooks, SeriesStats } from "@/types/book";
+import React, { createContext, ReactNode, useContext, useEffect } from "react";
 
 interface BooksContextType {
   books: Book[];
   groupedBooks: GroupedBooks;
   getSeriesStats: (books: Book[]) => SeriesStats;
-  addBook: (
-    bookData: Omit<Book, "id" | "purchaseDate" | "price" | "url">,
-    store: StoreKey
-  ) => void;
-  removeBook: (bookId: number) => void;
+  addBook: (bookData: NewBook) => Promise<void>;
+  removeBook: (bookId: string) => Promise<void>;
   removeSeries: (seriesTitle: string) => void;
   totalStats: {
-    totalPrice: number;
     seriesCount: number;
     bookCount: number;
   };
@@ -27,6 +24,13 @@ interface BooksProviderProps {
 
 export const BooksProvider: React.FC<BooksProviderProps> = ({ children }) => {
   const booksData = useBooks();
+
+  useEffect(() => {
+    (async () => {
+      console.log("DB Migration executed successfully");
+      await booksData.initializeBooks();
+    })();
+  }, [booksData]);
 
   return (
     <BooksContext.Provider value={booksData}>{children}</BooksContext.Provider>

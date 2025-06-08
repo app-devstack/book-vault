@@ -1,3 +1,8 @@
+import { useBooksContext } from "@/components/providers/BooksProvider";
+import { BookSearchResult } from "@/types/book";
+import { COLORS, SHADOWS } from "@/utils/colors";
+import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
+import { router } from "expo-router";
 import React from "react";
 import {
   FlatList,
@@ -7,38 +12,27 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { BookSearchResult, StoreKey } from "../../types/book";
-import { COLORS, SHADOWS } from "../../utils/colors";
-import { BORDER_RADIUS, FONT_SIZES } from "../../utils/constants";
 
-interface SearchResultsProps {
+type SearchResultsProps = {
   results: BookSearchResult[];
-  onAddBook: (bookData: any, store: StoreKey) => void;
-}
+};
 
-interface SearchResultItemProps {
+type SearchResultItemProps = {
   item: BookSearchResult;
-  onAddBook: (bookData: any, store: StoreKey) => void;
-}
+};
 
-const SearchResultItem: React.FC<SearchResultItemProps> = ({
-  item,
-  onAddBook,
-}) => {
-  const handleAddBook = (store: StoreKey) => {
-    const bookData = {
-      title: item.title.replace(/\s*\d+巻$/, ""),
-      volume: parseInt(item.title.match(/(\d+)巻/) || [0, 1])[1],
-      author: item.author,
-      thumbnail: item.thumbnail,
-    };
-    onAddBook(bookData, store);
+const SearchResultItem = ({ item }: SearchResultItemProps) => {
+  const { addBook } = useBooksContext();
+
+  const handleAddBook = async () => {
+    await addBook(item);
+    router.push("/");
   };
 
   return (
     <View style={styles.resultItem}>
       <Image
-        source={{ uri: item.thumbnail }}
+        source={{ uri: item.imageUrl }}
         style={styles.resultThumbnail}
         resizeMode="cover"
       />
@@ -52,33 +46,17 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
 
         <TouchableOpacity
           style={[styles.storeButton, { backgroundColor: "#00A0DC" }]}
-          onPress={() => handleAddBook("kindle" as StoreKey)}
+          onPress={handleAddBook}
           activeOpacity={0.8}
         >
           <Text style={styles.storeButtonText}>本を登録する</Text>
         </TouchableOpacity>
-
-        {/* <View style={styles.storeButtons}>
-          {Object.entries(STORES).map(([key, store]) => (
-            <TouchableOpacity
-              key={key}
-              style={[styles.storeButton, { backgroundColor: store.color }]}
-              onPress={() => handleAddBook(key as StoreKey)}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.storeButtonText}>{store.name}に登録</Text>
-            </TouchableOpacity>
-          ))}
-        </View> */}
       </View>
     </View>
   );
 };
 
-export const SearchResults: React.FC<SearchResultsProps> = ({
-  results,
-  onAddBook,
-}) => {
+export const SearchResults = ({ results }: SearchResultsProps) => {
   if (results.length === 0) {
     return null;
   }
@@ -88,11 +66,10 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       <Text style={styles.header}>検索結果</Text>
       <FlatList
         data={results}
-        renderItem={({ item }) => (
-          <SearchResultItem item={item} onAddBook={onAddBook} />
-        )}
-        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <SearchResultItem item={item} />}
+        keyExtractor={(item) => item.googleBooksId}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
       />
     </View>
   );

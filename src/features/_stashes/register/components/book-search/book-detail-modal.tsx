@@ -90,18 +90,6 @@ export const BookDetailModal = ({
                   label: "出版社:",
                   value: volumeInfo.publisher,
                 },
-                {
-                  key: "publishedDate",
-                  label: "出版日:",
-                  value: volumeInfo.publishedDate,
-                },
-                {
-                  key: "pageCount",
-                  label: "ページ数:",
-                  value: volumeInfo.pageCount
-                    ? `${volumeInfo.pageCount}ページ`
-                    : null,
-                },
               ]
                 .filter((item) => item.value)
                 .map((item) => (
