@@ -1,7 +1,7 @@
+import { useBooksContext } from "@/components/providers/BooksProvider";
+import { NewBook } from "@/db/types";
+import { RegisterScreen } from "@/features/register/RegisterScreen";
 import { useSearch } from "@/hooks/useSearch";
-import { useBooksContext } from "@/provider/BooksProvider";
-import { RegisterScreen } from "@/screens/RegisterScreen";
-import { StoreKey } from "@/types/book";
 import { RegisterTab } from "@/types/store";
 import { COLORS } from "@/utils/colors";
 import { router } from "expo-router";

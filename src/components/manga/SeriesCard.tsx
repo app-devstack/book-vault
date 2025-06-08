@@ -1,9 +1,10 @@
+import { Icon } from "@/components/icons/Icons";
+import { Book } from "@/db/types";
+import { SeriesStats } from "@/types/book";
+import { COLORS, SHADOWS } from "@/utils/colors";
+import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Book, SeriesStats } from "../../types/book";
-import { COLORS, SHADOWS } from "../../utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, STORES } from "../../utils/constants";
-import { Icon } from "../icons/Icons";
 
 interface SeriesCardProps {
   seriesTitle: string;

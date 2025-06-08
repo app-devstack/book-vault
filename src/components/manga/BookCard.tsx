@@ -1,3 +1,7 @@
+import { Icon } from "@/components/icons/Icons";
+import { Book } from "@/db/types";
+import { COLORS, SHADOWS } from "@/utils/colors";
+import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
 import React from "react";
 import {
   Image,
@@ -7,10 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Book } from "../../types/book";
-import { COLORS, SHADOWS } from "../../utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, STORES } from "../../utils/constants";
-import { Icon } from "../icons/Icons";
 
 interface BookCardProps {
   book: Book;

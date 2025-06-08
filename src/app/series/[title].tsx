@@ -1,9 +1,9 @@
-import { useBooksContext } from "@/provider/BooksProvider";
+import { useBooksContext } from "@/components/providers/BooksProvider";
+import { SeriesDetailScreen } from "@/features/series/SeriesDetailScreen";
+import { COLORS } from "@/utils/colors";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { SeriesDetailScreen } from "../../screens/SeriesDetailScreen";
-import { COLORS } from "../../utils/colors";
 
 export default function SeriesDetailPage() {
   const { title } = useLocalSearchParams<{ title: string }>();
