@@ -1,4 +1,4 @@
-import { BookSearchItemType } from "@/feature/register/components/book-search/types";
+import { BookSearchItemType } from "@/utils/googleBooks/types";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 

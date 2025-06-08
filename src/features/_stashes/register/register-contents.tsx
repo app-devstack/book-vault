@@ -1,4 +1,4 @@
-import BookSearch from "@/feature/register/components/book-search";
+import BookSearch from "@/features/_stashes/register/components/book-search";
 import { StyleSheet, View } from "react-native";
 
 export default function RegisterContents() {

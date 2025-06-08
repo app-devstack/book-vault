@@ -1,4 +1,4 @@
-import { BookSearchItemType } from "@/feature/register/components/book-search/types";
+import { BookSearchItemType } from "@/utils/googleBooks/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 

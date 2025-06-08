@@ -1,6 +1,5 @@
 import { Text } from "@/components/Text";
-import { BookItem } from "@/feature/register/components/book-search/book-item";
-import { BookSearchItemType } from "@/feature/register/components/book-search/types";
+import { BookSearchItemType } from "@/utils/googleBooks/types";
 import { bookService } from "@/utils/service/book-service";
 import React, { useState } from "react";
 import { Alert, FlatList, StyleSheet } from "react-native";
@@ -37,9 +36,8 @@ export const SearchResults = ({ data }: SearchResultsProps) => {
       await bookService.createBook({
         id: book.id,
         title: book.volumeInfo.title,
-        targetURL: targetURL,
-        imageURL: book.volumeInfo.imageLinks?.thumbnail || "",
-        addedAt: new Date(),
+        targetUrl: targetURL,
+        imageUrl: book.volumeInfo.imageLinks?.thumbnail || "",
       });
 
       Alert.alert("成功", "本が正常に登録されました");
@@ -62,7 +60,8 @@ export const SearchResults = ({ data }: SearchResultsProps) => {
         data={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <BookItem item={item} onPress={handleBookSelect} />
+          // <BookItem item={item} onPress={handleBookSelect} />
+          <></>
         )}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={searchStyles.listContent}
