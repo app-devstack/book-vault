@@ -8,6 +8,10 @@ class BookService {
   async getAllBooks() {
     const items = await db.query.books.findMany({
       orderBy: (books, { desc }) => [desc(books.createdAt)],
+      with: {
+        series: true, // シリーズ情報を含める
+        shop: true, // ショップ情報を含める
+      },
     });
     return items;
   }

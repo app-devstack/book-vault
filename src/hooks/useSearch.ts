@@ -1,5 +1,6 @@
 import { BookSearchResult } from "@/types/book";
 import { transformBookSearchItem } from "@/utils/googleBooks";
+import { GoogleBooksResponse } from "@/utils/googleBooks/types";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useCallback, useEffect, useState } from "react";
@@ -13,16 +14,24 @@ const fetchBooks = async (query: string) => {
   if (!response.ok) {
     throw new Error("データの取得に失敗しました");
   }
-  return response.json();
+  return response.json() as Promise<GoogleBooksResponse>;
 };
 
 export const useGetBookSearch = (searchTerm: string) => {
   return useQuery<BookSearchResult[]>({
     queryKey: ["books", searchTerm],
     queryFn: () =>
-      fetchBooks(searchTerm).then((data) => {
+      fetchBooks(searchTerm).then(async (data) => {
         const items = data.items || [];
-        return items.map(transformBookSearchItem);
+
+        const results: BookSearchResult[] = [];
+
+        for (const item of items) {
+          const transformedItem = await transformBookSearchItem(item);
+          results.push(transformedItem);
+        }
+
+        return results;
       }),
     enabled: !!searchTerm,
   });

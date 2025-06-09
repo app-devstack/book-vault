@@ -1,10 +1,12 @@
 import { useBooksContext } from "@/components/providers/BooksProvider";
+import RegisterDetailModal from "@/features/register/RegisterDetailModal";
+// import { BookDetailModal } from "@/features/_stashes/register/components/book-search/book-detail-modal";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import { router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -19,14 +21,15 @@ type SearchResultsProps = {
 
 type SearchResultItemProps = {
   item: BookSearchResult;
+  handleBookSelect: (book: BookSearchResult) => void;
 };
 
-const SearchResultItem = ({ item }: SearchResultItemProps) => {
-  const { addBook } = useBooksContext();
-
-  const handleAddBook = async () => {
-    await addBook(item);
-    router.push("/");
+const SearchResultItem = ({
+  item,
+  handleBookSelect,
+}: SearchResultItemProps) => {
+  const handleAddBook = () => {
+    handleBookSelect(item);
   };
 
   return (
@@ -57,6 +60,38 @@ const SearchResultItem = ({ item }: SearchResultItemProps) => {
 };
 
 export const SearchResults = ({ results }: SearchResultsProps) => {
+  const { addBook } = useBooksContext();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(
+    null
+  );
+
+  const handleBookSelect = (book: BookSearchResult) => {
+    setSelectedBook(book);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedBook(null);
+  };
+
+  const handleBookRegister = async (
+    book: BookSearchResult,
+    targetURL: string
+  ) => {
+    try {
+      await addBook(book);
+      closeModal();
+
+      Alert.alert("成功", "本が正常に登録されました");
+    } catch (error) {
+      console.error("登録エラー:", error);
+      Alert.alert("エラー", "登録に失敗しました");
+    }
+  };
+
   if (results.length === 0) {
     return null;
   }
@@ -66,10 +101,23 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
       <Text style={styles.header}>検索結果</Text>
       <FlatList
         data={results}
-        renderItem={({ item }) => <SearchResultItem item={item} />}
+        renderItem={({ item }) => (
+          <SearchResultItem
+            key={item.googleBooksId}
+            item={item}
+            handleBookSelect={handleBookSelect}
+          />
+        )}
         keyExtractor={(item) => item.googleBooksId}
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
+      />
+
+      <RegisterDetailModal
+        visible={isModalVisible}
+        book={selectedBook}
+        onClose={closeModal}
+        onRegister={handleBookRegister}
       />
     </View>
   );

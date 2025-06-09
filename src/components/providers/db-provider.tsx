@@ -14,10 +14,9 @@ export default function DBProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!success) return;
     (async () => {
-      console.log("DB Migration executed successfully");
-      const data = await db.query.books.findMany();
-      console.log("Current books in DB:", JSON.stringify(data, null, 2));
-
+      // console.log("DB Migration executed successfully");
+      // const data = await db.query.books.findMany();
+      // console.log("Current books in DB:", JSON.stringify(data, null, 2));
       // const books = await createDummyBook();
       // setItems(books);
     })();

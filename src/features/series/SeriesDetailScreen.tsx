@@ -1,7 +1,7 @@
 import { Icon } from "@/components/icons/Icons";
 import { BookCard } from "@/components/manga/BookCard";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
@@ -11,10 +11,12 @@ import {
   View,
 } from "react-native";
 
-import { Book } from "@/db/types";
+import { Book, SeriesWithBooks } from "@/db/types";
 import { SeriesStats } from "@/types/book";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
+import { seriesService } from "@/utils/service/series-service";
+import { useLocalSearchParams } from "expo-router";
 
 interface SeriesDetailScreenProps {
   seriesTitle: string;
@@ -29,9 +31,32 @@ export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
   stats,
   onBack,
 }) => {
-  const sortedBooks = [...seriesBooks].sort(
-    (a, b) => (b.volume ?? 0) - (a.volume ?? 0)
-  );
+  const [series, setSeries] = useState<SeriesWithBooks>();
+  const { seriesId } = useLocalSearchParams<{ seriesId: string }>();
+
+  useEffect(() => {
+    (async () => {
+      const series = await seriesService.getSeriesById(seriesId);
+      setSeries(series);
+    })();
+  }, [seriesId]);
+
+  if (!series) {
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.background,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ color: COLORS.text }}>シリーズ情報を読み込み中...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  const books = series.books || [];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,9 +79,9 @@ export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
       </View>
 
       <FlatList
-        data={sortedBooks}
+        data={books}
         renderItem={({ item }) => <BookCard book={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         ListHeaderComponent={() => (
           <LinearGradient
             colors={GRADIENTS.primary}
@@ -70,19 +95,6 @@ export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
                 <Text style={styles.statLabel}>所有巻数</Text>
               </View>
             </View>
-
-            {/* <View style={styles.storesInfo}>
-              <Text style={styles.storesLabel}>購入ストア:</Text>
-              <View style={styles.storesList}>
-                {stats.stores.map((store) => (
-                  <View key={store} style={styles.storeTag}>
-                    <Text style={styles.storeTagText}>
-                      {STORES[store].name}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            </View> */}
           </LinearGradient>
         )}
         contentContainerStyle={styles.listContent}
@@ -141,7 +153,7 @@ const styles = StyleSheet.create({
   statsGrid: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 16,
+    // marginBottom: 16,
   },
   statItem: {
     alignItems: "center",

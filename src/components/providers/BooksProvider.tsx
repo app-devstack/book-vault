@@ -30,7 +30,8 @@ export const BooksProvider: React.FC<BooksProviderProps> = ({ children }) => {
       console.log("DB Migration executed successfully");
       await booksData.initializeBooks();
     })();
-  }, [booksData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <BooksContext.Provider value={booksData}>{children}</BooksContext.Provider>
