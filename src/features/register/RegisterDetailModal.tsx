@@ -2,7 +2,7 @@ import { Icon } from "@/components/icons/Icons";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -23,12 +23,12 @@ type RegisterDetailModalProps = {
   onRegister: (book: BookSearchResult, targetURL: string) => Promise<void>;
 };
 
-export const RegisterDetailModal: React.FC<RegisterDetailModalProps> = ({
+export default function RegisterDetailModal({
   visible,
   book,
   onClose,
   onRegister,
-}) => {
+}: RegisterDetailModalProps) {
   const [targetURL, setTargetURL] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
 
@@ -175,7 +175,7 @@ export const RegisterDetailModal: React.FC<RegisterDetailModalProps> = ({
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -186,18 +186,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 50,
-    paddingBottom: 20,
+    paddingTop: 12,
+    paddingBottom: 12,
     paddingHorizontal: SCREEN_PADDING,
     ...SHADOWS.large,
   },
   closeButton: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: "rgba(255,255,255,0.2)",
     borderRadius: BORDER_RADIUS.medium,
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: FONT_SIZES.title,
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: SCREEN_PADDING,
+    paddingBottom: 40,
   },
   bookDetailCard: {
     backgroundColor: COLORS.card,
@@ -257,15 +258,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statusBadge: {
-    backgroundColor: COLORS.primary + '20',
+    backgroundColor: COLORS.primary + "20",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: BORDER_RADIUS.xlarge,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   statusText: {
     fontSize: FONT_SIZES.small,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: COLORS.primary,
   },
   descriptionCard: {
@@ -287,8 +288,8 @@ const styles = StyleSheet.create({
     ...SHADOWS.medium,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
     marginBottom: 16,
   },
@@ -315,6 +316,8 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     padding: SCREEN_PADDING,
+    paddingTop: 8,
+    paddingBottom: 12,
     gap: 16,
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
@@ -324,34 +327,34 @@ const styles = StyleSheet.create({
   footerButton: {
     flex: 1,
     borderRadius: BORDER_RADIUS.xlarge,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   cancelButton: {
     backgroundColor: COLORS.card,
     borderWidth: 2,
     borderColor: COLORS.border,
     paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   cancelButtonText: {
     fontSize: FONT_SIZES.large,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: COLORS.textLight,
   },
   registerButton: {
     ...SHADOWS.medium,
   },
   registerButtonGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 16,
     gap: 8,
   },
   registerButtonText: {
     fontSize: FONT_SIZES.large,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
 });
