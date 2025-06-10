@@ -54,6 +54,12 @@ export const BookCard = ({ book, showSeriesTitle = false }: BookCardProps) => {
             <Text style={styles.volumeTitle}>{book.volume}巻</Text>
           )}
 
+          <Text style={styles.volumeTitle} numberOfLines={3}>
+            {book.title}
+          </Text>
+
+          {/* 作者名を表示 */}
+
           {/* <Text style={[styles.storeName, { color: STORES[book.store].color }]}>
             {STORES[book.store].name}
           </Text> */}
@@ -77,7 +83,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.large,
     marginBottom: 12,
-    borderWidth: 2,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     ...SHADOWS.small,
   },
   content: {
