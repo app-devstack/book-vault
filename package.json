@@ -17,6 +17,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "db:generate": "npx drizzle-kit generate",
+    "db:generate:custom": "npx drizzle-kit generate --custom",
     "db:reset": "drizzle-kit drop",
     "deploy": "eas build --platform android --profile development",
     "preview": "eas build --platform android --profile preview",
