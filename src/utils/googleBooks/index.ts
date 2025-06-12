@@ -12,8 +12,6 @@ export const transformBookSearchItem = async (
 ): Promise<BookSearchResult> => {
   const volumeInfo = item.volumeInfo || {};
 
-  console.log("transformBookSearchItem", item);
-
   const {
     title,
     authors,
