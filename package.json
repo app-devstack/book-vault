@@ -17,9 +17,11 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "db:generate": "npx drizzle-kit generate",
+    "db:reset": "drizzle-kit drop",
     "deploy": "eas build --platform android --profile development",
     "preview": "eas build --platform android --profile preview",
-    "preview:nocache": "bun run preview --clear-cache"
+    "preview:nocache": "bun run preview --clear-cache",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
