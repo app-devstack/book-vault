@@ -1,9 +1,10 @@
 import { useBooksContext } from "@/components/providers/BooksProvider";
+import { NewBook } from "@/db/types";
 import RegisterDetailModal from "@/features/register/RegisterDetailModal";
 // import { BookDetailModal } from "@/features/_stashes/register/components/book-search/book-detail-modal";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
+import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from "@/utils/constants";
 import React, { useState } from "react";
 import {
   Alert,
@@ -79,10 +80,17 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
 
   const handleBookRegister = async (
     book: BookSearchResult,
-    targetURL: string
+    targetUrl: string
   ) => {
     try {
-      await addBook(book);
+      const formattedBook = {
+        ...book,
+        seriesId: book.seriesId || EMPTY_SERIES_ID, // シリーズIDがない場合はデフォルト値を設定
+        shopId: EMPTY_SHOP_ID, // TODO: inputとかから指定できるようにする
+        targetUrl
+      }satisfies NewBook
+
+      await addBook(formattedBook);
       closeModal();
 
       Alert.alert("成功", "本が正常に登録されました");

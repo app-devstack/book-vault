@@ -52,6 +52,8 @@ export const transformBookSearchItem = async (
     isbn: getIsbn(),
     imageUrl: imageUrl,
     targetUrl: canonicalVolumeLink || "",
+
+    seriesId: seriesInfo?.volumeSeries?.seriesId || "",
   };
 };
 

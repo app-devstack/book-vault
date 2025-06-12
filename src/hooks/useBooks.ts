@@ -1,10 +1,10 @@
-import { Book, NewBook } from "@/db/types";
-import { GroupedBooks, SeriesStats } from "@/types/book";
+import { Book, BookWithRelations, NewBook, SeriesWithBooks } from "@/db/types";
+import { SeriesStats } from "@/types/book";
 import { bookService } from "@/utils/service/book-service";
 import { useMemo, useState } from "react";
 
 export const useBooks = () => {
-  const [books, setBooks] = useState<Book[]>([]);
+  const [books, setBooks] = useState<BookWithRelations[]>([]);
 
   const initializeBooks = async () => {
     try {
@@ -17,14 +17,24 @@ export const useBooks = () => {
   };
 
   // シリーズごとにグループ化
-  const groupedBooks: GroupedBooks = useMemo(() => {
-    return books.reduce((acc, book) => {
-      if (!acc[book.title]) {
-        acc[book.title] = [];
+  const seriesedBooks: SeriesWithBooks[] = useMemo(() => {
+    const seriesMap = new Map<string, SeriesWithBooks>();
+
+    for (const book of books) {
+      if (!book.series) continue;      // シリーズが存在しない場合はスキップ
+
+      const seriesId = book.series.id || "";
+      const existsSeries = seriesMap.get(seriesId);
+
+      if (existsSeries) {
+        existsSeries.books.push(book);
+      } else {
+        const newData = {...book.series, books: [book] } satisfies SeriesWithBooks;
+        seriesMap.set(seriesId, newData);
       }
-      acc[book.title].push(book);
-      return acc;
-    }, {} as GroupedBooks);
+    }
+
+    return Array.from(seriesMap.values())
   }, [books]);
 
   // 各シリーズの統計を計算
@@ -35,10 +45,20 @@ export const useBooks = () => {
   };
 
   // 本を追加
-  const addBook = async (bookData: NewBook) => {
+  const addBook = async (bookData: NewBook ) => {
     try {
+      const {seriesId} = bookData
+
       const newBook = await bookService.createBook({ ...bookData });
-      setBooks((prev) => [...prev, newBook]);
+      const series = await bookService.getSeriesById(seriesId);
+
+      const bookWithRelations = {
+        ...newBook,
+        series: series ,
+        shop: undefined // 未実装のため、いったん未定義とする
+      } satisfies BookWithRelations;
+
+      setBooks((prev) => [...prev, bookWithRelations]);
     } catch (error) {
       console.error("Error adding book:", error);
       //  後で処理追加
@@ -58,21 +78,21 @@ export const useBooks = () => {
 
   // 統計情報
   const totalStats = useMemo(() => {
-    const seriesCount = Object.keys(groupedBooks).length;
+    const seriesCount = Object.keys(seriesedBooks).length;
     const bookCount = books.length;
 
     return {
       seriesCount,
       bookCount,
     };
-  }, [books, groupedBooks]);
+  }, [books, seriesedBooks]);
 
   return {
     books,
 
     initializeBooks,
 
-    groupedBooks,
+    seriesedBooks,
     getSeriesStats,
     addBook,
     removeBook,

@@ -10,7 +10,7 @@ import { SeriesCard } from "@/features/home/components/SeriesCard";
 import { router } from "expo-router";
 
 export const HomeScreen = () => {
-  const { groupedBooks, getSeriesStats, totalStats } = useBooksContext();
+  const { seriesedBooks, getSeriesStats, totalStats } = useBooksContext();
 
   const onSeriesPress = (seriesTitle: string) => {
     // エンコードしてルーティング
@@ -18,28 +18,25 @@ export const HomeScreen = () => {
     router.push(`/series/${encodedTitle}`);
   };
 
-  const seriesEntries = Object.entries(groupedBooks);
-  const isEmpty = seriesEntries.length === 0;
-
   // 登録本がないときの見た目
-  if (isEmpty) return <EmptyBooksState />;
+  if (seriesedBooks.length === 0) return <EmptyBooksState />;
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={seriesEntries}
-        renderItem={({ item: [seriesTitle, seriesBooks] }) => {
-          const stats = getSeriesStats(seriesBooks);
+        data={seriesedBooks}
+        renderItem={({ item:seriese }) => {
+          const stats = getSeriesStats(seriese.books);
           return (
             <SeriesCard
-              seriesTitle={seriesTitle}
-              seriesBooks={seriesBooks}
+              seriesTitle={seriese.title}
+              seriesBooks={seriese.books}
               stats={stats}
-              onPress={() => onSeriesPress(seriesTitle)}
+              onPress={() => onSeriesPress(seriese.title)}
             />
           );
         }}
-        keyExtractor={([seriesTitle]) => seriesTitle}
+        keyExtractor={(seriese) => seriese.id}
         ListHeaderComponent={() => (
           <LinearGradient
             colors={GRADIENTS.primary}

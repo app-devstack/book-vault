@@ -1,11 +1,11 @@
-import { Book, NewBook } from "@/db/types";
+import { Book, NewBook, SeriesWithBooks } from "@/db/types";
 import { useBooks } from "@/hooks/useBooks";
-import { GroupedBooks, SeriesStats } from "@/types/book";
+import { SeriesStats } from "@/types/book";
 import React, { createContext, ReactNode, useContext, useEffect } from "react";
 
 interface BooksContextType {
   books: Book[];
-  groupedBooks: GroupedBooks;
+  seriesedBooks: SeriesWithBooks[];
   getSeriesStats: (books: Book[]) => SeriesStats;
   addBook: (bookData: NewBook) => Promise<void>;
   removeBook: (bookId: string) => Promise<void>;

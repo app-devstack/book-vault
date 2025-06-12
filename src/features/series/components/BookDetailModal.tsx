@@ -19,7 +19,7 @@ import Toast from "react-native-toast-message";
 
 const {
   // width: _screenWidth,
-  height: screenHeight
+  height: screenHeight,
 } = Dimensions.get("window");
 
 type BookDetailModalProps = {
@@ -43,6 +43,7 @@ export const BookDetailModal = ({
   const handleDeletePress = () => {
     Alert.alert(
       "本を削除",
+     // prettier-ignore
       `「${book.title}${book.volume ? ` ${book.volume}巻` : ""}」を削除しますか？`,
       [
         {
@@ -191,11 +192,7 @@ export const BookDetailModal = ({
                 onPress={handleDeletePress}
                 disabled={isDeleting}
               >
-                <Icon
-                  name="trash"
-                  size="small"
-                  color="white"
-                />
+                <Icon name="trash" size="small" color="white" />
                 <Text style={styles.deleteButtonText}>
                   {isDeleting ? "削除中..." : "削除"}
                 </Text>
