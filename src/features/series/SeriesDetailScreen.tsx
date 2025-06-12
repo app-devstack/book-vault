@@ -1,5 +1,5 @@
 import { Icon } from "@/components/icons/Icons";
-import { BookCard } from "@/components/manga/BookCard";
+import { BookCard } from "@/features/series/components/BookCard";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {

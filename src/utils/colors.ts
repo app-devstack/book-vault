@@ -12,6 +12,7 @@ export const COLORS = {
   warning: "#F39C12",
   shadow: "rgba(0,0,0,0.1)",
   shadowDark: "rgba(0,0,0,0.15)",
+  error: "#EF4444",
 } as const;
 
 export const GRADIENTS = {

@@ -1,4 +1,3 @@
-import { SeriesCard } from "@/components/manga/SeriesCard";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,6 +6,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import { useBooksContext } from "@/components/providers/BooksProvider";
 import EmptyBooksState from "@/features/home/components/EmptyBooksState";
+import { SeriesCard } from "@/features/home/components/SeriesCard";
 import { router } from "expo-router";
 
 export const HomeScreen = () => {

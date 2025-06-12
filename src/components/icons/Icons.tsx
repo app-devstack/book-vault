@@ -19,7 +19,9 @@ export type IconName =
   | "book"
   | "book-outline"
   | "library"
-  | "library-outline";
+  | "library-outline"
+  | "trash"
+  | "close";
 
 interface IconProps {
   name: IconName;
