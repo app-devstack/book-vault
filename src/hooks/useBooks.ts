@@ -1,6 +1,7 @@
-import { Book, BookWithRelations, NewBook, SeriesWithBooks } from "@/db/types";
+import { Book, BookWithRelations, NewBook, Series, SeriesWithBooks } from "@/db/types";
 import { SeriesStats } from "@/types/book";
 import { bookService } from "@/utils/service/book-service";
+import { seriesService } from "@/utils/service/series-service";
 import { useMemo, useState } from "react";
 
 export const useBooks = () => {
@@ -49,12 +50,21 @@ export const useBooks = () => {
     try {
       const {seriesId} = bookData
 
+      let series:Series|undefined= await seriesService.getSeriesById(seriesId);
+
+      if (!series) {
+        // シリーズが存在しない場合は新規作成
+        series = await seriesService.createSeries({
+          title: extractByMultipleSpaces(bookData.title),
+          author: bookData.author,
+        });
+      }
+
       const newBook = await bookService.createBook({ ...bookData });
-      const series = await bookService.getSeriesById(seriesId);
 
       const bookWithRelations = {
         ...newBook,
-        series: series ,
+        series: series,
         shop: undefined // 未実装のため、いったん未定義とする
       } satisfies BookWithRelations;
 
@@ -100,3 +110,10 @@ export const useBooks = () => {
     totalStats,
   };
 };
+
+
+//  utilに移動する
+function  extractByMultipleSpaces(title:string): string {
+  const match = title.match(/^[^\s\u3000]+/);
+  return match ? match[0] : title;
+}

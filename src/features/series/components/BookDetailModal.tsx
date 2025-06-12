@@ -1,8 +1,8 @@
 import { Icon } from "@/components/icons/Icons";
+import { useBooksContext } from "@/components/providers/BooksProvider";
 import { Book } from "@/db/types";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import { bookService } from "@/utils/service/book-service";
 import React, { useState } from "react";
 import {
   Alert,
@@ -35,13 +35,14 @@ export const BookDetailModal = ({
   onClose,
   onBookDeleted,
 }: BookDetailModalProps) => {
+  const {removeBook} = useBooksContext();
   const [isDeleting, setIsDeleting] = useState(false);
 
   if (!book) return null;
 
   // 削除確認ダイアログ
-  const handleDeletePress = () => {
-    Alert.alert(
+  const handleDeletePress = async () => {
+     Alert.alert(
       "本を削除",
      // prettier-ignore
       `「${book.title}${book.volume ? ` ${book.volume}巻` : ""}」を削除しますか？`,
@@ -65,7 +66,7 @@ export const BookDetailModal = ({
 
     setIsDeleting(true);
     try {
-      await bookService.deleteBook(book.id);
+      await removeBook(book.id);
 
       Toast.show({
         type: "success",

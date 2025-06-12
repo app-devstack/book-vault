@@ -12,10 +12,8 @@ import { router } from "expo-router";
 export const HomeScreen = () => {
   const { seriesedBooks, getSeriesStats, totalStats } = useBooksContext();
 
-  const onSeriesPress = (seriesTitle: string) => {
-    // エンコードしてルーティング
-    const encodedTitle = encodeURIComponent(seriesTitle);
-    router.push(`/series/${encodedTitle}`);
+  const onSeriesPress = (seriesId: string) => {
+    router.push(`/series/${seriesId}`);
   };
 
   // 登録本がないときの見た目
@@ -32,7 +30,7 @@ export const HomeScreen = () => {
               seriesTitle={seriese.title}
               seriesBooks={seriese.books}
               stats={stats}
-              onPress={() => onSeriesPress(seriese.title)}
+              onPress={() => onSeriesPress(seriese.id)}
             />
           );
         }}

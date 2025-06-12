@@ -1,5 +1,6 @@
 import db from "@/db";
-import { books } from "@/db/schema";
+import { books, series } from "@/db/schema";
+import { NewSeries } from "@/db/types";
 import { eq } from "drizzle-orm";
 
 class SeriesService {
@@ -27,6 +28,12 @@ class SeriesService {
         },
       },
     });
+    return item;
+  }
+
+  async createSeries(data:NewSeries) {
+    const [item] = await db.insert(series).values(data).returning();
+
     return item;
   }
 

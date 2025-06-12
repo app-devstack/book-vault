@@ -22,7 +22,7 @@ export type GoogleBooksResponse = {
       // 巻数
       seriesInfo?: {
         bookDisplayNumber: string;
-        volumeSeries: { seriesId: string; orderNumber: number };
+        volumeSeries: { seriesId: string; orderNumber: number }[];
       };
 
       //Googleブックスの正規のリンク

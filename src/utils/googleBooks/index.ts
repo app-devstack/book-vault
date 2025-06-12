@@ -12,6 +12,8 @@ export const transformBookSearchItem = async (
 ): Promise<BookSearchResult> => {
   const volumeInfo = item.volumeInfo || {};
 
+  console.log("transformBookSearchItem", item);
+
   const {
     title,
     authors,
@@ -26,7 +28,7 @@ export const transformBookSearchItem = async (
   // 巻数の取得と正規化
   const extractVolumeNumber = (): number | undefined => {
     const candidate =
-      seriesInfo?.bookDisplayNumber || seriesInfo?.volumeSeries?.orderNumber;
+      seriesInfo?.bookDisplayNumber || seriesInfo?.volumeSeries[0].orderNumber;
     const parsed = Number(candidate);
     return isNaN(parsed) ? undefined : parsed;
   };
@@ -53,7 +55,7 @@ export const transformBookSearchItem = async (
     imageUrl: imageUrl,
     targetUrl: canonicalVolumeLink || "",
 
-    seriesId: seriesInfo?.volumeSeries?.seriesId || "",
+    seriesId: seriesInfo?.volumeSeries[0].seriesId || "",
   };
 };
 
