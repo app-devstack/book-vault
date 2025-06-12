@@ -14,14 +14,14 @@ export type SeriesWithBooks = Series & {
 };
 
 export type BookWithSeries = Book & {
-  series: Series | null;
+  series: Series | undefined;
 };
 
 export type BookWithShop = Book & {
-  shop: Shop | null;
+  shop: Shop | undefined;
 };
 
 export type BookWithRelations = Book & {
-  series: Series | null;
-  shop: Shop | null;
+  series: Series | undefined;
+  shop: Shop | undefined;
 };

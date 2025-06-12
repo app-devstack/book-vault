@@ -56,8 +56,12 @@ export const books = sqliteTable("books", {
 
   purchaseDate: timestamp("purchase_date").notNull(), // 購入日
 
-  seriesId: text("series_id").references(() => series.id), // シリーズIDへの外部キー
-  shopId: text("shop_id").references(() => shops.id), // 購入ショップIDへの外部キー
+  seriesId: text("series_id")
+    .notNull()
+    .references(() => series.id), // シリーズIDへの外部キー
+  shopId: text("shop_id")
+    .notNull()
+    .references(() => shops.id), // 購入ショップIDへの外部キー
 });
 
 // リレーション定義
