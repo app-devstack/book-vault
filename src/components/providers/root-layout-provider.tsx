@@ -1,4 +1,4 @@
-import { BooksProvider } from "@/components/providers/BooksProvider";
+import { BooksProvider } from "@/components/providers/books-provider";
 import DBProvider from "@/components/providers/db-provider";
 // import ResetButton from "@/db/utils/resetButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
