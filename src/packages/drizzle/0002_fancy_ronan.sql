@@ -1,0 +1,1 @@
+ALTER TABLE `series` ADD `google_books_series_id` text;
