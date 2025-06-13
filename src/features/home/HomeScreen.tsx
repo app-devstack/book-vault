@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
-import { useBooksContext } from "@/components/providers/BooksProvider";
+import { useBooksContext } from "@/components/providers/books-provider";
 import EmptyBooksState from "@/features/home/components/EmptyBooksState";
 import { SeriesCard } from "@/features/home/components/SeriesCard";
 import { router } from "expo-router";

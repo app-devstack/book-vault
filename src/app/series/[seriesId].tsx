@@ -1,4 +1,4 @@
-import { useBooksContext } from "@/components/providers/BooksProvider";
+import { useBooksContext } from "@/components/providers/books-provider";
 import { SeriesDetailScreen } from "@/features/series/SeriesDetailScreen";
 import { COLORS } from "@/utils/colors";
 import { router, useLocalSearchParams } from "expo-router";
@@ -16,7 +16,7 @@ export default function SeriesDetailPage() {
 
   // シリーズが見つからない場合はホームに戻る
   if (!series || !seriesBooks || seriesBooks.length === 0) {
-    router.replace("/");
+    router.push("/");
     return null;
   }
 

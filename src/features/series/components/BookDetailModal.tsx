@@ -1,5 +1,5 @@
 import { Icon } from "@/components/icons/Icons";
-import { useBooksContext } from "@/components/providers/BooksProvider";
+import { useBooksContext } from "@/components/providers/books-provider";
 import { Book } from "@/db/types";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
@@ -232,13 +232,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: BORDER_RADIUS.large,
     borderTopRightRadius: BORDER_RADIUS.large,
     maxHeight: screenHeight * 0.9,
-    minHeight: screenHeight * 0.5,
+    minHeight: screenHeight * 0.75,
     ...SHADOWS.large,
   },
   header: {
     flexDirection: "row",
     justifyContent: "flex-end",
     padding: 16,
+    paddingTop:8,
+    paddingBottom: 8,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },

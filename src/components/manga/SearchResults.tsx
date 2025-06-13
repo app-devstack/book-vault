@@ -1,4 +1,4 @@
-import { useBooksContext } from "@/components/providers/BooksProvider";
+import { useBooksContext } from "@/components/providers/books-provider";
 import { NewBook } from "@/db/types";
 import RegisterDetailModal from "@/features/register/RegisterDetailModal";
 // import { BookDetailModal } from "@/features/_stashes/register/components/book-search/book-detail-modal";
@@ -80,15 +80,16 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
 
   const handleBookRegister = async (
     book: BookSearchResult,
-    targetUrl: string
+    targetUrl: string,
+    selectedSeriesId?: string | null
   ) => {
     try {
       const formattedBook = {
         ...book,
-        seriesId: book.seriesId || EMPTY_SERIES_ID, // シリーズIDがない場合はデフォルト値を設定
-        shopId: EMPTY_SHOP_ID, // TODO: inputとかから指定できるようにする
+        seriesId: selectedSeriesId || book.seriesId || EMPTY_SERIES_ID,
+        shopId: EMPTY_SHOP_ID,
         targetUrl
-      }satisfies NewBook
+      } satisfies NewBook
 
       await addBook(formattedBook);
       closeModal();

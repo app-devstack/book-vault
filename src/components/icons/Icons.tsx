@@ -21,7 +21,9 @@ export type IconName =
   | "library"
   | "library-outline"
   | "trash"
-  | "close";
+  | "close"
+  | "checkmark"
+  |"chevron-down";
 
 interface IconProps {
   name: IconName;
