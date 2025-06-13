@@ -30,6 +30,8 @@ export const series = sqliteTable("series", {
   author: text("author"), // 作者名
   description: text("description"), // シリーズの概要・あらすじ
   thumbnail: text("thumbnail"), // シリーズ代表画像のURL
+
+  googleBooksSeriesId: text("google_books_series_id"), // Google BooksのシリーズID
 });
 
 // ショップマスタ
