@@ -1,5 +1,5 @@
 import db from "@/db";
-import { books, series } from "@/db/schema";
+import { books } from "@/db/schema";
 import { NewBook } from "@/db/types";
 import { eq } from "drizzle-orm";
 
@@ -29,14 +29,6 @@ class BookService {
       .returning();
 
     return deletedItem;
-  }
-
- //TODO: あとでシリーズサービスに移動する
-  async getSeriesById(seriesId: string) {
-    const item = await db.query.series.findFirst({
-      where: eq(series.id, seriesId),
-    });
-    return item;
   }
 }
 
