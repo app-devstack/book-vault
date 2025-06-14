@@ -1,10 +1,10 @@
 import db from "@/db";
-import { books } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import schema from "@/db/schema";
+import { NewSeries } from "@/db/types";
 
 class SeriesService {
   // constructor(parameters) {}
-  async getAllBooks() {
+  async getAllSeries() {
     const items = await db.query.series.findMany({
       orderBy: (series, { desc }) => [desc(series.createdAt)],
       with: {
@@ -16,7 +16,7 @@ class SeriesService {
 
   async getSeriesById(seriesId: string) {
     const item = await db.query.series.findFirst({
-      where: eq(books.id, seriesId),
+      where: (series,{eq}) => eq(series.id, seriesId),
       with: {
         // シリーズに関連する書籍情報を含める
         books: {
@@ -30,20 +30,28 @@ class SeriesService {
     return item;
   }
 
-  // async createBook(data: NewBook) {
-  //   const [item] = await db.insert(books).values(data).returning();
+  async getSeriesByGoogleBooksSeriesId(googleBooksSeriesId: string) {
+    // googleBooksSeriesIdで検索
+    const item = await db.query.series.findFirst({
+      where: (series,{eq}) => eq(series.googleBooksSeriesId, googleBooksSeriesId),
+      with: {
+        // シリーズに関連する書籍情報を含める
+        books: {
+          orderBy: (books, { desc }) => [
+            desc(books.volume),
+            desc(books.createdAt),
+          ],
+        },
+      },
+    });
+    return item;
+  }
 
-  //   return item;
-  // }
+  async createSeries(data:NewSeries) {
+    const [item] = await db.insert(schema.series).values(data).returning();
 
-  // async deleteBook(bookId: string) {
-  //   const [deletedItem] = await db
-  //     .delete(books)
-  //     .where(eq(books.id, bookId))
-  //     .returning();
-
-  //   return deletedItem;
-  // }
+    return item;
+  }
 }
 
 export const seriesService = new SeriesService();

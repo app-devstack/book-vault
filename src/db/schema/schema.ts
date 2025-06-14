@@ -2,8 +2,6 @@ import { uuidv7 } from "@/lib/uuid";
 import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export * as schema from "@/db/schema";
-
 const timestamp = (name: string) =>
   integer(name, { mode: "timestamp_ms" })
     .notNull()
@@ -30,6 +28,8 @@ export const series = sqliteTable("series", {
   author: text("author"), // 作者名
   description: text("description"), // シリーズの概要・あらすじ
   thumbnail: text("thumbnail"), // シリーズ代表画像のURL
+
+  googleBooksSeriesId: text("google_books_series_id"), // Google BooksのシリーズID
 });
 
 // ショップマスタ
@@ -56,8 +56,12 @@ export const books = sqliteTable("books", {
 
   purchaseDate: timestamp("purchase_date").notNull(), // 購入日
 
-  seriesId: text("series_id").references(() => series.id), // シリーズIDへの外部キー
-  shopId: text("shop_id").references(() => shops.id), // 購入ショップIDへの外部キー
+  seriesId: text("series_id")
+    .notNull()
+    .references(() => series.id), // シリーズIDへの外部キー
+  shopId: text("shop_id")
+    .notNull()
+    .references(() => shops.id), // 購入ショップIDへの外部キー
 });
 
 // リレーション定義

@@ -1,4 +1,6 @@
 import { Icon } from "@/components/icons/Icons";
+import { useBooksContext } from "@/components/providers/books-provider";
+import { SeriesSelector } from "@/components/ui/SeriesSelector";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
@@ -20,7 +22,7 @@ type RegisterDetailModalProps = {
   visible: boolean;
   book: BookSearchResult | null;
   onClose: () => void;
-  onRegister: (book: BookSearchResult, targetURL: string) => Promise<void>;
+  onRegister: (book: BookSearchResult, targetURL: string, selectedSeriesId?: string | null) => Promise<void>;
 };
 
 export default function RegisterDetailModal({
@@ -30,11 +32,14 @@ export default function RegisterDetailModal({
   onRegister,
 }: RegisterDetailModalProps) {
   const [targetURL, setTargetURL] = useState("");
+  const [selectedSeriesId, setSelectedSeriesId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
+  const { seriesedBooks, createSeries } = useBooksContext();
 
   useEffect(() => {
     if (book) {
       setTargetURL(`https://books.google.com/books?id=${book.googleBooksId}`);
+      setSelectedSeriesId(null);
     }
   }, [book]);
 
@@ -43,7 +48,7 @@ export default function RegisterDetailModal({
 
     setIsRegistering(true);
     try {
-      await onRegister(book, targetURL);
+      await onRegister(book, targetURL, selectedSeriesId);
       onClose();
     } finally {
       setIsRegistering(false);
@@ -120,6 +125,23 @@ export default function RegisterDetailModal({
               </Text>
             </View>
           )}
+
+          {/* シリーズ選択セクション */}
+          <View style={styles.seriesCard}>
+            <View style={styles.sectionHeader}>
+              <Icon name="library" size="medium" color={COLORS.primary} />
+              <Text style={styles.sectionTitle}>シリーズ</Text>
+            </View>
+            <SeriesSelector
+              series={seriesedBooks}
+              selectedSeriesId={selectedSeriesId}
+              onSelectSeries={setSelectedSeriesId}
+              onCreateSeries={createSeries}
+              placeholder="既存シリーズから選択 または 新規作成"
+              initialTitle={book?.title ? book.title.split(' ')[0] : ""}
+              initialAuthor={book?.author || ""}
+            />
+          </View>
 
           {/* URL入力セクション */}
           <View style={styles.urlCard}>
@@ -270,6 +292,15 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   descriptionCard: {
+    backgroundColor: COLORS.card,
+    borderRadius: BORDER_RADIUS.xlarge,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    ...SHADOWS.medium,
+  },
+  seriesCard: {
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.xlarge,
     padding: 20,

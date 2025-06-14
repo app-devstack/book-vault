@@ -11,6 +11,7 @@ export interface BookSearchResult {
   isbn?: string;
   imageUrl?: string;
   targetUrl: string;
+  seriesId?: string;
 }
 
 export type StoreKey = "kindle" | "kobo" | "bookwalker";

@@ -1,5 +1,5 @@
 import db from "@/db";
-import { books } from "@/db/schema";
+import schema from "@/db/schema";
 import { NewBook } from "@/db/types";
 import { eq } from "drizzle-orm";
 
@@ -17,15 +17,15 @@ class BookService {
   }
 
   async createBook(data: NewBook) {
-    const [item] = await db.insert(books).values(data).returning();
+    const [item] = await db.insert(schema.books).values(data).returning();
 
     return item;
   }
 
   async deleteBook(bookId: string) {
     const [deletedItem] = await db
-      .delete(books)
-      .where(eq(books.id, bookId))
+      .delete(schema.books)
+      .where(eq(schema.books.id, bookId))
       .returning();
 
     return deletedItem;

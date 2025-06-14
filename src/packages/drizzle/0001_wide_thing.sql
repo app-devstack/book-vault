@@ -21,5 +21,5 @@ CREATE TABLE `shops` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `shops_name_unique` ON `shops` (`name`);--> statement-breakpoint
-ALTER TABLE `books` ADD `series_id` text REFERENCES series(id);--> statement-breakpoint
-ALTER TABLE `books` ADD `shop_id` text REFERENCES shops(id);
+ALTER TABLE `books` ADD `series_id` text NOT NULL REFERENCES series(id);--> statement-breakpoint
+ALTER TABLE `books` ADD `shop_id` text NOT NULL REFERENCES shops(id);

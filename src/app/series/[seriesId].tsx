@@ -1,4 +1,4 @@
-import { useBooksContext } from "@/components/providers/BooksProvider";
+import { useBooksContext } from "@/components/providers/books-provider";
 import { SeriesDetailScreen } from "@/features/series/SeriesDetailScreen";
 import { COLORS } from "@/utils/colors";
 import { router, useLocalSearchParams } from "expo-router";
@@ -6,16 +6,17 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function SeriesDetailPage() {
-  const { title } = useLocalSearchParams<{ title: string }>();
-  const { groupedBooks, getSeriesStats } = useBooksContext();
+  const { seriesId } = useLocalSearchParams<{ seriesId: string }>();
+  const { seriesedBooks, getSeriesStats } = useBooksContext();
 
-  // URLパラメータからデコード
-  const seriesTitle = decodeURIComponent(title || "");
-  const seriesBooks = groupedBooks[seriesTitle];
+  const series = seriesedBooks.find(
+    (series) => series.id === seriesId
+  );
+  const seriesBooks = series?.books || [];
 
   // シリーズが見つからない場合はホームに戻る
-  if (!seriesBooks || seriesBooks.length === 0) {
-    router.replace("/");
+  if (!series || !seriesBooks || seriesBooks.length === 0) {
+    router.push("/");
     return null;
   }
 
@@ -28,7 +29,7 @@ export default function SeriesDetailPage() {
   return (
     <View style={styles.container}>
       <SeriesDetailScreen
-        seriesTitle={seriesTitle}
+        seriesTitle={series.title}
         seriesBooks={seriesBooks}
         stats={stats}
         onBack={handleBack}

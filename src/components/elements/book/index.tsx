@@ -14,7 +14,7 @@ import {
 export default function BookItem(item: Book) {
   const openExternalLink = async () => {
     try {
-      const url = item.targetURL;
+      const url = item.targetUrl;
       const supported = await Linking.canOpenURL(url); // URLが開けるかどうかをチェック
 
       if (supported) await Linking.openURL(url);
@@ -30,7 +30,7 @@ export default function BookItem(item: Book) {
       onPress={openExternalLink}
     >
       <View style={styles.content}>
-        <ItemBookImg imageURL={item.imageURL} />
+        <ItemBookImg imageURL={item.imageUrl} />
 
         <ItemTitleAndDescription
           title={item.title}

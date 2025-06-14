@@ -1,45 +1,40 @@
-import { SeriesCard } from "@/components/manga/SeriesCard";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
-import { useBooksContext } from "@/components/providers/BooksProvider";
+import { useBooksContext } from "@/components/providers/books-provider";
 import EmptyBooksState from "@/features/home/components/EmptyBooksState";
+import { SeriesCard } from "@/features/home/components/SeriesCard";
 import { router } from "expo-router";
 
 export const HomeScreen = () => {
-  const { groupedBooks, getSeriesStats, totalStats } = useBooksContext();
+  const { seriesedBooks, getSeriesStats, totalStats } = useBooksContext();
 
-  const onSeriesPress = (seriesTitle: string) => {
-    // エンコードしてルーティング
-    const encodedTitle = encodeURIComponent(seriesTitle);
-    router.push(`/series/${encodedTitle}`);
+  const onSeriesPress = (seriesId: string) => {
+    router.push(`/series/${seriesId}`);
   };
 
-  const seriesEntries = Object.entries(groupedBooks);
-  const isEmpty = seriesEntries.length === 0;
-
   // 登録本がないときの見た目
-  if (isEmpty) return <EmptyBooksState />;
+  if (seriesedBooks.length === 0) return <EmptyBooksState />;
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={seriesEntries}
-        renderItem={({ item: [seriesTitle, seriesBooks] }) => {
-          const stats = getSeriesStats(seriesBooks);
+        data={seriesedBooks}
+        renderItem={({ item:seriese }) => {
+          const stats = getSeriesStats(seriese.books);
           return (
             <SeriesCard
-              seriesTitle={seriesTitle}
-              seriesBooks={seriesBooks}
+              seriesTitle={seriese.title}
+              seriesBooks={seriese.books}
               stats={stats}
-              onPress={() => onSeriesPress(seriesTitle)}
+              onPress={() => onSeriesPress(seriese.id)}
             />
           );
         }}
-        keyExtractor={([seriesTitle]) => seriesTitle}
+        keyExtractor={(seriese) => seriese.id}
         ListHeaderComponent={() => (
           <LinearGradient
             colors={GRADIENTS.primary}

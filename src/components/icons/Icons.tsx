@@ -19,7 +19,14 @@ export type IconName =
   | "book"
   | "book-outline"
   | "library"
-  | "library-outline";
+  | "library-outline"
+  | "trash"
+  | "close"
+  | "checkmark"
+  | "chevron-down"
+  | "person"
+  | "document-text"
+  | "information-circle";
 
 interface IconProps {
   name: IconName;

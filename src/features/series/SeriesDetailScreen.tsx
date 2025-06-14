@@ -1,5 +1,5 @@
 import { Icon } from "@/components/icons/Icons";
-import { BookCard } from "@/components/manga/BookCard";
+import { BookCard } from "@/features/series/components/BookCard";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
@@ -51,7 +51,13 @@ export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
           alignItems: "center",
         }}
       >
-        <Text style={{ color: COLORS.text }}>シリーズ情報を読み込み中...</Text>
+        <Text style={{ color: COLORS.text }}>
+          シリーズ情報を読み込み中...
+        </Text>
+        <Text style={{ color: COLORS.text }}>
+          シリーズ情報を読み込み中...
+          {seriesId+""}
+        </Text>
       </SafeAreaView>
     );
   }

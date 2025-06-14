@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ce9eb5e8-bf01-4e8e-a441-62f1382e8ee2",
-  "prevId": "eca7370c-4e0c-4e07-b5cc-65a4d615cdff",
+  "id": "bf997aa3-9246-4e88-823d-abf219231522",
+  "prevId": "ce9eb5e8-bf01-4e8e-a441-62f1382e8ee2",
   "tables": {
     "books": {
       "name": "books",
@@ -186,6 +186,13 @@
         },
         "thumbnail": {
           "name": "thumbnail",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "google_books_series_id": {
+          "name": "google_books_series_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
