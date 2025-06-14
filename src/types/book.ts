@@ -1,33 +1,25 @@
-export interface Book {
-  id: number;
-  title: string;
-  volume: number;
-  author: string;
-  thumbnail: string;
-  store: StoreKey;
-  purchaseDate: string;
-  price: number;
-  url: string;
-  description?: string;
-}
+import { Book } from "@/db/types";
 
 export interface BookSearchResult {
-  id: string;
+  // id: string;
+  googleBooksId: string;
   title: string;
-  author: string;
-  thumbnail: string;
+  author?: string;
+  volume?: number;
+  publisher?: string;
   description: string;
+  isbn?: string;
+  imageUrl?: string;
+  targetUrl: string;
+  seriesId?: string;
 }
 
 export type StoreKey = "kindle" | "kobo" | "bookwalker";
 
 export interface SeriesStats {
   volumeCount: number;
-  minVolume: number;
-  maxVolume: number;
-  stores: StoreKey[];
-  totalPrice: number;
-  latestPurchase: Date;
+  // stores: StoreKey[];
+  // latestPurchase: Date;
 }
 
 export interface GroupedBooks {

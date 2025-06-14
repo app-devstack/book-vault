@@ -1,7 +1,8 @@
-import { BookSearchItemType } from "@/feature/register/components/book-search/types";
 import { BookSearchResult } from "@/types/book";
-import { COLORS } from "@/utils/colors";
+import { transformBookSearchItem } from "@/utils/googleBooks";
+import { GoogleBooksResponse } from "@/utils/googleBooks/types";
 import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@uidotdev/usehooks";
 import { useCallback, useEffect, useState } from "react";
 
 const fetchBooks = async (query: string) => {
@@ -13,63 +14,53 @@ const fetchBooks = async (query: string) => {
   if (!response.ok) {
     throw new Error("データの取得に失敗しました");
   }
-  return response.json();
-};
-
-// BookSearchItemTypeをBookSearchResultに変換する関数
-const transformBookSearchItem = (
-  item: BookSearchItemType
-): BookSearchResult => {
-  const volumeInfo = item.volumeInfo || {};
-
-  return {
-    id: item.id || "",
-    title: volumeInfo.title || "不明なタイトル",
-    author: volumeInfo.authors?.join(", ") || "不明な著者",
-    thumbnail:
-      volumeInfo.imageLinks?.thumbnail ||
-      `https://via.placeholder.com/120x160/${COLORS.primary.slice(
-        1
-      )}/FFFFFF?text=No+Image`,
-    description: volumeInfo.description || "説明がありません",
-  };
+  return response.json() as Promise<GoogleBooksResponse>;
 };
 
 export const useGetBookSearch = (searchTerm: string) => {
   return useQuery<BookSearchResult[]>({
     queryKey: ["books", searchTerm],
     queryFn: () =>
-      fetchBooks(searchTerm).then((data) => {
+      fetchBooks(searchTerm).then(async (data) => {
         const items = data.items || [];
-        return items.map(transformBookSearchItem);
+
+        const results: BookSearchResult[] = [];
+
+        for (const item of items) {
+          const transformedItem = await transformBookSearchItem(item);
+          results.push(transformedItem);
+        }
+
+        return results;
       }),
     enabled: !!searchTerm,
   });
 };
 
 // デバウンス用のカスタムフック
-const useDebounce = (value: string, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+// const useDebounce = (value: string, delay: number) => {
+//   const [debouncedValue, setDebouncedValue] = useState(value);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+//   useEffect(() => {
+//     const handler = setTimeout(() => {
+//       setDebouncedValue(value);
+//     }, delay);
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
+//     return () => {
+//       clearTimeout(handler);
+//     };
+//   }, [value, delay]);
 
-  return debouncedValue;
-};
+//   return debouncedValue;
+// };
+
+const SEARCH_DEBOUNCE_DELAY = 500; // デバウンスの遅延時間（ミリ秒）
 
 export const useSearch = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  // 500msのデバウンス
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const debouncedSearchQuery = useDebounce(searchQuery, SEARCH_DEBOUNCE_DELAY);
 
   // デバウンスされた検索クエリでGoogle Books APIを呼び出し
   const { data: searchResults = [], isFetching } =

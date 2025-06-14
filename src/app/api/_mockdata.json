@@ -1,45 +1,354 @@
 {
   "kind": "books#volumes",
-  "totalItems": 324,
+  "totalItems": 1000000,
   "items": [
     {
       "kind": "books#volume",
-      "id": "mN2sNAEACAAJ",
-      "etag": "GIAlHu98DEQ",
-      "selfLink": "https://www.googleapis.com/books/v1/volumes/mN2sNAEACAAJ",
+      "id": "9MEvEQAAQBAJ",
+      "etag": "7926iKM/Kvw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/9MEvEQAAQBAJ",
       "volumeInfo": {
-        "title": "ノラネコぐんだんパンこうじょう",
-        "authors": ["工藤ノリコ"],
-        "publisher": "Hakusensha/Tsai Fong Books",
-        "publishedDate": "2012-11",
-        "description": "ノラネコぐんだんは、おいしそうなパンが気になり、ワンワンちゃんのパンこうじょうにしのびこみました。食いしん坊のノラネコぐんだんが見よう見まねでパンづくりに挑戦、大騒動を巻き起こします。",
+        "title": "ちいかわ　なんか小さくてかわいいやつ（７）",
+        "authors": ["ナガノ"],
+        "publisher": "講談社",
+        "publishedDate": "2024-11-21",
+        "description": "累計３６０万部突破＆テレビアニメ好評放送中！ 大人気「ちいかわ」の待望の最新コミックス第７巻！ なんか小さくてかわいいやつ、すなわち「ちいかわ」！ 「わ～らうとまっけよ～ あ・く・む！！」 ある日突然、にらめっこを挑まれたちいかわ。にらめっこで笑ったせいで、その日から悪夢を見るようになってしまった！ なんとかしようと、うさぎと一緒に戦うけど、今度はうさぎが捕まってしまって…どうしよう！？ 楽しく、切なくて、ちょっぴりハードなちいかわの日々は、たくさんの仲間といっしょに、ますます大騒ぎ！ 話題の「あくむ編」ほか、この本だけの描き下ろしエピソードやイラストもたっぷり収録！",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:BT000090714200700701900206"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 171,
+        "printType": "BOOK",
+        "categories": ["Comics & Graphic Novels"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "0.2.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=9MEvEQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=9MEvEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=9MEvEQAAQBAJ&printsec=frontcover&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=1&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=9MEvEQAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=9MEvEQAAQBAJ",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "7",
+          "volumeSeries": [
+            {
+              "seriesId": "bTctGwAAABBBLM",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 7
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1375,
+          "currencyCode": "JPY"
+        },
+        "retailPrice": {
+          "amount": 1375,
+          "currencyCode": "JPY"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=9MEvEQAAQBAJ&rdid=book-9MEvEQAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1375000000,
+              "currencyCode": "JPY"
+            },
+            "retailPrice": {
+              "amountInMicros": 1375000000,
+              "currencyCode": "JPY"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-epub.acsm?id=9MEvEQAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-pdf.acsm?id=9MEvEQAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=9MEvEQAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "累計360万部突破＆テレビアニメ好評放送中！ 大人気「ちいかわ」の待望の最新コミックス第7巻！ なんか小さくてかわいいやつ、すなわち「ちいかわ」！ ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "TAY9EAAAQBAJ",
+      "etag": "yP5jFW+0CWI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/TAY9EAAAQBAJ",
+      "volumeInfo": {
+        "title": "ちいかわ　なんか小さくてかわいいやつ（２）",
+        "authors": ["ナガノ"],
+        "publisher": "講談社",
+        "publishedDate": "2021-08-23",
+        "description": "「自分ツッコミくま」ナガノによる人気シリーズ、早くも続編が登場！ なんか小さくてかわいいやつ＝通称「ちいかわ」は、たまに現れるちょっと怖い存在におびえたりしながら、労働に精を出す日々を送っています。 そんなちいかわの大親友・ハチワレは、ちいかわの家で「草むしり検定５級」の資格対策本を見つけます。 「資格を取って報酬がアップしたら、みんなに贈り物ができる」 苦手な勉強を頑張るちいかわの姿に、ハチワレが思いついたのは…。 小さくてかわいくて、いつも一生懸命。 もちろん、なんでもうまくいくわけじゃなくて、ちいかわの日々は、辛いこと、悲しいこと、危険なこととも隣り合わせ。 でも、大好きなみんなと一緒に、明日も笑って「くらしたい」。 ここでしか読めない描きおろしエピソードも収録します！",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:BT000090714200200201900206"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 131,
+        "printType": "BOOK",
+        "categories": ["Comics & Graphic Novels"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "2.2.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": true,
+          "containsImageBubbles": true,
+          "epubBubbleVersion": "d1f4fe763591b958",
+          "imageBubbleVersion": "d1f4fe763591b958"
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=TAY9EAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=TAY9EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=TAY9EAAAQBAJ&printsec=frontcover&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=2&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=TAY9EAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=TAY9EAAAQBAJ",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "2",
+          "volumeSeries": [
+            {
+              "seriesId": "bTctGwAAABBBLM",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 2
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "retailPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=TAY9EAAAQBAJ&rdid=book-TAY9EAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            },
+            "retailPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-epub.acsm?id=TAY9EAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-pdf.acsm?id=TAY9EAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=TAY9EAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "「自分ツッコミくま」ナガノによる人気シリーズ、早くも続編が登場！ なんか小さくてかわいいやつ＝通称「ちいかわ」は、たまに現れるちょっと怖い存在におびえたりしなが ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "pphjEAAAQBAJ",
+      "etag": "Prr05/hUEaI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/pphjEAAAQBAJ",
+      "volumeInfo": {
+        "title": "ちいかわ　なんか小さくてかわいいやつ（３）",
+        "authors": ["ナガノ"],
+        "publisher": "講談社",
+        "publishedDate": "2022-03-23",
+        "description": "「自分ツッコミくま」ナガノによる人気シリーズ、早くも第3巻登場！ 仲良しトリオに、新しい仲間が加わった！ ちいかわが出会った小さなカブトムシ、これからはずっと一緒だと思ってた…。 大反響の「小さな友達」編を完全収録＆描き下ろしも満載の「ちいかわ」第3巻!!",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:BT000090714200300301900206"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 131,
+        "printType": "BOOK",
+        "categories": ["Comics & Graphic Novels"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "2.4.3.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": true,
+          "containsImageBubbles": true,
+          "epubBubbleVersion": "eca1c50b49e635c0",
+          "imageBubbleVersion": "eca1c50b49e635c0"
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=pphjEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=pphjEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=pphjEAAAQBAJ&printsec=frontcover&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=3&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=pphjEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=pphjEAAAQBAJ",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "3",
+          "volumeSeries": [
+            {
+              "seriesId": "bTctGwAAABBBLM",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 3
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "retailPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=pphjEAAAQBAJ&rdid=book-pphjEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            },
+            "retailPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-epub.acsm?id=pphjEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-pdf.acsm?id=pphjEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=pphjEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "「自分ツッコミくま」ナガノによる人気シリーズ、早くも第3巻登場！ 仲良しトリオに、新しい仲間が加わった！ ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "mmaKzgEACAAJ",
+      "etag": "NQQhdZURZfM",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/mmaKzgEACAAJ",
+      "volumeInfo": {
+        "title": "ちいかわなんか小さくてかわいいやつ 1",
+        "subtitle": "",
+        "authors": ["ナガノ"],
+        "publishedDate": "2021-02",
+        "description": "「自分ツッコミくま」ナガノの人気シリーズ、待望の書籍化!小さくて泣き虫な「ちいかわ」は、大好きな友達と元気に暮らすのです。",
         "industryIdentifiers": [
           {
             "type": "ISBN_10",
-            "identifier": "459276157X"
+            "identifier": "4065223962"
           },
           {
             "type": "ISBN_13",
-            "identifier": "9784592761570"
+            "identifier": "9784065223963"
           }
         ],
         "readingModes": {
           "text": false,
           "image": false
         },
-        "pageCount": 1,
+        "pageCount": 0,
         "printType": "BOOK",
+        "categories": ["Animals"],
         "maturityRating": "NOT_MATURE",
         "allowAnonLogging": false,
         "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
         "imageLinks": {
-          "smallThumbnail": "http://books.google.com/books/content?id=mN2sNAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
-          "thumbnail": "http://books.google.com/books/content?id=mN2sNAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          "smallThumbnail": "http://books.google.com/books/content?id=mmaKzgEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=mmaKzgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
         },
         "language": "ja",
-        "previewLink": "http://books.google.co.jp/books?id=mN2sNAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&cd=1&source=gbs_api",
-        "infoLink": "http://books.google.co.jp/books?id=mN2sNAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&source=gbs_api",
-        "canonicalVolumeLink": "https://books.google.com/books/about/%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93%E3%83%91%E3%83%B3%E3%81%93%E3%81%86%E3%81%98.html?hl=&id=mN2sNAEACAAJ"
+        "previewLink": "http://books.google.co.jp/books?id=mmaKzgEACAAJ&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=4&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=mmaKzgEACAAJ&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F.html?hl=&id=mmaKzgEACAAJ"
       },
       "saleInfo": {
         "country": "JP",
@@ -58,38 +367,439 @@
         "pdf": {
           "isAvailable": false
         },
-        "webReaderLink": "http://play.google.com/books/reader?id=mN2sNAEACAAJ&hl=&source=gbs_api",
+        "webReaderLink": "http://play.google.com/books/reader?id=mmaKzgEACAAJ&hl=&source=gbs_api",
         "accessViewStatus": "NONE",
         "quoteSharingAllowed": false
       },
       "searchInfo": {
-        "textSnippet": "ノラネコぐんだんは、おいしそうなパンが気になり、ワンワンちゃんのパンこうじょうにしのびこみました。食いしん坊のノラネコぐんだんが見よう見まねでパンづくりに挑戦、 ..."
+        "textSnippet": "「自分ツッコミくま」ナガノの人気シリーズ、待望の書籍化!小さくて泣き虫な「ちいかわ」は、大好きな友達と元気に暮らすのです。"
       }
     },
     {
       "kind": "books#volume",
-      "id": "A_L8xAEACAAJ",
-      "etag": "kMe1bk8iK1E",
-      "selfLink": "https://www.googleapis.com/books/v1/volumes/A_L8xAEACAAJ",
+      "id": "cLnoEAAAQBAJ",
+      "etag": "Gjjo4hUrPE8",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/cLnoEAAAQBAJ",
       "volumeInfo": {
-        "title": "ノラネコぐんだんコミック",
-        "authors": ["工藤ノリコ"],
-        "publishedDate": "2019",
+        "title": "ちいかわ　なんか小さくてかわいいやつ（６）",
+        "authors": ["ナガノ"],
+        "publisher": "講談社",
+        "publishedDate": "2023-12-21",
+        "description": "累計２７０万部突破＆テレビアニメ好評放送中！大人気「ちいかわ」の待望の最新コミックス第６巻！ なんか小さくてかわいいやつ、すなわち「ちいかわ」！ うさぎが旅行のお土産でくれたキレイな石。石を見ていたら無性にどこかに行きたくなって、ちいかわとハチワレは、うさぎの跡を追って古びた旅館に辿り着く。 中の「拾魔」でうさぎを見つけてひと安心…のはずが、石のせいで、みんなの様子がおかしくなって大ピンチ！ 楽しく、切なくて、ちょっぴりハードなちいかわの日々は、たくさんの仲間といっしょに、ますます大騒ぎ！ この本だけの描き下ろしエピソードやイラストもたっぷり収録！",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:BT000090714200600601900206"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 139,
+        "printType": "BOOK",
+        "categories": ["Comics & Graphic Novels"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.2.2.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=cLnoEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=cLnoEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=cLnoEAAAQBAJ&printsec=frontcover&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=5&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=cLnoEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=cLnoEAAAQBAJ",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "6",
+          "volumeSeries": [
+            {
+              "seriesId": "bTctGwAAABBBLM",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 6
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "retailPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=cLnoEAAAQBAJ&rdid=book-cLnoEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            },
+            "retailPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-epub.acsm?id=cLnoEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-pdf.acsm?id=cLnoEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=cLnoEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "累計270万部突破＆テレビアニメ好評放送中！大人気「ちいかわ」の待望の最新コミックス第6巻！ なんか小さくてかわいいやつ、すなわち「ちいかわ」！ ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "As2mEAAAQBAJ",
+      "etag": "SwF/y00x8k0",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/As2mEAAAQBAJ",
+      "volumeInfo": {
+        "title": "ちいかわ　なんか小さくてかわいいやつ（５）",
+        "authors": ["ナガノ"],
+        "publisher": "講談社",
+        "publishedDate": "2023-01-23",
+        "description": "テレビアニメも大好評！ 人気シリーズ「ちいかわ」、待望の第５巻登場！！ ちいかわたちが森で出会った大男「オデ」。オデにすすめられて一緒にキノコを食べていたら、ゴブリンたちに捕まっちゃった！ オデとともに監獄に収容されたちいかわたち。このままだとゴブリンたちに食べられちゃう…！？ でも……諦めずにみんなで脱出できるよね！ 「オデ」編のほか、大反響の「スロット」編や「黒い流れ星」編も収録！ さらに単行本でしか読めない描き下ろしも！ つらいことも悲しいこともあるけれど、大好きなみんなと明日も笑って暮らしたい。小さな幸せを見つける、ちいかわのささやかな日々は続きます！",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:BT000090714200500501900206"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 168,
+        "printType": "BOOK",
+        "categories": ["Comics & Graphic Novels"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "2.5.5.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=As2mEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=As2mEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=As2mEAAAQBAJ&printsec=frontcover&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=6&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=As2mEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=As2mEAAAQBAJ",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "5",
+          "volumeSeries": [
+            {
+              "seriesId": "bTctGwAAABBBLM",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 5
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "retailPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=As2mEAAAQBAJ&rdid=book-As2mEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            },
+            "retailPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-epub.acsm?id=As2mEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-pdf.acsm?id=As2mEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=As2mEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "テレビアニメも大好評！ 人気シリーズ「ちいかわ」、待望の第5巻登場！！ ちいかわたちが森で出会った大男「オデ」。オデにすすめられて一緒にキノコを食べていたら、ゴブ ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "zZQZEAAAQBAJ",
+      "etag": "ncDl9iP3lmc",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/zZQZEAAAQBAJ",
+      "volumeInfo": {
+        "title": "ちいかわ　なんか小さくてかわいいやつ（１）",
+        "authors": ["ナガノ"],
+        "publisher": "講談社",
+        "publishedDate": "2021-02-12",
+        "description": "「自分ツッコミくま」ナガノの人気シリーズ、待望の書籍化！ なんか小さくてかわいいやつ＝通称「ちいかわ」たちが繰り広げる、楽しくて、切なくて、ちょっとハードな日々の物語。 みんなに愛されて、優しくされて、こういう風になって暮らしたい…はずが、周囲には得体の知れない存在もたくさん!? でも、大好きなハチワレやうさぎたちと、おいしいものを食べたり、労働の報酬でほしいものを手に入れようとしたり、毎日を一生懸命生きる「ちいかわ」の周りは、いつも笑顔で溢れています。 この本でしか読めない描きおろしエピソードももちろん収録！ もう一つの「ナガノワールド」、ここに開幕です！",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:BT000090714200100101900206"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 131,
+        "printType": "BOOK",
+        "categories": ["Comics & Graphic Novels"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.3.2.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=zZQZEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=zZQZEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=zZQZEAAAQBAJ&printsec=frontcover&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=7&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=zZQZEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=zZQZEAAAQBAJ",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "1",
+          "volumeSeries": [
+            {
+              "seriesId": "bTctGwAAABBBLM",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 1
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1100,
+          "currencyCode": "JPY"
+        },
+        "retailPrice": {
+          "amount": 1100,
+          "currencyCode": "JPY"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=zZQZEAAAQBAJ&rdid=book-zZQZEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1100000000,
+              "currencyCode": "JPY"
+            },
+            "retailPrice": {
+              "amountInMicros": 1100000000,
+              "currencyCode": "JPY"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-epub.acsm?id=zZQZEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-pdf.acsm?id=zZQZEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=zZQZEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "「自分ツッコミくま」ナガノの人気シリーズ、待望の書籍化！ なんか小さくてかわいいやつ＝通称「ちいかわ」たちが繰り広げる、楽しくて、切なくて、ちょっとハードな日々 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "em18EAAAQBAJ",
+      "etag": "hw4p84mUlmo",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/em18EAAAQBAJ",
+      "volumeInfo": {
+        "title": "ちいかわ　なんか小さくてかわいいやつ（４）",
+        "authors": ["ナガノ"],
+        "publisher": "講談社",
+        "publishedDate": "2022-07-22",
+        "description": "テレビアニメも大好評！「自分ツッコミくま」ナガノによる人気シリーズ、早くも第４巻登場!! 思わず口ずさんじゃう 「♪ウ ウ・ワ・ワ ウワ」のフレーズが、ちいかわたちにも大人気のグループ「パジャマパーティーズ」。「むちゃフェス」に出ることになったのに、メンバーがでかい鳥にさらわれた…！ それでもみんなが戻ることを信じて、ステージを守りたい…それなら！ ちいかわたちが代理の「パジャマパーティーズ」になるよ！ 楽しい時も、ピンチの時も。大好きなみんなと頑張るちいかわのささやかな毎日を描きます!!",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "PKEY:BT000090714200400401900206"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 139,
+        "printType": "BOOK",
+        "categories": ["Comics & Graphic Novels"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.5.3.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=em18EAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=em18EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=em18EAAAQBAJ&printsec=frontcover&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=8&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=em18EAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=em18EAAAQBAJ",
+        "seriesInfo": {
+          "kind": "books#volume_series_info",
+          "bookDisplayNumber": "4",
+          "volumeSeries": [
+            {
+              "seriesId": "bTctGwAAABBBLM",
+              "seriesBookType": "COLLECTED_EDITION",
+              "orderNumber": 4
+            }
+          ]
+        }
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "retailPrice": {
+          "amount": 1210,
+          "currencyCode": "JPY"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=em18EAAAQBAJ&rdid=book-em18EAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            },
+            "retailPrice": {
+              "amountInMicros": 1210000000,
+              "currencyCode": "JPY"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-epub.acsm?id=em18EAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.co.jp/books/download/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F_%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F-sample-pdf.acsm?id=em18EAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=em18EAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "テレビアニメも大好評！「自分ツッコミくま」ナガノによる人気シリーズ、早くも第4巻登場!! 思わず口ずさんじゃう 「♪ウ ウ・ワ・ワ ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "3flU0AEACAAJ",
+      "etag": "P9Es3QUIdZc",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/3flU0AEACAAJ",
+      "volumeInfo": {
+        "title": "ちいかわなんか小さくてかわいいやつ(6)なんか光ってて旅したくなるご朱印帳付き特装版",
+        "authors": ["ナガノ"],
+        "publishedDate": "2023-12-21",
+        "description": "ツツウラウラへ旅しよう!キラキラ豪華刺繍のご朱印帳付き「ちいかわ」待望の最新コミックス第6巻! なんか小さくてかわいいやつ、すなわち「ちいかわ」! うさぎが旅行のお土産でくれたキレイな石。石を見ていたら無性にどこかに行きたくなって、ちいかわとハチワレは、うさぎの跡を追って古びた旅館に辿り着く。 中の「拾魔」でうさぎを見つけてひと安心...のはずが、石のせいで、みんなの様子がおかしくなって大ピンチ! 楽しく、切なくて、ちょっぴりハードなちいかわの日々は、たくさんの仲間といっしょに、ますます大騒ぎ! この本だけの描き下ろしエピソードやイラストもたっぷり収録!",
         "industryIdentifiers": [
           {
             "type": "ISBN_10",
-            "identifier": "4592762495"
+            "identifier": "4065339839"
           },
           {
             "type": "ISBN_13",
-            "identifier": "9784592762492"
+            "identifier": "9784065339831"
           }
         ],
         "readingModes": {
           "text": false,
           "image": false
         },
-        "pageCount": 143,
+        "pageCount": 0,
         "printType": "BOOK",
         "maturityRating": "NOT_MATURE",
         "allowAnonLogging": false,
@@ -98,10 +808,14 @@
           "containsEpubBubbles": false,
           "containsImageBubbles": false
         },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=3flU0AEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=3flU0AEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
         "language": "ja",
-        "previewLink": "http://books.google.co.jp/books?id=A_L8xAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&cd=2&source=gbs_api",
-        "infoLink": "http://books.google.co.jp/books?id=A_L8xAEACAAJ&dq=%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93&hl=&source=gbs_api",
-        "canonicalVolumeLink": "https://books.google.com/books/about/%E3%83%8E%E3%83%A9%E3%83%8D%E3%82%B3%E3%81%90%E3%82%93%E3%81%A0%E3%82%93%E3%82%B3%E3%83%9F%E3%83%83%E3%82%AF.html?hl=&id=A_L8xAEACAAJ"
+        "previewLink": "http://books.google.co.jp/books?id=3flU0AEACAAJ&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=9&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=3flU0AEACAAJ&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F.html?hl=&id=3flU0AEACAAJ"
       },
       "saleInfo": {
         "country": "JP",
@@ -120,9 +834,81 @@
         "pdf": {
           "isAvailable": false
         },
-        "webReaderLink": "http://play.google.com/books/reader?id=A_L8xAEACAAJ&hl=&source=gbs_api",
+        "webReaderLink": "http://play.google.com/books/reader?id=3flU0AEACAAJ&hl=&source=gbs_api",
         "accessViewStatus": "NONE",
         "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "ツツウラウラへ旅しよう!キラキラ豪華刺繍のご朱印帳付き「ちいかわ」待望の最新コミックス第6巻!"
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "QcqLzgEACAAJ",
+      "etag": "t2a7nQ8e5v0",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/QcqLzgEACAAJ",
+      "volumeInfo": {
+        "title": "ちいかわなんか小さくてかわいいやつ 2",
+        "subtitle": "",
+        "authors": ["ナガノ"],
+        "publishedDate": "2021-08",
+        "description": "「自分ツッコミくま」ナガノの人気シリーズ、早くも続編が登場!「草むしり検定5級」の受験に挑むちいかわの運命は!?",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "4065242517"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784065242513"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 0,
+        "printType": "BOOK",
+        "categories": ["Animals"],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=QcqLzgEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=QcqLzgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=QcqLzgEACAAJ&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&cd=10&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=QcqLzgEACAAJ&dq=intitle:%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F+%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E3%81%A1%E3%81%84%E3%81%8B%E3%82%8F%E3%81%AA%E3%82%93%E3%81%8B%E5%B0%8F%E3%81%95%E3%81%8F%E3%81%A6%E3%81%8B%E3%82%8F.html?hl=&id=QcqLzgEACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=QcqLzgEACAAJ&hl=&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "「自分ツッコミくま」ナガノの人気シリーズ、早くも続編が登場!「草むしり検定5級」の受験に挑むちいかわの運命は!?"
       }
     }
   ]

@@ -1,7 +1,7 @@
+import schema from "@/db/schema";
 import { DrizzleConfig } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { openDatabaseSync } from "expo-sqlite";
-import * as schema from "./schema";
 
 /** The name of the database file to open. */
 export const DATABASE_NAME = "db.db";

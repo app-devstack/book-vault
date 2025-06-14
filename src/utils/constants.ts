@@ -1,23 +1,3 @@
-import { Stores } from "../types/store";
-
-export const STORES: Stores = {
-  kindle: {
-    name: "Kindle",
-    color: "#FF9500",
-    url: "https://kindle.amazon.co.jp",
-  },
-  kobo: {
-    name: "楽天Kobo",
-    color: "#ED1C24",
-    url: "https://books.rakuten.co.jp",
-  },
-  bookwalker: {
-    name: "BookWalker",
-    color: "#00A0DC",
-    url: "https://bookwalker.jp",
-  },
-};
-
 export const SCREEN_PADDING = 20;
 export const BORDER_RADIUS = {
   small: 8,
@@ -43,3 +23,9 @@ export const FONT_SIZES = {
   title: 24,
   hero: 28,
 } as const;
+
+/** シリーズ未指定のときのデフォルトID */
+export const EMPTY_SERIES_ID = "01976464-7d02-7f01-9fa1-2d6ac90450a8"
+
+/** ショップ未指定のときのデフォルトID */
+export const EMPTY_SHOP_ID = "01976488-9d25-73fe-95e9-68d05e783406"

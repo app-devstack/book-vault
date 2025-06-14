@@ -1,5 +1,13 @@
-import React from "react";
+import { useBooksContext } from "@/components/providers/books-provider";
+import { NewBook } from "@/db/types";
+import RegisterDetailModal from "@/features/register/RegisterDetailModal";
+// import { BookDetailModal } from "@/features/_stashes/register/components/book-search/book-detail-modal";
+import { BookSearchResult } from "@/types/book";
+import { COLORS, SHADOWS } from "@/utils/colors";
+import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from "@/utils/constants";
+import React, { useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -7,38 +15,28 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { BookSearchResult, StoreKey } from "../../types/book";
-import { COLORS, SHADOWS } from "../../utils/colors";
-import { BORDER_RADIUS, FONT_SIZES } from "../../utils/constants";
 
-interface SearchResultsProps {
+type SearchResultsProps = {
   results: BookSearchResult[];
-  onAddBook: (bookData: any, store: StoreKey) => void;
-}
+};
 
-interface SearchResultItemProps {
+type SearchResultItemProps = {
   item: BookSearchResult;
-  onAddBook: (bookData: any, store: StoreKey) => void;
-}
+  handleBookSelect: (book: BookSearchResult) => void;
+};
 
-const SearchResultItem: React.FC<SearchResultItemProps> = ({
+const SearchResultItem = ({
   item,
-  onAddBook,
-}) => {
-  const handleAddBook = (store: StoreKey) => {
-    const bookData = {
-      title: item.title.replace(/\s*\d+巻$/, ""),
-      volume: parseInt(item.title.match(/(\d+)巻/) || [0, 1])[1],
-      author: item.author,
-      thumbnail: item.thumbnail,
-    };
-    onAddBook(bookData, store);
+  handleBookSelect,
+}: SearchResultItemProps) => {
+  const handleAddBook = () => {
+    handleBookSelect(item);
   };
 
   return (
     <View style={styles.resultItem}>
       <Image
-        source={{ uri: item.thumbnail }}
+        source={{ uri: item.imageUrl }}
         style={styles.resultThumbnail}
         resizeMode="cover"
       />
@@ -52,33 +50,57 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
 
         <TouchableOpacity
           style={[styles.storeButton, { backgroundColor: "#00A0DC" }]}
-          onPress={() => handleAddBook("kindle" as StoreKey)}
+          onPress={handleAddBook}
           activeOpacity={0.8}
         >
           <Text style={styles.storeButtonText}>本を登録する</Text>
         </TouchableOpacity>
-
-        {/* <View style={styles.storeButtons}>
-          {Object.entries(STORES).map(([key, store]) => (
-            <TouchableOpacity
-              key={key}
-              style={[styles.storeButton, { backgroundColor: store.color }]}
-              onPress={() => handleAddBook(key as StoreKey)}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.storeButtonText}>{store.name}に登録</Text>
-            </TouchableOpacity>
-          ))}
-        </View> */}
       </View>
     </View>
   );
 };
 
-export const SearchResults: React.FC<SearchResultsProps> = ({
-  results,
-  onAddBook,
-}) => {
+export const SearchResults = ({ results }: SearchResultsProps) => {
+  const { addBook } = useBooksContext();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(
+    null
+  );
+
+  const handleBookSelect = (book: BookSearchResult) => {
+    setSelectedBook(book);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedBook(null);
+  };
+
+  const handleBookRegister = async (
+    book: BookSearchResult,
+    targetUrl: string,
+    selectedSeriesId?: string | null
+  ) => {
+    try {
+      const formattedBook = {
+        ...book,
+        seriesId: selectedSeriesId || book.seriesId || EMPTY_SERIES_ID,
+        shopId: EMPTY_SHOP_ID,
+        targetUrl
+      } satisfies NewBook
+
+      await addBook(formattedBook);
+      closeModal();
+
+      Alert.alert("成功", "本が正常に登録されました");
+    } catch (error) {
+      console.error("登録エラー:", error);
+      Alert.alert("エラー", "登録に失敗しました");
+    }
+  };
+
   if (results.length === 0) {
     return null;
   }
@@ -89,10 +111,22 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       <FlatList
         data={results}
         renderItem={({ item }) => (
-          <SearchResultItem item={item} onAddBook={onAddBook} />
+          <SearchResultItem
+            key={item.googleBooksId}
+            item={item}
+            handleBookSelect={handleBookSelect}
+          />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.googleBooksId}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
+      />
+
+      <RegisterDetailModal
+        visible={isModalVisible}
+        book={selectedBook}
+        onClose={closeModal}
+        onRegister={handleBookRegister}
       />
     </View>
   );
