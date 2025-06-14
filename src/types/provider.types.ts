@@ -57,50 +57,8 @@ export interface SeriesValidationResult {
   warnings: string[];
 }
 
-// Runtime validation schemas
-export interface BookValidationSchema {
-  title: {
-    required: boolean;
-    minLength: number;
-    maxLength: number;
-  };
-  isbn: {
-    required: boolean;
-    format: RegExp;
-  };
-  author: {
-    required: boolean;
-    minLength: number;
-    maxLength: number;
-  };
-  targetUrl: {
-    required: boolean;
-    format: RegExp;
-  };
-  volume: {
-    required: boolean;
-    min: number;
-    max: number;
-  };
-}
-
-export interface SeriesValidationSchema {
-  title: {
-    required: boolean;
-    minLength: number;
-    maxLength: number;
-    unique: boolean;
-  };
-  author: {
-    required: boolean;
-    minLength: number;
-    maxLength: number;
-  };
-  description: {
-    required: boolean;
-    maxLength: number;
-  };
-}
+// Zod validation result types (keeping for compatibility)
+// Note: Actual validation schemas are now in src/utils/validation.ts using Zod
 
 // Error boundary props
 export interface ErrorBoundaryState {

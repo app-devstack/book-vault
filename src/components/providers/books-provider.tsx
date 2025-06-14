@@ -143,7 +143,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
     return withLoadingState('addBook', async () => {
       try {
         // データ検証とサニタイゼーション
-        const validatedBookData = validateBookOrThrow(bookData) as NewBook;
+        const validatedBookData = validateBookOrThrow(bookData);
         
         const { seriesId } = validatedBookData;
 
@@ -265,7 +265,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
     return withLoadingState('createSeries', async () => {
       try {
         // データ検証とサニタイゼーション
-        const validatedSeriesData = validateSeriesOrThrow(seriesData) as Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>;
+        const validatedSeriesData = validateSeriesOrThrow(seriesData);
         
         const newSeries = await seriesService.createSeries(validatedSeriesData);
         // 新しく作成されたシリーズを空のシリーズリストに追加
