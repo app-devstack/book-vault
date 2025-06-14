@@ -9,11 +9,10 @@ import {
   Dimensions,
   Image,
   Modal,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -124,9 +123,9 @@ export const BookDetailModal = ({
               </TouchableOpacity>
             </View>
 
-            <ScrollView
+            <View
               style={styles.content}
-              showsVerticalScrollIndicator={false}
+              // showsVerticalScrollIndicator={false}
             >
               {/* サムネイル */}
               <View style={styles.thumbnailContainer}>
@@ -179,12 +178,12 @@ export const BookDetailModal = ({
               {book.description && (
                 <View style={styles.descriptionSection}>
                   {/* <Text style={styles.sectionTitle}>あらすじ</Text> */}
-                  <Text style={styles.description} numberOfLines={4}>
+                  <Text style={styles.description} numberOfLines={3}>
                     {book.description}
                   </Text>
                 </View>
               )}
-            </ScrollView>
+            </View>
 
             {/* アクションボタン */}
             <View style={styles.actions}>
@@ -232,7 +231,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: BORDER_RADIUS.large,
     borderTopRightRadius: BORDER_RADIUS.large,
     maxHeight: screenHeight * 0.9,
-    minHeight: screenHeight * 0.75,
+    minHeight: screenHeight * 0.8,
     ...SHADOWS.large,
   },
   header: {
@@ -336,8 +335,8 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    padding: 20,
-    paddingTop: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
     gap: 12,

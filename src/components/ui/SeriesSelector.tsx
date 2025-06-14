@@ -3,7 +3,8 @@ import { SeriesCreationModal } from "@/components/ui/SeriesCreationModal";
 import { NewSeries, Series } from "@/db/types";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import React, { useState } from "react";
+import { seriesService } from "@/utils/service/series-service";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Modal,
@@ -24,7 +25,7 @@ interface SeriesSelectorProps {
 }
 
 export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
-  series,
+  series:seriesProps,
   selectedSeriesId,
   onSelectSeries,
   onCreateSeries,
@@ -32,6 +33,17 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
   initialTitle = "",
   initialAuthor = "",
 }) => {
+  const [series, setSeries] = useState<Series[]>(seriesProps);
+
+  useEffect(() => {
+    const fetchSeries = async () => {
+      const allSeries = await seriesService.getAllSeries();
+      setSeries((prev)=>([...prev, ...allSeries]));
+    };
+
+    fetchSeries();
+}, []);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCreationModalVisible, setIsCreationModalVisible] = useState(false);
 
@@ -51,7 +63,7 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
 
   const handleSeriesCreated = async (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>) => {
     if (!onCreateSeries) return "";
-    
+
     const newSeriesId = await onCreateSeries(seriesData);
     onSelectSeries(newSeriesId);
     return newSeriesId;

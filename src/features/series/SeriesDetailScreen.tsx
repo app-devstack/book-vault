@@ -51,7 +51,13 @@ export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
           alignItems: "center",
         }}
       >
-        <Text style={{ color: COLORS.text }}>シリーズ情報を読み込み中...</Text>
+        <Text style={{ color: COLORS.text }}>
+          シリーズ情報を読み込み中...
+        </Text>
+        <Text style={{ color: COLORS.text }}>
+          シリーズ情報を読み込み中...
+          {seriesId+""}
+        </Text>
       </SafeAreaView>
     );
   }

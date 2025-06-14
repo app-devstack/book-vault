@@ -4,7 +4,7 @@ import { NewSeries } from "@/db/types";
 
 class SeriesService {
   // constructor(parameters) {}
-  async getAllBooks() {
+  async getAllSeries() {
     const items = await db.query.series.findMany({
       orderBy: (series, { desc }) => [desc(series.createdAt)],
       with: {
