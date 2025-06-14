@@ -1,6 +1,6 @@
+import db from "@/db";
+import schema from "@/db/schema";
 import { EMPTY_SERIES_ID, EMPTY_SHOP_ID } from "@/utils/constants";
-import db from ".";
-import { schema } from "./schema";
 
 export async function initializeDatabaseSeed() {
   const existingSeries = await db.query.series.findFirst({

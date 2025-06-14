@@ -1,5 +1,5 @@
 import db from "@/db";
-import { series } from "@/db/schema";
+import schema from "@/db/schema";
 import { NewSeries } from "@/db/types";
 
 class SeriesService {
@@ -48,7 +48,7 @@ class SeriesService {
   }
 
   async createSeries(data:NewSeries) {
-    const [item] = await db.insert(series).values(data).returning();
+    const [item] = await db.insert(schema.series).values(data).returning();
 
     return item;
   }

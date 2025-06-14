@@ -2,8 +2,6 @@ import { uuidv7 } from "@/lib/uuid";
 import { relations } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export * as schema from "@/db/schema";
-
 const timestamp = (name: string) =>
   integer(name, { mode: "timestamp_ms" })
     .notNull()

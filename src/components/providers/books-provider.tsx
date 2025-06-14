@@ -1,6 +1,7 @@
 import { createConstate } from "@/components/providers/utils/constate";
 import { Book, BookWithRelations, NewBook, NewSeries, Series, SeriesWithBooks } from "@/db/types";
 import { SeriesStats } from "@/types/book";
+import { EMPTY_SERIES_ID } from "@/utils/constants";
 import { bookService } from "@/utils/service/book-service";
 import { seriesService } from "@/utils/service/series-service";
 import { extractByMultipleSpaces } from "@/utils/text";
@@ -73,7 +74,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
         });
       }
 
-      const newBook = await bookService.createBook({ ...bookData, seriesId: series.id });
+      const newBook = await bookService.createBook({ ...bookData, seriesId: series?.id || EMPTY_SERIES_ID });
 
       const bookWithRelations: BookWithRelations = {
         ...newBook,
@@ -82,9 +83,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
       };
 
       setBooks((prev) => [...prev, bookWithRelations]);
-      
+
       // もしこの本が空のシリーズに関連付けられている場合、空のシリーズリストから削除
-      setEmptySeries((prev) => prev.filter((s) => s.id !== series.id));
+      setEmptySeries((prev) => prev.filter((s) => s.id !== series?.id));
     } catch (error) {
       console.error("Error adding book:", error);
       throw error;

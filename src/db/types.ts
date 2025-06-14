@@ -1,4 +1,4 @@
-import { schema } from "@/db/schema";
+import schema from "@/db/schema";
 
 export type Series = typeof schema.series.$inferSelect;
 export type NewSeries = typeof schema.series.$inferInsert;
