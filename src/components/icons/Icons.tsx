@@ -23,7 +23,10 @@ export type IconName =
   | "trash"
   | "close"
   | "checkmark"
-  |"chevron-down";
+  | "chevron-down"
+  | "person"
+  | "document-text"
+  | "information-circle";
 
 interface IconProps {
   name: IconName;

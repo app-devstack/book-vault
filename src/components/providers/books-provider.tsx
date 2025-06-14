@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
  const useBooks = () => {
   const [books, setBooks] = useState<BookWithRelations[]>([]);
+  const [emptySeries, setEmptySeries] = useState<Series[]>([]); // 本が関連付けられていないシリーズ
 
   const initializeBooks = useCallback(async () => {
     try {
@@ -22,6 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
   const seriesedBooks: SeriesWithBooks[] = useMemo(() => {
     const seriesMap = new Map<string, SeriesWithBooks>();
 
+    // 本が関連付けられているシリーズを追加
     books.forEach((book) => {
       if (!book.series?.id) return;
 
@@ -38,8 +40,18 @@ import { useCallback, useEffect, useMemo, useState } from "react";
       }
     });
 
+    // 本が関連付けられていない空のシリーズを追加
+    emptySeries.forEach((series) => {
+      if (!seriesMap.has(series.id)) {
+        seriesMap.set(series.id, {
+          ...series,
+          books: [],
+        });
+      }
+    });
+
     return Array.from(seriesMap.values());
-  }, [books]);
+  }, [books, emptySeries]);
 
   const getSeriesStats = useCallback((seriesBooks: Book[]): SeriesStats => {
     return {
@@ -70,6 +82,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
       };
 
       setBooks((prev) => [...prev, bookWithRelations]);
+      
+      // もしこの本が空のシリーズに関連付けられている場合、空のシリーズリストから削除
+      setEmptySeries((prev) => prev.filter((s) => s.id !== series.id));
     } catch (error) {
       console.error("Error adding book:", error);
       throw error;
@@ -93,6 +108,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
   const createSeries = useCallback(async (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
     try {
       const newSeries = await seriesService.createSeries(seriesData);
+      // 新しく作成されたシリーズを空のシリーズリストに追加
+      setEmptySeries((prev) => [...prev, newSeries]);
       return newSeries.id;
     } catch (error) {
       console.error("Error creating series:", error);
