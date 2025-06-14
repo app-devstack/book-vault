@@ -1,7 +1,6 @@
 import { createConstate } from "@/components/providers/utils/constate";
 import { Book, BookWithRelations, NewBook, NewSeries, Series, SeriesWithBooks } from "@/db/types";
 import { SeriesStats } from "@/types/book";
-import { BookError, BookVaultError } from "@/types/errors";
 // import { BooksContextValue } from "@/types/provider.types";
 import { showBookDeleteConfirmation, showSeriesDeleteConfirmation, showBulkDeleteConfirmation } from "@/components/ui/ConfirmationDialog";
 import { useUndo } from "@/hooks/useUndo";
@@ -11,65 +10,19 @@ import { seriesService } from "@/utils/service/series-service";
 import { extractByMultipleSpaces } from "@/utils/text";
 import { validateBookOrThrow, validateSeriesOrThrow } from "@/utils/validation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useErrorHandler } from "@/hooks/useErrorHandler";
+import { useLoadingStates } from "@/hooks/useLoadingStates";
 
  const useBooks = () => {
   const [books, setBooks] = useState<BookWithRelations[]>([]);
   const [emptySeries, setEmptySeries] = useState<Series[]>([]); // 本が関連付けられていないシリーズ
-  const [loading, setLoading] = useState({
-    initialize: false,
-    addBook: false,
-    removeBook: false,
-    createSeries: false
-  });
-  const [error, setError] = useState<BookError | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
+  // エラーハンドリングとローディング状態を分離したフックを使用
+  const { error, retryCount, clearError, handleError, setRetryCount } = useErrorHandler();
+  const { loading, withLoadingState } = useLoadingStates();
   
   // アンドゥ機能
   const { addUndoAction, executeUndo, canUndo, isUndoing, clearUndoStack } = useUndo();
 
-  const clearError = useCallback(() => {
-    setError(null);
-    setRetryCount(0);
-  }, []);
-
-  const handleError = useCallback((error: unknown, operation: string, maxRetries = 3) => {
-    const bookError = BookVaultError.fromError(error, `${operation}中にエラーが発生しました`);
-
-    console.error(`Error in ${operation}:`, {
-      type: bookError.type,
-      code: bookError.code,
-      message: bookError.message,
-      userMessage: bookError.userMessage
-    });
-
-    // リトライ可能なエラーの場合、再試行カウントをチェック
-    if (bookError.retryable && retryCount < maxRetries) {
-      setRetryCount(prev => prev + 1);
-      return { shouldRetry: true, error: bookError };
-    }
-
-    setError(bookError.toBookError());
-    return { shouldRetry: false, error: bookError };
-  }, [retryCount]);
-
-  const withLoadingState = useCallback(<T,>(
-    operation: keyof typeof loading,
-    asyncFn: () => Promise<T>
-  ): Promise<T> => {
-    return new Promise(async (resolve, reject) => {
-      setLoading(prev => ({ ...prev, [operation]: true }));
-      clearError();
-
-      try {
-        const result = await asyncFn();
-        resolve(result);
-      } catch (error) {
-        reject(error);
-      } finally {
-        setLoading(prev => ({ ...prev, [operation]: false }));
-      }
-    });
-  }, [clearError]);
 
   const initializeBooks = useCallback(async (forceRetry = false) => {
     if (!forceRetry && retryCount >= 3) {
@@ -93,7 +46,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
         throw error;
       }
     });
-  }, [withLoadingState, handleError, retryCount]);
+  }, [withLoadingState, handleError, retryCount, setRetryCount]);
 
   // パフォーマンス最適化：booksの変更時のみ再計算
   const seriesedBooks: SeriesWithBooks[] = useMemo(() => {
