@@ -8,6 +8,7 @@ import { useBookData } from "@/hooks/useBookData";
 import { useBookMutations } from "@/hooks/useBookMutations";
 import { useBulkOperations } from "@/hooks/useBulkOperations";
 import { useBookDeletion } from "@/hooks/useBookDeletion";
+import { useDataTransform } from "@/hooks/useDataTransform";
 
  const useBooks = () => {
   // エラーハンドリングとローディング状態を分離したフックを使用
@@ -21,12 +22,17 @@ import { useBookDeletion } from "@/hooks/useBookDeletion";
   const { 
     books, 
     setBooks, 
+    emptySeries,
     setEmptySeries, 
-    seriesedBooks, 
-    totalStats, 
-    initializeBooks,
-    getSeriesStats 
+    initializeBooks
   } = useBookData({ withLoadingState, handleError, retryCount, setRetryCount, loading });
+  
+  // データ変換フック
+  const { seriesedBooks, totalStats, getSeriesStats } = useDataTransform({
+    books,
+    emptySeries,
+    loading,
+  });
   
   // CRUD操作フック
   const { addBook, createSeries } = useBookMutations({ 

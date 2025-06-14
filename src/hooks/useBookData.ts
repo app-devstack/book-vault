@@ -1,7 +1,6 @@
-import { Book, BookWithRelations, Series, SeriesWithBooks } from "@/db/types";
-import { SeriesStats } from "@/types/book";
+import { BookWithRelations, Series } from "@/db/types";
 import { bookService } from "@/utils/service/book-service";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 interface UseBookDataProps {
   withLoadingState: <T>(operation: 'initialize', asyncFn: () => Promise<T>) => Promise<T>;
@@ -45,65 +44,12 @@ export const useBookData = ({
     });
   }, [withLoadingState, handleError, retryCount, setRetryCount]);
 
-  // パフォーマンス最適化：booksの変更時のみ再計算
-  const seriesedBooks: SeriesWithBooks[] = useMemo(() => {
-    if (loading.initialize || books.length === 0) {
-      return [];
-    }
-
-    const seriesMap = new Map<string, SeriesWithBooks>();
-
-    // 本が関連付けられているシリーズを効率的に処理
-    for (const book of books) {
-      if (!book.series?.id) continue;
-
-      const seriesId = book.series.id;
-      const existingSeries = seriesMap.get(seriesId);
-
-      if (existingSeries) {
-        existingSeries.books.push(book);
-      } else {
-        seriesMap.set(seriesId, {
-          ...book.series,
-          books: [book],
-        });
-      }
-    }
-
-    // 空のシリーズを効率的に処理
-    for (const series of emptySeries) {
-      if (!seriesMap.has(series.id)) {
-        seriesMap.set(series.id, {
-          ...series,
-          books: [],
-        });
-      }
-    }
-
-    return Array.from(seriesMap.values());
-  }, [books, emptySeries, loading.initialize]);
-
-  const getSeriesStats = useCallback((seriesBooks: Book[]): SeriesStats => {
-    return {
-      volumeCount: seriesBooks.length,
-    };
-  }, []);
-
-  const totalStats = useMemo(() => {
-    return {
-      seriesCount: seriesedBooks.length,
-      bookCount: books.length,
-    };
-  }, [books, seriesedBooks]);
 
   return {
     books,
     setBooks,
     emptySeries,
     setEmptySeries,
-    seriesedBooks,
-    totalStats,
     initializeBooks,
-    getSeriesStats,
   };
 };
