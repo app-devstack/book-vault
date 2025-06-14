@@ -1,133 +1,44 @@
 import { createConstate } from "@/components/providers/utils/constate";
-import { Book, BookWithRelations, NewBook, NewSeries, Series, SeriesWithBooks } from "@/db/types";
-import { SeriesStats } from "@/types/book";
+import { BookWithRelations, NewBook } from "@/db/types";
 // import { BooksContextValue } from "@/types/provider.types";
 import { showBookDeleteConfirmation, showSeriesDeleteConfirmation, showBulkDeleteConfirmation } from "@/components/ui/ConfirmationDialog";
 import { useUndo } from "@/hooks/useUndo";
-import { EMPTY_SERIES_ID } from "@/utils/constants";
 import { bookService } from "@/utils/service/book-service";
-import { seriesService } from "@/utils/service/series-service";
-import { extractByMultipleSpaces } from "@/utils/text";
-import { validateBookOrThrow, validateSeriesOrThrow } from "@/utils/validation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { validateBookOrThrow } from "@/utils/validation";
+import { useCallback, useEffect } from "react";
 import { useErrorHandler } from "@/hooks/useErrorHandler";
 import { useLoadingStates } from "@/hooks/useLoadingStates";
+import { useBookData } from "@/hooks/useBookData";
+import { useBookMutations } from "@/hooks/useBookMutations";
 
  const useBooks = () => {
-  const [books, setBooks] = useState<BookWithRelations[]>([]);
-  const [emptySeries, setEmptySeries] = useState<Series[]>([]); // 本が関連付けられていないシリーズ
   // エラーハンドリングとローディング状態を分離したフックを使用
   const { error, retryCount, clearError, handleError, setRetryCount } = useErrorHandler();
   const { loading, withLoadingState } = useLoadingStates();
   
+  // データ管理フック
+  const { 
+    books, 
+    setBooks, 
+    setEmptySeries, 
+    seriesedBooks, 
+    totalStats, 
+    initializeBooks,
+    getSeriesStats 
+  } = useBookData({ withLoadingState, handleError, retryCount, setRetryCount, loading });
+  
+  // CRUD操作フック
+  const { addBook, createSeries } = useBookMutations({ 
+    withLoadingState, 
+    handleError, 
+    books, 
+    setBooks, 
+    setEmptySeries 
+  });
+  
   // アンドゥ機能
   const { addUndoAction, executeUndo, canUndo, isUndoing, clearUndoStack } = useUndo();
 
-
-  const initializeBooks = useCallback(async (forceRetry = false) => {
-    if (!forceRetry && retryCount >= 3) {
-      return;
-    }
-
-    return withLoadingState('initialize', async () => {
-      try {
-        const initialBooks = await bookService.getAllBooks();
-        setBooks(initialBooks);
-        setRetryCount(0); // 成功時はリトライカウントをリセット
-      } catch (error) {
-        const { shouldRetry } = handleError(error, '書籍データの初期化');
-
-        if (shouldRetry && retryCount < 3) {
-          // 1秒後に再試行
-          setTimeout(() => {
-            initializeBooks(true);
-          }, 1000 * Math.pow(2, retryCount)); // 指数バックオフ
-        }
-        throw error;
-      }
-    });
-  }, [withLoadingState, handleError, retryCount, setRetryCount]);
-
-  // パフォーマンス最適化：booksの変更時のみ再計算
-  const seriesedBooks: SeriesWithBooks[] = useMemo(() => {
-    if (loading.initialize || books.length === 0) {
-      return [];
-    }
-
-    const seriesMap = new Map<string, SeriesWithBooks>();
-
-    // 本が関連付けられているシリーズを効率的に処理
-    for (const book of books) {
-      if (!book.series?.id) continue;
-
-      const seriesId = book.series.id;
-      const existingSeries = seriesMap.get(seriesId);
-
-      if (existingSeries) {
-        existingSeries.books.push(book);
-      } else {
-        seriesMap.set(seriesId, {
-          ...book.series,
-          books: [book],
-        });
-      }
-    }
-
-    // 空のシリーズを効率的に処理
-    for (const series of emptySeries) {
-      if (!seriesMap.has(series.id)) {
-        seriesMap.set(series.id, {
-          ...series,
-          books: [],
-        });
-      }
-    }
-
-    return Array.from(seriesMap.values());
-  }, [books, emptySeries, loading.initialize]);
-
-  const getSeriesStats = useCallback((seriesBooks: Book[]): SeriesStats => {
-    return {
-      volumeCount: seriesBooks.length,
-    };
-  }, []);
-
-  const addBook = useCallback(async (bookData: NewBook) => {
-    return withLoadingState('addBook', async () => {
-      try {
-        // データ検証とサニタイゼーション
-        const validatedBookData = validateBookOrThrow(bookData);
-        
-        const { seriesId } = validatedBookData;
-
-        let series: Series | undefined = await seriesService.getSeriesById(seriesId);
-
-        if (!series) {
-          series = await seriesService.createSeries({
-            title: extractByMultipleSpaces(validatedBookData.title),
-            author: validatedBookData.author,
-            googleBooksSeriesId: seriesId,
-          });
-        }
-
-        const newBook = await bookService.createBook({ ...validatedBookData, seriesId: series?.id || EMPTY_SERIES_ID });
-
-        const bookWithRelations: BookWithRelations = {
-          ...newBook,
-          series,
-          shop: undefined,
-        };
-
-        setBooks((prev) => [...prev, bookWithRelations]);
-
-        // もしこの本が空のシリーズに関連付けられている場合、空のシリーズリストから削除
-        setEmptySeries((prev) => prev.filter((s) => s.id !== series?.id));
-      } catch (error) {
-        handleError(error, '書籍の追加');
-        throw error;
-      }
-    });
-  }, [withLoadingState, handleError]);
 
   const removeBook = useCallback(async (bookId: string, options?: { skipConfirmation?: boolean }) => {
     const { skipConfirmation = false } = options || {};
@@ -190,7 +101,7 @@ import { useLoadingStates } from "@/hooks/useLoadingStates";
       bookToDelete.series?.title,
       executeDelete
     );
-  }, [books, withLoadingState, handleError, addUndoAction]);
+  }, [books, withLoadingState, handleError, addUndoAction, setBooks]);
 
   const removeSeries = useCallback((seriesTitle: string, options?: { skipConfirmation?: boolean }) => {
     const { skipConfirmation = false } = options || {};
@@ -212,31 +123,7 @@ import { useLoadingStates } from "@/hooks/useLoadingStates";
       booksInSeries.length,
       executeDelete
     );
-  }, [books]);
-
-  const createSeries = useCallback(async (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
-    return withLoadingState('createSeries', async () => {
-      try {
-        // データ検証とサニタイゼーション
-        const validatedSeriesData = validateSeriesOrThrow(seriesData);
-        
-        const newSeries = await seriesService.createSeries(validatedSeriesData);
-        // 新しく作成されたシリーズを空のシリーズリストに追加
-        setEmptySeries((prev) => [...prev, newSeries]);
-        return newSeries.id;
-      } catch (error) {
-        handleError(error, 'シリーズの作成');
-        throw error;
-      }
-    });
-  }, [withLoadingState, handleError]);
-
-  const totalStats = useMemo(() => {
-    return {
-      seriesCount: seriesedBooks.length,
-      bookCount: books.length,
-    };
-  }, [books, seriesedBooks]);
+  }, [books, setBooks]);
 
   // 一括操作機能
   const removeBooksInBulk = useCallback(async (bookIds: string[], options?: { skipConfirmation?: boolean }) => {
@@ -303,7 +190,7 @@ import { useLoadingStates } from "@/hooks/useLoadingStates";
       '書籍',
       executeDelete
     );
-  }, [withLoadingState, handleError, addUndoAction, books]);
+  }, [withLoadingState, handleError, addUndoAction, books, setBooks]);
 
   const updateBooksInBulk = useCallback(async (bookIds: string[], updates: Partial<NewBook>) => {
     if (bookIds.length === 0) return;
@@ -334,7 +221,7 @@ import { useLoadingStates } from "@/hooks/useLoadingStates";
         throw error;
       }
     });
-  }, [books, withLoadingState, handleError]);
+  }, [books, withLoadingState, handleError, setBooks]);
 
   return {
     // Data
