@@ -1,5 +1,6 @@
 import { BooksProvider } from "@/components/providers/books-provider";
 import DBProvider from "@/components/providers/db-provider";
+import { ProviderErrorBoundary } from "@/components/providers/ErrorBoundary";
 // import ResetButton from "@/db/utils/resetButton";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
@@ -22,7 +23,9 @@ export default function RootLayoutProvider({
         {/* <ResetButton /> */}
           <QueryClientProvider client={queryClient}>
             <DBProvider>
-              <BooksProvider>{children}</BooksProvider>
+              <ProviderErrorBoundary>
+                <BooksProvider>{children}</BooksProvider>
+              </ProviderErrorBoundary>
               <Toast />
             </DBProvider>
           </QueryClientProvider>

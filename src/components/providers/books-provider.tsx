@@ -2,10 +2,14 @@ import { createConstate } from "@/components/providers/utils/constate";
 import { Book, BookWithRelations, NewBook, NewSeries, Series, SeriesWithBooks } from "@/db/types";
 import { SeriesStats } from "@/types/book";
 import { BookError, BookVaultError } from "@/types/errors";
+// import { BooksContextValue } from "@/types/provider.types";
+import { showBookDeleteConfirmation, showSeriesDeleteConfirmation, showBulkDeleteConfirmation } from "@/components/ui/ConfirmationDialog";
+import { useUndo } from "@/hooks/useUndo";
 import { EMPTY_SERIES_ID } from "@/utils/constants";
 import { bookService } from "@/utils/service/book-service";
 import { seriesService } from "@/utils/service/series-service";
 import { extractByMultipleSpaces } from "@/utils/text";
+import { validateBookOrThrow, validateSeriesOrThrow } from "@/utils/validation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
  const useBooks = () => {
@@ -19,6 +23,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
   });
   const [error, setError] = useState<BookError | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  
+  // アンドゥ機能
+  const { addUndoAction, executeUndo, canUndo, isUndoing, clearUndoStack } = useUndo();
 
   const clearError = useCallback(() => {
     setError(null);
@@ -135,19 +142,22 @@ import { useCallback, useEffect, useMemo, useState } from "react";
   const addBook = useCallback(async (bookData: NewBook) => {
     return withLoadingState('addBook', async () => {
       try {
-        const { seriesId } = bookData;
+        // データ検証とサニタイゼーション
+        const validatedBookData = validateBookOrThrow(bookData) as NewBook;
+        
+        const { seriesId } = validatedBookData;
 
         let series: Series | undefined = await seriesService.getSeriesById(seriesId);
 
         if (!series) {
           series = await seriesService.createSeries({
-            title: extractByMultipleSpaces(bookData.title),
-            author: bookData.author,
+            title: extractByMultipleSpaces(validatedBookData.title),
+            author: validatedBookData.author,
             googleBooksSeriesId: seriesId,
           });
         }
 
-        const newBook = await bookService.createBook({ ...bookData, seriesId: series?.id || EMPTY_SERIES_ID });
+        const newBook = await bookService.createBook({ ...validatedBookData, seriesId: series?.id || EMPTY_SERIES_ID });
 
         const bookWithRelations: BookWithRelations = {
           ...newBook,
@@ -166,26 +176,98 @@ import { useCallback, useEffect, useMemo, useState } from "react";
     });
   }, [withLoadingState, handleError]);
 
-  const removeBook = useCallback(async (bookId: string) => {
-    return withLoadingState('removeBook', async () => {
-      try {
-        await bookService.deleteBook(bookId);
-        setBooks((prev) => prev.filter((book) => book.id !== bookId));
-      } catch (error) {
-        handleError(error, '書籍の削除');
-        throw error;
-      }
-    });
-  }, [withLoadingState, handleError]);
+  const removeBook = useCallback(async (bookId: string, options?: { skipConfirmation?: boolean }) => {
+    const { skipConfirmation = false } = options || {};
+    
+    const bookToDelete = books.find(book => book.id === bookId);
+    if (!bookToDelete) {
+      throw new Error('削除対象の書籍が見つかりません');
+    }
 
-  const removeSeries = useCallback((seriesTitle: string) => {
-    setBooks((prev) => prev.filter((book) => book.series?.title !== seriesTitle));
-  }, []);
+    const executeDelete = () => {
+      return withLoadingState('removeBook', async () => {
+        try {
+          await bookService.deleteBook(bookId);
+          setBooks((prev) => prev.filter((book) => book.id !== bookId));
+          
+          // アンドゥアクションを追加
+          addUndoAction({
+            type: 'delete_book',
+            description: `「${bookToDelete.title}」を削除しました`,
+            data: bookToDelete,
+            undo: async () => {
+              // 書籍を復元するための処理
+              const restoredBook = await bookService.createBook({
+                title: bookToDelete.title,
+                volume: bookToDelete.volume,
+                imageUrl: bookToDelete.imageUrl,
+                targetUrl: bookToDelete.targetUrl,
+                description: bookToDelete.description,
+                isbn: bookToDelete.isbn,
+                author: bookToDelete.author,
+                googleBooksId: bookToDelete.googleBooksId,
+                purchaseDate: bookToDelete.purchaseDate,
+                seriesId: bookToDelete.seriesId,
+                shopId: bookToDelete.shopId
+              });
+              
+              const bookWithRelations: BookWithRelations = {
+                ...restoredBook,
+                series: bookToDelete.series,
+                shop: bookToDelete.shop
+              };
+              
+              setBooks((prev) => [...prev, bookWithRelations]);
+            }
+          });
+        } catch (error) {
+          handleError(error, '書籍の削除');
+          throw error;
+        }
+      });
+    };
+
+    if (skipConfirmation) {
+      return executeDelete();
+    }
+
+    // 削除確認ダイアログを表示
+    showBookDeleteConfirmation(
+      bookToDelete.title,
+      bookToDelete.series?.title,
+      executeDelete
+    );
+  }, [books, withLoadingState, handleError, addUndoAction]);
+
+  const removeSeries = useCallback((seriesTitle: string, options?: { skipConfirmation?: boolean }) => {
+    const { skipConfirmation = false } = options || {};
+    
+    const booksInSeries = books.filter(book => book.series?.title === seriesTitle);
+    
+    const executeDelete = () => {
+      setBooks((prev) => prev.filter((book) => book.series?.title !== seriesTitle));
+    };
+
+    if (skipConfirmation) {
+      executeDelete();
+      return;
+    }
+
+    // シリーズ削除確認ダイアログを表示
+    showSeriesDeleteConfirmation(
+      seriesTitle,
+      booksInSeries.length,
+      executeDelete
+    );
+  }, [books]);
 
   const createSeries = useCallback(async (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
     return withLoadingState('createSeries', async () => {
       try {
-        const newSeries = await seriesService.createSeries(seriesData);
+        // データ検証とサニタイゼーション
+        const validatedSeriesData = validateSeriesOrThrow(seriesData) as Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>;
+        
+        const newSeries = await seriesService.createSeries(validatedSeriesData);
         // 新しく作成されたシリーズを空のシリーズリストに追加
         setEmptySeries((prev) => [...prev, newSeries]);
         return newSeries.id;
@@ -202,6 +284,104 @@ import { useCallback, useEffect, useMemo, useState } from "react";
       bookCount: books.length,
     };
   }, [books, seriesedBooks]);
+
+  // 一括操作機能
+  const removeBooksInBulk = useCallback(async (bookIds: string[], options?: { skipConfirmation?: boolean }) => {
+    const { skipConfirmation = false } = options || {};
+    
+    if (bookIds.length === 0) return;
+    
+    const executeDelete = async () => {
+      return withLoadingState('removeBook', async () => {
+        try {
+          // 削除前に対象書籍の情報を保存
+          const booksToDelete = books.filter(book => bookIds.includes(book.id));
+          
+          await bookService.deleteBooksInBulk(bookIds);
+          setBooks((prev) => prev.filter((book) => !bookIds.includes(book.id)));
+          
+          // アンドゥアクションを追加
+          addUndoAction({
+            type: 'bulk_delete',
+            description: `${bookIds.length}冊の書籍を削除しました`,
+            data: booksToDelete,
+            undo: async () => {
+              // 削除された書籍を一括復元
+              const restorePromises = booksToDelete.map(async (bookToRestore) => {
+                const restoredBook = await bookService.createBook({
+                  title: bookToRestore.title,
+                  volume: bookToRestore.volume,
+                  imageUrl: bookToRestore.imageUrl,
+                  targetUrl: bookToRestore.targetUrl,
+                  description: bookToRestore.description,
+                  isbn: bookToRestore.isbn,
+                  author: bookToRestore.author,
+                  googleBooksId: bookToRestore.googleBooksId,
+                  purchaseDate: bookToRestore.purchaseDate,
+                  seriesId: bookToRestore.seriesId,
+                  shopId: bookToRestore.shopId
+                });
+                
+                return {
+                  ...restoredBook,
+                  series: bookToRestore.series,
+                  shop: bookToRestore.shop
+                } as BookWithRelations;
+              });
+              
+              const restoredBooks = await Promise.all(restorePromises);
+              setBooks((prev) => [...prev, ...restoredBooks]);
+            }
+          });
+        } catch (error) {
+          handleError(error, '書籍の一括削除');
+          throw error;
+        }
+      });
+    };
+
+    if (skipConfirmation) {
+      return executeDelete();
+    }
+
+    // 一括削除確認ダイアログを表示
+    showBulkDeleteConfirmation(
+      bookIds.length,
+      '書籍',
+      executeDelete
+    );
+  }, [withLoadingState, handleError, addUndoAction, books]);
+
+  const updateBooksInBulk = useCallback(async (bookIds: string[], updates: Partial<NewBook>) => {
+    if (bookIds.length === 0) return;
+    
+    return withLoadingState('addBook', async () => {
+      try {
+        // 各書籍を個別に更新（簡易実装）
+        const updatePromises = bookIds.map(async (bookId) => {
+          const book = books.find(b => b.id === bookId);
+          if (!book) return;
+          
+          // 実際のアプリケーションでは、bookService.updateBook() を実装する必要があります
+          // 現在は新規作成→削除の流れで代替
+          const updatedData = { ...book, ...updates } as NewBook;
+          const validatedData = validateBookOrThrow(updatedData) as NewBook;
+          
+          await bookService.deleteBook(bookId);
+          return await bookService.createBook(validatedData);
+        });
+        
+        await Promise.all(updatePromises);
+        
+        // データを再取得（簡易実装）
+        const refreshedBooks = await bookService.getAllBooks({ useCache: false });
+        setBooks(refreshedBooks);
+      } catch (error) {
+        handleError(error, '書籍の一括更新');
+        throw error;
+      }
+    });
+  }, [books, withLoadingState, handleError]);
 
   return {
     // Data
@@ -223,6 +403,16 @@ import { useCallback, useEffect, useMemo, useState } from "react";
     removeSeries,
     createSeries,
     getSeriesStats,
+    
+    // Bulk operations
+    removeBooksInBulk,
+    updateBooksInBulk,
+    
+    // Undo functionality
+    executeUndo,
+    canUndo,
+    isUndoing,
+    clearUndoStack,
   };
 };
 
