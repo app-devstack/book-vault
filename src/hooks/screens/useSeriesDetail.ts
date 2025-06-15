@@ -17,7 +17,8 @@ export const useSeriesDetail = (seriesId: string) => {
   const deleteBookMutation = useDeleteBook();
   
   const series = seriesDetailQuery.data;
-  const books = series?.books || [];
+  
+  const books = useMemo(() => series?.books || [], [series?.books]);
   
   const stats = useMemo((): SeriesDetailStats => ({
     volumeCount: books.length,

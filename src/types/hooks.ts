@@ -1,11 +1,13 @@
 import { BookSearchResult } from '@/types/book';
 import { Book, SeriesWithBooks } from '@/db/types';
 import { SeriesOption } from '@/hooks/queries/useSeriesOptions';
-import { AppStats } from '@/hooks/queries/useAppStats';
 import { SeriesStats } from '@/hooks/screens/useHomeScreen';
 import { SeriesDetailStats } from '@/hooks/screens/useSeriesDetail';
-import { UseBookDetailModalParams } from '@/hooks/screens/useBookDetailModal';
 import { BookRegistrationForm } from '@/hooks/screens/useBookRegistration';
+
+// 型のre-export（他のファイルで使用される場合）
+export type { AppStats } from '@/hooks/queries/useAppStats';
+export type { UseBookDetailModalParams } from '@/hooks/screens/useBookDetailModal';
 
 // ホーム画面用フックの戻り値型
 export interface UseHomeScreenReturn {
