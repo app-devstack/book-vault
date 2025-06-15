@@ -137,6 +137,25 @@ class BookService {
     }
   }
 
+  // 特定の書籍を取得
+  async getBookById(bookId: string): Promise<BookWithRelations | null> {
+    try {
+      const book = await db.query.books.findFirst({
+        where: (books, { eq }) => eq(books.id, bookId),
+        with: {
+          series: true,
+          shop: true
+        }
+      });
+      return book || null;
+    } catch (error) {
+      throw createDatabaseError(
+        `Failed to fetch book by ID: ${error}`,
+        '書籍の取得に失敗しました'
+      );
+    }
+  }
+
   // シリーズIDで書籍を効率的に取得
   async getBooksBySeriesId(seriesId: string) {
     try {
