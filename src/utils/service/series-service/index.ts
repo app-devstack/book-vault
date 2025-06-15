@@ -52,6 +52,61 @@ class SeriesService {
 
     return item;
   }
+
+  async getAllSeriesWithBooks() {
+    const items = await db.query.series.findMany({
+      orderBy: (series, { desc }) => [desc(series.updatedAt)],
+      with: {
+        books: {
+          orderBy: (books, { desc }) => [
+            desc(books.volume),
+            desc(books.createdAt),
+          ],
+        },
+      },
+    });
+    return items;
+  }
+
+  async getSeriesWithBooks(seriesId: string) {
+    const item = await db.query.series.findFirst({
+      where: (series, { eq }) => eq(series.id, seriesId),
+      with: {
+        books: {
+          orderBy: (books, { desc }) => [
+            desc(books.volume),
+            desc(books.createdAt),
+          ],
+        },
+      },
+    });
+    return item;
+  }
+
+  async getSeriesOptions() {
+    const items = await db.query.series.findMany({
+      orderBy: (series, { asc }) => [asc(series.title)],
+      columns: {
+        id: true,
+        title: true,
+        author: true,
+      },
+      with: {
+        books: {
+          columns: {
+            id: true,
+          },
+        },
+      },
+    });
+    
+    return items.map(series => ({
+      id: series.id,
+      title: series.title,
+      author: series.author,
+      bookCount: series.books.length,
+    }));
+  }
 }
 
 export const seriesService = new SeriesService();
