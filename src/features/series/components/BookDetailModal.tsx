@@ -1,9 +1,9 @@
 import { Icon } from "@/components/icons/Icons";
-import { useBooksContext } from "@/components/providers/books-provider";
+import { useDeleteBook } from "@/hooks/mutations/useDeleteBook";
 import { Book } from "@/db/types";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import React, { useState } from "react";
+import React from "react";
 import {
   Alert,
   Dimensions,
@@ -14,7 +14,6 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import Toast from "react-native-toast-message";
 
 const {
   // width: _screenWidth,
@@ -34,8 +33,7 @@ export const BookDetailModal = ({
   onClose,
   onBookDeleted,
 }: BookDetailModalProps) => {
-  const {removeBook} = useBooksContext();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteBookMutation = useDeleteBook();
 
   if (!book) return null;
 
@@ -61,29 +59,15 @@ export const BookDetailModal = ({
 
   // 削除実行
   const handleDeleteConfirm = async () => {
-    if (isDeleting) return;
+    if (deleteBookMutation.isPending) return;
 
-    setIsDeleting(true);
     try {
-      await removeBook(book.id);
-
-      Toast.show({
-        type: "success",
-        text1: "削除完了",
-        text2: "本が削除されました",
-      });
-
+      await deleteBookMutation.mutateAsync(book.id);
       onBookDeleted?.(book.id);
       onClose();
     } catch (error) {
+      // エラーハンドリングはmutation内で実行済み
       console.error("Delete error:", error);
-      Toast.show({
-        type: "error",
-        text1: "削除エラー",
-        text2: "削除に失敗しました",
-      });
-    } finally {
-      setIsDeleting(false);
     }
   };
 
@@ -190,11 +174,11 @@ export const BookDetailModal = ({
               <TouchableOpacity
                 style={[styles.actionButton, styles.deleteButton]}
                 onPress={handleDeletePress}
-                disabled={isDeleting}
+                disabled={deleteBookMutation.isPending}
               >
                 <Icon name="trash" size="small" color="white" />
                 <Text style={styles.deleteButtonText}>
-                  {isDeleting ? "削除中..." : "削除"}
+                  {deleteBookMutation.isPending ? "削除中..." : "削除"}
                 </Text>
               </TouchableOpacity>
 
