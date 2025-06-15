@@ -1,6 +1,17 @@
 import React from 'react';
-import { ErrorBoundaryProps, ErrorBoundaryState } from '@/types/provider.types';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+  errorInfo: React.ErrorInfo | null;
+}
+
+export interface ErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
+}
 
 // デフォルトのフォールバックコンポーネント
 const DefaultFallbackComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
@@ -11,11 +22,11 @@ const DefaultFallbackComponent: React.FC<{ error: Error; retry: () => void }> = 
         アプリの実行中に問題が発生しました。
         以下のボタンを押して再試行してください。
       </Text>
-      
+
       <TouchableOpacity style={styles.retryButton} onPress={retry}>
         <Text style={styles.retryButtonText}>再試行</Text>
       </TouchableOpacity>
-      
+
       {__DEV__ && (
         <View style={styles.debugInfo}>
           <Text style={styles.debugTitle}>開発者情報:</Text>
@@ -89,10 +100,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   render() {
     if (this.state.hasError && this.state.error) {
       const FallbackComponent = this.props.fallback || DefaultFallbackComponent;
-      
+
       return (
-        <FallbackComponent 
-          error={this.state.error} 
+        <FallbackComponent
+          error={this.state.error}
           retry={this.handleRetry}
         />
       );
@@ -128,7 +139,7 @@ export const ProviderErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
           書籍データの取得中にエラーが発生しました。
           ネットワーク接続を確認して、再試行してください。
         </Text>
-        
+
         <TouchableOpacity style={styles.providerRetryButton} onPress={retry}>
           <Text style={styles.providerRetryButtonText}>再読み込み</Text>
         </TouchableOpacity>
@@ -207,7 +218,7 @@ const styles = StyleSheet.create({
     fontFamily: 'monospace',
     marginBottom: 4
   },
-  
+
   // Provider専用スタイル
   providerErrorContainer: {
     flex: 1,

@@ -1,6 +1,6 @@
 import { RegisterScreen } from "@/features/register/RegisterScreen";
+import { RegisterTab } from "@/features/register/_types";
 import { useSearch } from "@/hooks/useSearch";
-import { RegisterTab } from "@/types/store";
 import { COLORS } from "@/utils/colors";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
