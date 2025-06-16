@@ -1,4 +1,3 @@
-import { BooksProvider } from "@/components/providers/books-provider";
 import DBProvider from "@/components/providers/db-provider";
 import { ProviderErrorBoundary } from "@/components/providers/ErrorBoundary";
 // import ResetButton from "@/db/utils/resetButton";
@@ -44,7 +43,7 @@ export default function RootLayoutProvider({
           <QueryClientProvider client={queryClient}>
             <DBProvider>
               <ProviderErrorBoundary>
-                <BooksProvider>{children}</BooksProvider>
+                {children}
               </ProviderErrorBoundary>
               <Toast />
             </DBProvider>

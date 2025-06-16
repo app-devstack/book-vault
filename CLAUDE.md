@@ -385,3 +385,7 @@ box-shadow: 0px 8px 24px rgba(0,0,0,0.04);
 - Brand identity strengthening
 
 ---
+
+### 必須事項
+
+**`doc/`配下のファイルは絶対にコミットしないで**
