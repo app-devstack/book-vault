@@ -1,13 +1,11 @@
-import { useBooksContext } from "@/components/providers/books-provider";
+import { useAddBook } from "@/hooks/mutations/useAddBook";
 import { NewBook } from "@/db/types";
 import RegisterDetailModal from "@/features/register/RegisterDetailModal";
-// import { BookDetailModal } from "@/features/_stashes/register/components/book-search/book-detail-modal";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from "@/utils/constants";
 import React, { useState } from "react";
 import {
-  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -61,7 +59,7 @@ const SearchResultItem = ({
 };
 
 export const SearchResults = ({ results }: SearchResultsProps) => {
-  const { addBook } = useBooksContext();
+  const addBookMutation = useAddBook();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(
@@ -91,13 +89,11 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
         targetUrl
       } satisfies NewBook
 
-      await addBook(formattedBook);
+      await addBookMutation.mutateAsync(formattedBook);
       closeModal();
-
-      Alert.alert("成功", "本が正常に登録されました");
     } catch (error) {
+      // エラーハンドリングはmutation内で実行済み
       console.error("登録エラー:", error);
-      Alert.alert("エラー", "登録に失敗しました");
     }
   };
 
