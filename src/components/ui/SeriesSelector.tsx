@@ -3,7 +3,6 @@ import { SeriesCreationModal } from "@/components/ui/SeriesCreationModal";
 import { NewSeries, Series } from "@/db/types";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import { seriesService } from "@/utils/service/series-service";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -36,13 +35,9 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
   const [series, setSeries] = useState<Series[]>(seriesProps);
 
   useEffect(() => {
-    const fetchSeries = async () => {
-      const allSeries = await seriesService.getAllSeries();
-      setSeries((prev)=>([...prev, ...allSeries]));
-    };
-
-    fetchSeries();
-}, []);
+    // propsで渡されたシリーズデータを使用し、重複取得を避ける
+    setSeries(seriesProps);
+  }, [seriesProps]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCreationModalVisible, setIsCreationModalVisible] = useState(false);
