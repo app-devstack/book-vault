@@ -2,11 +2,11 @@ import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { FlatList, StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 
-import { useHomeScreen } from "@/hooks/screens/useHomeScreen";
 import EmptyBooksState from "@/features/home/components/EmptyBooksState";
 import { SeriesCard } from "@/features/home/components/SeriesCard";
+import { useHomeScreen } from "@/hooks/screens/useHomeScreen";
 import { router } from "expo-router";
 
 export const HomeScreen = () => {
@@ -44,6 +44,8 @@ export const HomeScreen = () => {
         data={seriesedBooks}
         renderItem={({ item:seriese }) => {
           const stats = getSeriesStats(seriese.books);
+
+          if (seriese.books.length === 0) return null;
           return (
             <SeriesCard
               seriesTitle={seriese.title}
