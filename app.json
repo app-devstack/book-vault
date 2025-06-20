@@ -4,7 +4,7 @@
     "slug": "book-vault",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/icon.png",
+    "icon": "./src/assets/images/chi-book.png",
     "scheme": "bookstore",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
@@ -15,7 +15,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/chi-book.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -32,8 +32,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./src/assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "image": "./src/assets/images/chi-book.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
