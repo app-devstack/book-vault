@@ -5,7 +5,8 @@
       "Bash(bun run:*)",
       "Bash(mkdir:*)",
       "Bash(rm:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(bun install:*)"
     ],
     "deny": []
   }
