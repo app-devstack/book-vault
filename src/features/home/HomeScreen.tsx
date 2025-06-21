@@ -2,22 +2,41 @@ import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 
-import { useBooksContext } from "@/components/providers/books-provider";
 import EmptyBooksState from "@/features/home/components/EmptyBooksState";
 import { SeriesCard } from "@/features/home/components/SeriesCard";
+import { useHomeScreen } from "@/hooks/screens/useHomeScreen";
 import { router } from "expo-router";
 
 export const HomeScreen = () => {
-  const { seriesedBooks, getSeriesStats, totalStats } = useBooksContext();
+  const { seriesedBooks, getSeriesStats, totalStats, isLoading, error } = useHomeScreen();
 
   const onSeriesPress = (seriesId: string) => {
     router.push(`/series/${seriesId}`);
   };
 
-  // 登録本がないときの見た目
-  if (seriesedBooks.length === 0) return <EmptyBooksState />;
+  // ローディング状態
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.centerContainer]}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+        <Text style={styles.loadingText}>データを読み込み中...</Text>
+      </View>
+    );
+  }
+
+  // エラー状態
+  if (error) {
+    return (
+      <View style={[styles.container, styles.centerContainer]}>
+        <Text style={styles.errorText}>データの読み込みに失敗しました</Text>
+      </View>
+    );
+  }
+
+  // 登録本がないときの見た目（実際の書籍数で判定）
+  if (totalStats.bookCount === 0) return <EmptyBooksState />;
 
   return (
     <View style={styles.container}>
@@ -25,6 +44,8 @@ export const HomeScreen = () => {
         data={seriesedBooks}
         renderItem={({ item:seriese }) => {
           const stats = getSeriesStats(seriese.books);
+
+          if (seriese.books.length === 0) return null;
           return (
             <SeriesCard
               seriesTitle={seriese.title}
@@ -98,5 +119,20 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.medium,
     color: "white",
     fontWeight: "bold",
+  },
+  centerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.textLight,
+    marginTop: 16,
+  },
+  errorText: {
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.error,
+    textAlign: "center",
+    paddingHorizontal: 32,
   },
 });

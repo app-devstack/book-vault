@@ -1,7 +1,7 @@
 import { Icon } from "@/components/icons/Icons";
 import { SearchResults } from "@/components/manga/SearchResults";
+import { RegisterTab } from "@/features/register/_types";
 import { BookSearchResult } from "@/types/book";
-import { RegisterTab } from "@/types/store";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
 import React from "react";

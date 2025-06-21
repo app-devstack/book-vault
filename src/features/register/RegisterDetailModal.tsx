@@ -1,6 +1,7 @@
 import { Icon } from "@/components/icons/Icons";
-import { useBooksContext } from "@/components/providers/books-provider";
 import { SeriesSelector } from "@/components/ui/SeriesSelector";
+import { useCreateSeries } from "@/hooks/mutations/useCreateSeries";
+import { useSeriesOptions } from "@/hooks/queries/useSeriesOptions";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
@@ -34,11 +35,31 @@ export default function RegisterDetailModal({
   const [targetURL, setTargetURL] = useState("");
   const [selectedSeriesId, setSelectedSeriesId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
-  const { seriesedBooks, createSeries } = useBooksContext();
+
+  const seriesOptionsQuery = useSeriesOptions();
+  const createSeriesMutation = useCreateSeries();
+
+  // Convert SeriesOption[] to Series[] for SeriesSelector
+  const seriesedBooks = (seriesOptionsQuery.data || []).map(option => ({
+    id: option.id,
+    title: option.title,
+    author: option.author,
+    description: null,
+    thumbnail: null,
+    googleBooksSeriesId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }));
+
+  // Wrapper function to return series ID after creation
+  const handleCreateSeries = async (seriesData: any) => {
+    const newSeries = await createSeriesMutation.mutateAsync(seriesData);
+    return newSeries.id;
+  };
 
   useEffect(() => {
     if (book) {
-      setTargetURL(`https://books.google.com/books?id=${book.googleBooksId}`);
+      setTargetURL(``);
       setSelectedSeriesId(null);
     }
   }, [book]);
@@ -136,7 +157,7 @@ export default function RegisterDetailModal({
               series={seriesedBooks}
               selectedSeriesId={selectedSeriesId}
               onSelectSeries={setSelectedSeriesId}
-              onCreateSeries={createSeries}
+              onCreateSeries={handleCreateSeries}
               placeholder="既存シリーズから選択 または 新規作成"
               initialTitle={book?.title ? book.title.split(' ')[0] : ""}
               initialAuthor={book?.author || ""}

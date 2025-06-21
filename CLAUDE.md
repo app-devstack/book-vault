@@ -59,6 +59,7 @@ Three main entities with relational structure:
 - `src/app/` - Expo Router pages with file-based routing
 - `src/features/` - Feature modules (home, register, series, settings)
 - `src/components/providers/` - Context providers
+- `src/components/ui/` - Reusable UI components (Badge, Button, etc.)
 - `src/db/` - Database schema and types
 - `src/utils/service/` - Service layer (book-service, series-service)
 - `src/hooks/` - Custom React hooks
@@ -68,6 +69,13 @@ Three main entities with relational structure:
 ### Provider Usage
 
 Always use the `createConstate` utility for new providers instead of manual Context API setup. See `BooksProvider.tsx` as reference.
+
+### UI Components
+
+- **Reusable UI components** must be placed in `src/components/ui/`
+- Create atomic, composable components with multiple variants (e.g., Badge with success/warning/error variants)
+- All UI components should follow consistent API patterns with `variant`, `size`, and custom `style` props
+- Examples: Badge, Button, Input, Modal, etc.
 
 ### Database Operations
 
@@ -385,3 +393,7 @@ box-shadow: 0px 8px 24px rgba(0,0,0,0.04);
 - Brand identity strengthening
 
 ---
+
+### 必須事項
+
+**`doc/`配下のファイルは絶対にコミットしないで**
