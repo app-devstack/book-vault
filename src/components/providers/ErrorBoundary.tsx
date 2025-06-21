@@ -1,5 +1,8 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import * as Clipboard from 'expo-clipboard';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export interface ErrorBoundaryState {
   hasError: boolean;
@@ -131,21 +134,113 @@ export const ProviderErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const ProviderFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
-    <View style={styles.providerErrorContainer}>
-      <View style={styles.providerErrorCard}>
-        <Text style={styles.providerErrorTitle}>データの読み込みに失敗しました</Text>
-        <Text style={styles.providerErrorMessage}>
-          書籍データの取得中にエラーが発生しました。
-          ネットワーク接続を確認して、再試行してください。
-        </Text>
+  const ProviderFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => {
+    const [showDetails, setShowDetails] = useState(false);
+    const [copyFeedback, setCopyFeedback] = useState('');
 
-        <TouchableOpacity style={styles.providerRetryButton} onPress={retry}>
-          <Text style={styles.providerRetryButtonText}>再読み込み</Text>
-        </TouchableOpacity>
+    const errorDetails = {
+      name: error.name,
+      message: error.message,
+      stack: error.stack || 'スタックトレースが利用できません',
+      timestamp: new Date().toISOString(),
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+    };
+
+    const handleCopyError = async () => {
+      const errorText = `
+        エラー詳細 - ${errorDetails.timestamp}
+        =====================================
+
+        エラー名: ${errorDetails.name}
+        メッセージ: ${errorDetails.message}
+
+        スタックトレース:
+        ${errorDetails.stack}
+
+        User Agent: ${errorDetails.userAgent}
+        =====================================
+`       .trim();
+
+      try {
+        await Clipboard.setString(errorText);
+        setCopyFeedback('コピーしました！');
+        setTimeout(() => setCopyFeedback(''), 2000);
+      } catch {
+        setCopyFeedback('コピーに失敗しました');
+        setTimeout(() => setCopyFeedback(''), 2000);
+      }
+    };
+
+    return (
+      <View style={styles.providerErrorContainer}>
+        <View style={styles.providerErrorCard}>
+          <Text style={styles.providerErrorTitle}>💥 アプリエラー</Text>
+          <Text style={styles.providerErrorMessage}>
+            書籍データの取得中にエラーが発生しました。
+          </Text>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.providerRetryButton} onPress={retry}>
+              <Text style={styles.providerRetryButtonText}>🔄 再読み込み</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.detailsButton}
+              onPress={() => setShowDetails(!showDetails)}
+            >
+              <Text style={styles.detailsButtonText}>
+                {showDetails ? '📄 詳細を隠す' : '🔍 詳細を表示'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {showDetails && (
+            <View style={styles.errorDetailsContainer}>
+              <View style={styles.errorDetailsHeader}>
+                <Text style={styles.errorDetailsTitle}>エラー詳細</Text>
+                <TouchableOpacity style={styles.copyButton} onPress={handleCopyError}>
+                  <Text style={styles.copyButtonText}>📋 コピー</Text>
+                </TouchableOpacity>
+              </View>
+
+              {copyFeedback ? (
+                <Text style={styles.copyFeedback}>{copyFeedback}</Text>
+              ) : null}
+
+              <ScrollView style={styles.errorLogContainer} showsVerticalScrollIndicator={true}>
+                <View style={styles.errorSection}>
+                  <Text style={styles.errorSectionTitle}>🏷️ エラー名</Text>
+                  <Text style={styles.errorSectionContent} selectable>{errorDetails.name}</Text>
+                </View>
+
+                <View style={styles.errorSection}>
+                  <Text style={styles.errorSectionTitle}>💬 メッセージ</Text>
+                  <Text style={styles.errorSectionContent} selectable>{errorDetails.message}</Text>
+                </View>
+
+                <View style={styles.errorSection}>
+                  <Text style={styles.errorSectionTitle}>📍 スタックトレース</Text>
+                  <ScrollView style={styles.stackTraceContainer} horizontal showsHorizontalScrollIndicator={true}>
+                    <Text style={styles.stackTraceText} selectable>{errorDetails.stack}</Text>
+                  </ScrollView>
+                </View>
+
+                <View style={styles.errorSection}>
+                  <Text style={styles.errorSectionTitle}>⏰ 発生時刻</Text>
+                  <Text style={styles.errorSectionContent} selectable>{errorDetails.timestamp}</Text>
+                </View>
+
+                <View style={styles.errorSection}>
+                  <Text style={styles.errorSectionTitle}>🖥️ 環境情報</Text>
+                  <Text style={styles.errorSectionContent} selectable>{errorDetails.userAgent}</Text>
+                </View>
+              </ScrollView>
+            </View>
+          )}
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <ErrorBoundary fallback={ProviderFallback} onError={handleError}>
@@ -159,107 +254,206 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: COLORS.background,
     padding: 20
   },
   errorCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
+    backgroundColor: COLORS.card,
+    borderRadius: BORDER_RADIUS.xlarge,
     padding: 24,
     maxWidth: 400,
     width: '100%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4
+    ...SHADOWS.large
   },
   title: {
-    fontSize: 18,
+    fontSize: FONT_SIZES.xlarge,
     fontWeight: 'bold',
-    color: '#dc2626',
+    color: COLORS.error,
     marginBottom: 12,
     textAlign: 'center'
   },
   message: {
-    fontSize: 14,
-    color: '#6b7280',
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.textLight,
     lineHeight: 20,
     marginBottom: 20,
     textAlign: 'center'
   },
   retryButton: {
-    backgroundColor: '#2563eb',
-    borderRadius: 8,
+    backgroundColor: COLORS.primary,
+    borderRadius: BORDER_RADIUS.medium,
     paddingVertical: 12,
     paddingHorizontal: 24,
     alignItems: 'center'
   },
   retryButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: FONT_SIZES.medium,
     fontWeight: '600'
   },
   debugInfo: {
     marginTop: 20,
     padding: 12,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 6
+    backgroundColor: COLORS.background,
+    borderRadius: BORDER_RADIUS.medium
   },
   debugTitle: {
-    fontSize: 12,
+    fontSize: FONT_SIZES.small,
     fontWeight: 'bold',
-    color: '#4b5563',
+    color: COLORS.textLight,
     marginBottom: 8
   },
   debugText: {
-    fontSize: 10,
-    color: '#6b7280',
+    fontSize: FONT_SIZES.small,
+    color: COLORS.textLight,
     fontFamily: 'monospace',
     marginBottom: 4
   },
 
-  // Provider専用スタイル
+  // Provider専用スタイル - 詳細エラー表示
   providerErrorContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fef2f2',
-    padding: 20
+    backgroundColor: COLORS.background,
+    padding: 16,
   },
   providerErrorCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 24,
-    maxWidth: 400,
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#fecaca'
+    backgroundColor: COLORS.card,
+    borderRadius: BORDER_RADIUS.xlarge,
+    padding: 20,
+    flex: 1,
+    maxHeight: '90%',
+    borderWidth: 2,
+    borderColor: COLORS.error + '20',
+    ...SHADOWS.large
   },
   providerErrorTitle: {
-    fontSize: 16,
+    fontSize: FONT_SIZES.xxlarge,
     fontWeight: 'bold',
-    color: '#dc2626',
+    color: COLORS.error,
     marginBottom: 12,
     textAlign: 'center'
   },
   providerErrorMessage: {
-    fontSize: 14,
-    color: '#374151',
-    lineHeight: 20,
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.text,
+    lineHeight: 22,
     marginBottom: 20,
     textAlign: 'center'
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
   providerRetryButton: {
-    backgroundColor: '#ef4444',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    alignItems: 'center'
+    backgroundColor: COLORS.primary,
+    borderRadius: BORDER_RADIUS.large,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    flex: 1,
+    ...SHADOWS.medium
   },
   providerRetryButtonText: {
     color: 'white',
-    fontSize: 14,
-    fontWeight: '600'
+    fontSize: FONT_SIZES.medium,
+    fontWeight: 'bold'
+  },
+  detailsButton: {
+    backgroundColor: COLORS.warning + '20',
+    borderRadius: BORDER_RADIUS.large,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    flex: 1,
+    borderWidth: 1,
+    borderColor: COLORS.warning + '40'
+  },
+  detailsButtonText: {
+    color: COLORS.warning,
+    fontSize: FONT_SIZES.medium,
+    fontWeight: 'bold'
+  },
+  errorDetailsContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    borderRadius: BORDER_RADIUS.large,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: COLORS.border
+  },
+  errorDetailsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border
+  },
+  errorDetailsTitle: {
+    fontSize: FONT_SIZES.large,
+    fontWeight: 'bold',
+    color: COLORS.text
+  },
+  copyButton: {
+    backgroundColor: COLORS.accent,
+    borderRadius: BORDER_RADIUS.medium,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    ...SHADOWS.small
+  },
+  copyButtonText: {
+    color: 'white',
+    fontSize: FONT_SIZES.small,
+    fontWeight: 'bold'
+  },
+  copyFeedback: {
+    color: COLORS.success,
+    fontSize: FONT_SIZES.small,
+    textAlign: 'center',
+    marginBottom: 8,
+    fontWeight: 'bold'
+  },
+  errorLogContainer: {
+    flex: 1,
+    backgroundColor: COLORS.card,
+    borderRadius: BORDER_RADIUS.medium,
+    padding: 12,
+    maxHeight: 400
+  },
+  errorSection: {
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: COLORS.background,
+    borderRadius: BORDER_RADIUS.medium,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.primary
+  },
+  errorSectionTitle: {
+    fontSize: FONT_SIZES.medium,
+    fontWeight: 'bold',
+    color: COLORS.primary,
+    marginBottom: 8
+  },
+  errorSectionContent: {
+    fontSize: FONT_SIZES.small,
+    color: COLORS.text,
+    lineHeight: 18,
+    fontFamily: 'monospace'
+  },
+  stackTraceContainer: {
+    maxHeight: 120,
+    backgroundColor: COLORS.background,
+    borderRadius: BORDER_RADIUS.small,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: COLORS.border
+  },
+  stackTraceText: {
+    fontSize: FONT_SIZES.small,
+    color: COLORS.textLight,
+    fontFamily: 'monospace',
+    lineHeight: 16
   }
 });
