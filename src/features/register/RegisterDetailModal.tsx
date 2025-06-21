@@ -1,5 +1,4 @@
 import { Icon } from "@/components/icons/Icons";
-import { useSharedUrlContext } from "@/components/providers/shared-url-provider";
 import { SeriesSelector } from "@/components/ui/SeriesSelector";
 import { useCreateSeries } from "@/hooks/mutations/useCreateSeries";
 import { useSeriesOptions } from "@/hooks/queries/useSeriesOptions";
@@ -39,8 +38,8 @@ export default function RegisterDetailModal({
 
   const seriesOptionsQuery = useSeriesOptions();
   const createSeriesMutation = useCreateSeries();
-  const { sharedUrl } = useSharedUrlContext();
-
+  // const { sharedUrl } = useSharedUrlContext();
+  const sharedUrl:{url:string}|null =null as {url:string}|null
   // Convert SeriesOption[] to Series[] for SeriesSelector
   const seriesedBooks = (seriesOptionsQuery.data || []).map(option => ({
     id: option.id,
@@ -79,9 +78,9 @@ export default function RegisterDetailModal({
   };
 
   const handleUseSharedUrl = () => {
-    if (sharedUrl) {
-      setTargetURL(sharedUrl.url);
-    }
+    // if (sharedUrl) {
+    //   setTargetURL(sharedUrl.url);
+    // }
   };
 
   const getDisplayUrl = (url: string) => {
