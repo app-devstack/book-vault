@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 
+import { Image } from "expo-image";
 import { router } from "expo-router";
 export default function EmptyBooksState() {
   const onTabPress = () => {
@@ -15,7 +16,12 @@ export default function EmptyBooksState() {
       style={styles.container}
       contentContainerStyle={styles.emptyContainer}
     >
-      <Text style={styles.emptyIcon}>📚</Text>
+      {/* <Text style={styles.emptyIcon}>📚</Text> */}
+      <Image
+        source={require('@/assets/images/chi-book.png')}
+        style={styles.emptyIcon}
+        contentFit="contain"
+      />
       <Text style={styles.emptyTitle}>まだ本が登録されていません</Text>
       <Text style={styles.emptyDescription}>
         「登録」タブからお気に入りの本を追加してみましょう！
@@ -55,7 +61,8 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   emptyIcon: {
-    fontSize: 80,
+    width: 120,
+    height: 120,
     marginBottom: 20,
   },
   emptyTitle: {

@@ -1,5 +1,6 @@
 import { useAddBook } from "@/hooks/mutations/useAddBook";
 import { NewBook } from "@/db/types";
+import { EmptySearchState } from "@/features/register/components/EmptySearchState";
 import RegisterDetailModal from "@/features/register/RegisterDetailModal";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, SHADOWS } from "@/utils/colors";
@@ -98,7 +99,7 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
   };
 
   if (results.length === 0) {
-    return null;
+    return <EmptySearchState />;
   }
 
   return (
