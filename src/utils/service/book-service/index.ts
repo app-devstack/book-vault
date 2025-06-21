@@ -173,6 +173,44 @@ class BookService {
       );
     }
   }
+
+  // Google Books IDで登録済みかチェック
+  async isBookRegistered(googleBooksId: string): Promise<boolean> {
+    if (!googleBooksId) return false;
+    
+    try {
+      const book = await db.query.books.findFirst({
+        where: (books, { eq }) => eq(books.googleBooksId, googleBooksId),
+        columns: { id: true }
+      });
+      return !!book;
+    } catch (error) {
+      console.error('Failed to check book registration:', error);
+      return false;
+    }
+  }
+
+  // 複数のGoogle Books IDでまとめて登録済みチェック
+  async getBooksRegistrationStatus(googleBooksIds: string[]): Promise<Record<string, boolean>> {
+    if (googleBooksIds.length === 0) return {};
+
+    try {
+      const registeredBooks = await db.query.books.findMany({
+        where: (books, { inArray }) => inArray(books.googleBooksId, googleBooksIds.filter(Boolean)),
+        columns: { googleBooksId: true }
+      });
+
+      const registrationStatus: Record<string, boolean> = {};
+      googleBooksIds.forEach(id => {
+        registrationStatus[id] = registeredBooks.some(book => book.googleBooksId === id);
+      });
+
+      return registrationStatus;
+    } catch (error) {
+      console.error('Failed to check books registration status:', error);
+      return {};
+    }
+  }
 }
 
 export const bookService = new BookService();

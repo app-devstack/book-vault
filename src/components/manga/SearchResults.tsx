@@ -1,11 +1,13 @@
-import { useAddBook } from "@/hooks/mutations/useAddBook";
 import { NewBook } from "@/db/types";
 import { EmptySearchState } from "@/features/register/components/EmptySearchState";
 import RegisterDetailModal from "@/features/register/RegisterDetailModal";
+import { useAddBook } from "@/hooks/mutations/useAddBook";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from "@/utils/constants";
-import React, { useState } from "react";
+import { bookService } from "@/utils/service/book-service";
+import Badge from "@/components/ui/Badge";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -22,18 +24,20 @@ type SearchResultsProps = {
 type SearchResultItemProps = {
   item: BookSearchResult;
   handleBookSelect: (book: BookSearchResult) => void;
+  isRegistered?: boolean;
 };
 
 const SearchResultItem = ({
   item,
   handleBookSelect,
+  isRegistered = false,
 }: SearchResultItemProps) => {
   const handleAddBook = () => {
     handleBookSelect(item);
   };
 
   return (
-    <View style={styles.resultItem}>
+    <View style={[styles.resultItem, isRegistered && styles.registeredItem]}>
       <Image
         source={{ uri: item.imageUrl }}
         style={styles.resultThumbnail}
@@ -41,18 +45,31 @@ const SearchResultItem = ({
       />
 
       <View style={styles.resultDetails}>
-        <Text style={styles.resultTitle}>{item.title}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.resultTitle}>{item.title}</Text>
+          {isRegistered && (
+            <Badge variant="success" size="small">
+              登録済み
+            </Badge>
+          )}
+        </View>
         <Text style={styles.resultAuthor}>{item.author}</Text>
         <Text style={styles.resultDescription} numberOfLines={3}>
           {item.description}
         </Text>
 
         <TouchableOpacity
-          style={[styles.storeButton, { backgroundColor: "#00A0DC" }]}
+          style={[
+            styles.storeButton,
+            { backgroundColor: isRegistered ? COLORS.textLight : "#00A0DC" }
+          ]}
           onPress={handleAddBook}
           activeOpacity={0.8}
+          disabled={isRegistered}
         >
-          <Text style={styles.storeButtonText}>本を登録する</Text>
+          <Text style={styles.storeButtonText}>
+            {isRegistered ? "登録済み" : "本を登録する"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -62,10 +79,22 @@ const SearchResultItem = ({
 export const SearchResults = ({ results }: SearchResultsProps) => {
   const addBookMutation = useAddBook();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [registrationStatus, setRegistrationStatus] = useState<Record<string, boolean>>({});
 
   const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(
     null
   );
+
+  // 検索結果が変更されたら登録状況をチェック
+  useEffect(() => {
+    if (results.length > 0) {
+      const googleBooksIds = results.map(result => result.googleBooksId).filter(Boolean);
+
+      bookService.getBooksRegistrationStatus(googleBooksIds)
+        .then(status => setRegistrationStatus(status))
+        .catch(error => console.error('Registration status check failed:', error));
+    }
+  }, [results]);
 
   const handleBookSelect = (book: BookSearchResult) => {
     setSelectedBook(book);
@@ -91,6 +120,13 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
       } satisfies NewBook
 
       await addBookMutation.mutateAsync(formattedBook);
+
+      // 登録成功後に登録状況を更新
+      setRegistrationStatus(prev => ({
+        ...prev,
+        [book.googleBooksId]: true
+      }));
+
       closeModal();
     } catch (error) {
       // エラーハンドリングはmutation内で実行済み
@@ -112,6 +148,7 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
             key={item.googleBooksId}
             item={item}
             handleBookSelect={handleBookSelect}
+            isRegistered={registrationStatus[item.googleBooksId] || false}
           />
         )}
         keyExtractor={(item) => item.googleBooksId}
@@ -156,14 +193,24 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.medium,
     ...SHADOWS.small,
   },
+  registeredItem: {
+    opacity: 0.7,
+    backgroundColor: COLORS.background,
+  },
   resultDetails: {
     flex: 1,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+    gap: 8,
   },
   resultTitle: {
     fontSize: FONT_SIZES.large,
     fontWeight: "bold",
     color: COLORS.text,
-    marginBottom: 6,
+    flex: 1,
   },
   resultAuthor: {
     fontSize: FONT_SIZES.medium,
