@@ -1,7 +1,8 @@
 import { Icon } from "@/components/icons/Icons";
-import { useSeriesOptions } from "@/hooks/queries/useSeriesOptions";
-import { useCreateSeries } from "@/hooks/mutations/useCreateSeries";
+import { useSharedUrlContext } from "@/components/providers/shared-url-provider";
 import { SeriesSelector } from "@/components/ui/SeriesSelector";
+import { useCreateSeries } from "@/hooks/mutations/useCreateSeries";
+import { useSeriesOptions } from "@/hooks/queries/useSeriesOptions";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
@@ -35,10 +36,11 @@ export default function RegisterDetailModal({
   const [targetURL, setTargetURL] = useState("");
   const [selectedSeriesId, setSelectedSeriesId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
-  
+
   const seriesOptionsQuery = useSeriesOptions();
   const createSeriesMutation = useCreateSeries();
-  
+  const { sharedUrl } = useSharedUrlContext();
+
   // Convert SeriesOption[] to Series[] for SeriesSelector
   const seriesedBooks = (seriesOptionsQuery.data || []).map(option => ({
     id: option.id,
@@ -50,7 +52,7 @@ export default function RegisterDetailModal({
     createdAt: new Date(),
     updatedAt: new Date(),
   }));
-  
+
   // Wrapper function to return series ID after creation
   const handleCreateSeries = async (seriesData: any) => {
     const newSeries = await createSeriesMutation.mutateAsync(seriesData);
@@ -59,7 +61,7 @@ export default function RegisterDetailModal({
 
   useEffect(() => {
     if (book) {
-      setTargetURL(`https://books.google.com/books?id=${book.googleBooksId}`);
+      setTargetURL(``);
       setSelectedSeriesId(null);
     }
   }, [book]);
@@ -73,6 +75,21 @@ export default function RegisterDetailModal({
       onClose();
     } finally {
       setIsRegistering(false);
+    }
+  };
+
+  const handleUseSharedUrl = () => {
+    if (sharedUrl) {
+      setTargetURL(sharedUrl.url);
+    }
+  };
+
+  const getDisplayUrl = (url: string) => {
+    try {
+      const parsedUrl = new URL(url);
+      return parsedUrl.hostname + (parsedUrl.pathname.length > 1 ? parsedUrl.pathname.substring(0, 30) + '...' : '');
+    } catch {
+      return url.length > 40 ? url.substring(0, 40) + '...' : url;
     }
   };
 
@@ -169,7 +186,33 @@ export default function RegisterDetailModal({
             <View style={styles.sectionHeader}>
               <Icon name="open-outline" size="medium" color={COLORS.primary} />
               <Text style={styles.sectionTitle}>リンクURL</Text>
+              {sharedUrl && (
+                <TouchableOpacity
+                  style={styles.sharedUrlBadge}
+                  onPress={handleUseSharedUrl}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.sharedUrlBadgeText}>🔗 共有URL</Text>
+                </TouchableOpacity>
+              )}
             </View>
+
+            {sharedUrl && (
+              <View style={styles.sharedUrlTooltip}>
+                <Text style={styles.tooltipText}>
+                  共有されたURL: {getDisplayUrl(sharedUrl.url)}
+                </Text>
+                <TouchableOpacity
+                  style={styles.useSharedUrlButton}
+                  onPress={handleUseSharedUrl}
+                  activeOpacity={0.8}
+                >
+                  <Icon name="chevron-down" size="small" color="white" />
+                  <Text style={styles.useSharedUrlButtonText}>このURLを使用</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
             <TextInput
               style={styles.urlInput}
               value={targetURL}
@@ -406,6 +449,47 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     fontSize: FONT_SIZES.large,
+    fontWeight: "bold",
+    color: "white",
+  },
+  sharedUrlBadge: {
+    backgroundColor: COLORS.accent + "20",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: BORDER_RADIUS.medium,
+    marginLeft: "auto",
+  },
+  sharedUrlBadgeText: {
+    fontSize: FONT_SIZES.small,
+    fontWeight: "bold",
+    color: COLORS.accent,
+  },
+  sharedUrlTooltip: {
+    backgroundColor: COLORS.accent + "10",
+    borderRadius: BORDER_RADIUS.medium,
+    padding: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: COLORS.accent + "30",
+  },
+  tooltipText: {
+    fontSize: FONT_SIZES.small,
+    color: COLORS.textLight,
+    marginBottom: 8,
+  },
+  useSharedUrlButton: {
+    backgroundColor: COLORS.accent,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: BORDER_RADIUS.medium,
+    gap: 6,
+    alignSelf: "flex-start",
+  },
+  useSharedUrlButtonText: {
+    fontSize: FONT_SIZES.small,
     fontWeight: "bold",
     color: "white",
   },
