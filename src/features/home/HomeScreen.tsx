@@ -35,8 +35,8 @@ export const HomeScreen = () => {
     );
   }
 
-  // 登録本がないときの見た目
-  if (seriesedBooks.length === 0) return <EmptyBooksState />;
+  // 登録本がないときの見た目（実際の書籍数で判定）
+  if (totalStats.bookCount === 0) return <EmptyBooksState />;
 
   return (
     <View style={styles.container}>
