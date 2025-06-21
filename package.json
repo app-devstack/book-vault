@@ -36,6 +36,7 @@
     "drizzle-orm": "^0.43.1",
     "expo": "53.0.12",
     "expo-blur": "~14.1.4",
+    "expo-clipboard": "~7.1.4",
     "expo-constants": "~17.1.6",
     "expo-crypto": "~14.1.5",
     "expo-dev-client": "5.2.1",
