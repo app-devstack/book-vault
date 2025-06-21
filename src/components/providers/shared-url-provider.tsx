@@ -1,5 +1,5 @@
 import { SharedUrlData, useSharedUrl } from "@/hooks/useSharedUrl";
-import React, { createContext, ReactNode, useContext } from "react";
+import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
 
 interface SharedUrlContextType {
   sharedUrl: SharedUrlData | null;
@@ -13,7 +13,13 @@ const SharedUrlContext = createContext<SharedUrlContextType | undefined>(undefin
 export const useSharedUrlContext = () => {
   const context = useContext(SharedUrlContext);
   if (context === undefined) {
-    throw new Error("useSharedUrlContext must be used within a SharedUrlProvider");
+    // プロバイダーが初期化されていない場合はデフォルト値を返す
+    return {
+      sharedUrl: null,
+      isProcessing: false,
+      clearSharedUrl: () => {},
+      acceptSharedUrl: async () => {}
+    };
   }
   return context;
 };
@@ -23,6 +29,26 @@ interface SharedUrlProviderProps {
 }
 
 export const SharedUrlProvider: React.FC<SharedUrlProviderProps> = ({ children }) => {
+  const [isReady, setIsReady] = useState(false);
+  
+  // プロバイダーの初期化を遅延
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 200);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 初期化が完了していない場合は子コンポーネントのみレンダリング
+  if (!isReady) {
+    return <>{children}</>;
+  }
+
+  return <SharedUrlProviderContent>{children}</SharedUrlProviderContent>;
+};
+
+const SharedUrlProviderContent: React.FC<SharedUrlProviderProps> = ({ children }) => {
   const sharedUrlHook = useSharedUrl();
 
   return (

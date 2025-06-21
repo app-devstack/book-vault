@@ -15,6 +15,7 @@ export const useSharedUrl = () => {
       try {
         const initialUrl = await Linking.getInitialURL();
         if (initialUrl && (initialUrl.startsWith('http') || initialUrl.startsWith('https'))) {
+          console.log('Initial URL received:', initialUrl);
           setSharedUrl({
             url: initialUrl,
             timestamp: Date.now(),
@@ -27,6 +28,7 @@ export const useSharedUrl = () => {
 
     const handleUrlChange = ({ url }: { url: string }) => {
       if (url && (url.startsWith('http') || url.startsWith('https'))) {
+        console.log('URL received:', url);
         setSharedUrl({
           url: url,
           timestamp: Date.now(),
@@ -34,11 +36,15 @@ export const useSharedUrl = () => {
       }
     };
 
-    handleInitialUrl();
+    // 初期化処理を少し遅らせる
+    const timeoutId = setTimeout(() => {
+      handleInitialUrl();
+    }, 100);
 
     const subscription = Linking.addEventListener('url', handleUrlChange);
 
     return () => {
+      clearTimeout(timeoutId);
       subscription?.remove();
     };
   }, []);
