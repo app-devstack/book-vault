@@ -1,7 +1,8 @@
-import { COLORS } from '@/utils/colors';
-import { FONT_SIZES } from '@/utils/constants';
+import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as MediaLibrary from 'expo-media-library';
 import React, { useState } from 'react';
 import {
@@ -109,10 +110,16 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
         onPress={showPreview}
         activeOpacity={0.7}
       >
-        <Text style={styles.downloadIcon}>📱</Text>
-        <Text style={styles.downloadButtonText}>
-          {buttonText}
-        </Text>
+        <LinearGradient
+            colors={GRADIENTS.primary}
+            style={styles.emptyButtonGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}>
+          <Text style={styles.downloadIcon}>📱</Text>
+          <Text style={styles.downloadButtonText}>
+            {buttonText}
+          </Text>
+        </LinearGradient>
       </TouchableOpacity>
 
       {/* プレビューモーダル */}
@@ -187,22 +194,17 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
 };
 
 const styles = StyleSheet.create({
-  downloadButton: {
+  emptyButtonGradient: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  },
+  downloadButton: {
+    borderRadius: BORDER_RADIUS.xlarge,
+    overflow: "hidden",
+    ...SHADOWS.medium,
     minWidth: 240,
   },
   downloadIcon: {
@@ -305,4 +307,5 @@ const styles = StyleSheet.create({
   loadingIcon: {
     marginRight: 8,
   },
+
 });
