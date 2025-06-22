@@ -26,8 +26,8 @@
           "action": "SEND",
           "category": ["DEFAULT"],
           "data": {
-            "mimeType": "text/plain"
-          }
+              "mimeType": "text/plain"
+            }
         },
         {
           "action": "VIEW",
@@ -41,6 +41,13 @@
           "category": ["DEFAULT", "BROWSABLE"],
           "data": {
             "scheme": "http"
+          }
+        },
+        {
+          "action": "VIEW",
+          "category": ["DEFAULT", "BROWSABLE"],
+          "data": {
+            "scheme": "bookvault"
           }
         }
       ]
