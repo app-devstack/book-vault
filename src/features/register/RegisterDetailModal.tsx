@@ -1,16 +1,20 @@
 import { Icon } from "@/components/icons/Icons";
+import { useSharedUrlContext } from "@/components/providers/shared-url-provider";
+import Badge from "@/components/ui/Badge";
 import { SeriesSelector } from "@/components/ui/SeriesSelector";
 import { useCreateSeries } from "@/hooks/mutations/useCreateSeries";
 import { useSeriesOptions } from "@/hooks/queries/useSeriesOptions";
 import { BookSearchResult } from "@/types/book";
 import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
+import { BORDER_RADIUS, FONT_SIZES, ICON_SIZES, SCREEN_PADDING } from "@/utils/constants";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Animated,
   Image,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,6 +22,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+// アニメーション用定数
+const ANIMATION_CONFIG = {
+  duration: 300,
+  fadeOut: {
+    toValue: 0,
+    duration: 300,
+    useNativeDriver: true,
+  },
+  fadeIn: {
+    toValue: 1,
+    duration: 300,
+    useNativeDriver: true,
+  },
+} as const;
 
 type RegisterDetailModalProps = {
   visible: boolean;
@@ -35,9 +54,14 @@ export default function RegisterDetailModal({
   const [targetURL, setTargetURL] = useState("");
   const [selectedSeriesId, setSelectedSeriesId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isSharedUrlVisible, setIsSharedUrlVisible] = useState(true);
+
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
   const seriesOptionsQuery = useSeriesOptions();
   const createSeriesMutation = useCreateSeries();
+
+  const { sharedUrl } = useSharedUrlContext();
 
   // Convert SeriesOption[] to Series[] for SeriesSelector
   const seriesedBooks = (seriesOptionsQuery.data || []).map(option => ({
@@ -57,12 +81,26 @@ export default function RegisterDetailModal({
     return newSeries.id;
   };
 
+  // アニメーション関数
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeOut).start(() => {
+      setIsSharedUrlVisible(false);
+    });
+  };
+
+  const fadeIn = () => {
+    setIsSharedUrlVisible(true);
+    Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeIn).start();
+  };
+
   useEffect(() => {
     if (book) {
       setTargetURL(``);
       setSelectedSeriesId(null);
+      setIsSharedUrlVisible(true);
+      fadeAnim.setValue(1);
     }
-  }, [book]);
+  }, [book, fadeAnim]);
 
   const handleRegister = async () => {
     if (!book) return;
@@ -76,10 +114,18 @@ export default function RegisterDetailModal({
     }
   };
 
-  // const sliceTxt = (text: string, maxLength: number) => {
-  //   if (text.length <= maxLength) return text;
-  //   return text.slice(0, maxLength) + "...";
-  // };
+  const handleUseSharedUrl = () => {
+    if (sharedUrl) {
+      setTargetURL(sharedUrl.url);
+      fadeOut();
+    }
+  };
+
+  const handleBadgePress = () => {
+    if (!isSharedUrlVisible) {
+      fadeIn();
+    }
+  };
 
   if (!book) return null;
 
@@ -169,7 +215,67 @@ export default function RegisterDetailModal({
             <View style={styles.sectionHeader}>
               <Icon name="open-outline" size="medium" color={COLORS.primary} />
               <Text style={styles.sectionTitle}>リンクURL</Text>
+
+              {/* 共有URL検出インジケーター */}
+              {sharedUrl && (
+                <TouchableOpacity
+                  onPress={handleBadgePress}
+                  activeOpacity={0.7}
+                  style={styles.sharedUrlBadgeButton}
+                >
+                  <Badge
+                    variant="success"
+                    size="small"
+                    style={styles.sharedUrlBadgeCustom}
+                  >
+                    <View style={styles.badgeContent}>
+                      <Icon name="link" size={ICON_SIZES.xsmall} color="white" />
+                      <Text style={styles.badgeText}>共有URL</Text>
+                    </View>
+                  </Badge>
+                </TouchableOpacity>
+              )}
             </View>
+
+            {/* プレミアムな共有URL表示 */}
+            {sharedUrl && isSharedUrlVisible && (
+              <Animated.View
+                style={[
+                  styles.premiumSharedUrlContainer,
+                  { opacity: fadeAnim }
+                ]}
+              >
+                <LinearGradient
+                  colors={[COLORS.accent + '15', COLORS.accent + '08']}
+                  style={styles.sharedUrlGradientCard}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <View style={styles.urlPreviewContainer}>
+                    <Text style={styles.urlPreviewText} numberOfLines={2}>
+                      {sharedUrl.url}
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.useSharedUrlButton}
+                    onPress={handleUseSharedUrl}
+                    activeOpacity={0.7}
+                  >
+                    <LinearGradient
+                      colors={[COLORS.accentDark, COLORS.accentDark + 'DD']}
+                      style={styles.useSharedUrlButtonGradient}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                    >
+                      <Icon name="checkmark" size="small" color="white" />
+                      <Text style={styles.useSharedUrlButtonText}>このURLを使用</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </LinearGradient>
+              </Animated.View>
+            )}
+
             <TextInput
               style={styles.urlInput}
               value={targetURL}
@@ -319,6 +425,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderColor: COLORS.border,
+    gap: 12,
     ...SHADOWS.medium,
   },
   seriesCard: {
@@ -328,6 +435,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderColor: COLORS.border,
+    gap: 12,
     ...SHADOWS.medium,
   },
   urlCard: {
@@ -337,13 +445,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 1,
     borderColor: COLORS.border,
+    gap: 12,
     ...SHADOWS.medium,
   },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: FONT_SIZES.large,
@@ -407,6 +515,108 @@ const styles = StyleSheet.create({
   registerButtonText: {
     fontSize: FONT_SIZES.large,
     fontWeight: "bold",
+    color: "white",
+  },
+  // 共有URL検出インジケーター
+  sharedUrlBadgeButton: {
+    marginLeft: "auto",
+  },
+  sharedUrlBadgeCustom: {
+    backgroundColor: COLORS.accentDark,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  badgeContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  badgeText: {
+    fontSize: FONT_SIZES.small,
+    fontWeight: "600",
+    color: "white",
+  },
+
+  // プレミアム共有URLコンテナ
+  premiumSharedUrlContainer: {
+    ...SHADOWS.medium,
+  },
+  sharedUrlGradientCard: {
+    borderRadius: BORDER_RADIUS.large,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: COLORS.accent + "40",
+  },
+
+  // 共有URLヘッダー
+  sharedUrlHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  sharedUrlBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.accent + "20",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: BORDER_RADIUS.medium,
+    gap: 4,
+  },
+  sharedUrlDescription: {
+    fontSize: FONT_SIZES.small,
+    color: COLORS.textLight,
+    fontWeight: "500",
+  },
+
+  // URL プレビューコンテナ
+  urlPreviewContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    backgroundColor: "white",
+    borderRadius: BORDER_RADIUS.medium,
+    padding: 12,
+    marginBottom: 12,
+    borderWidth: 1.5,
+    borderColor: COLORS.accent + "30",
+    gap: 12,
+  },
+  urlIconContainer: {
+    backgroundColor: COLORS.accent + "15",
+    width: 36,
+    height: 36,
+    borderRadius: BORDER_RADIUS.medium,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 2,
+  },
+  urlPreviewText: {
+    flex: 1,
+    fontSize: FONT_SIZES.small,
+    color: COLORS.text,
+    lineHeight: 18,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+  },
+
+  // 使用ボタン
+  useSharedUrlButton: {
+    borderRadius: BORDER_RADIUS.medium,
+    overflow: "hidden",
+    width: "100%",
+    ...SHADOWS.small,
+  },
+  useSharedUrlButtonGradient: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    gap: 6,
+  },
+  useSharedUrlButtonText: {
+    fontSize: FONT_SIZES.medium,
+    fontWeight: "600",
     color: "white",
   },
 });
