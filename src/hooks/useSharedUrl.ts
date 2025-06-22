@@ -1,5 +1,6 @@
 import * as Linking from 'expo-linking';
 import { useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 
  interface SharedUrlData {
   url: string;
@@ -14,10 +15,15 @@ export const useSharedUrl = () => {
     const handleInitialUrl = async () => {
       try {
         const initialUrl = await Linking.getInitialURL();
-        if (initialUrl && (initialUrl.startsWith('http') || initialUrl.startsWith('https'))) {
+        if (initialUrl) {
           setSharedUrl({
             url: initialUrl,
             timestamp: Date.now(),
+          });
+          Toast.show({
+            type: 'info',
+            text1: 'Shared URL Detected',
+            text2: initialUrl,
           });
         }
       } catch (error) {
@@ -26,10 +32,15 @@ export const useSharedUrl = () => {
     };
 
     const handleUrlChange = ({ url }: { url: string }) => {
-      if (url && (url.startsWith('http') || url.startsWith('https'))) {
+      if (url ) {
         setSharedUrl({
           url: url,
           timestamp: Date.now(),
+        });
+        Toast.show({
+          type: 'info',
+          text1: 'Shared URL Detected',
+          text2: url,
         });
       }
     };
