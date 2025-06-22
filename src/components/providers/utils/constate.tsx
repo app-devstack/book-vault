@@ -2,6 +2,24 @@ import React from 'react';
 
 /**
  * プロバイダー作成関数
+ *
+ * @example
+ * const useCount = () => {
+ *  const [count, setCount] = React.useState(0);
+ * const increment = () => setCount((prev) => prev + 1);
+ * return { count, increment };
+ * }
+ *
+ * const constate = createConstate(useCount);
+ *
+ * export default function CountProvider({ children }: { children: React.ReactNode }) {
+ *   return (
+ *    <constate.Provider>
+ *     {children}
+ *    </constate.Provider>
+ *  );
+ *
+ * export const useCountContext = constate.useContextValue;
  */
 export function createConstate<T>(useValue: () => T) {
   const Context = React.createContext<T | null>(null);
@@ -24,24 +42,3 @@ export function createConstate<T>(useValue: () => T) {
     useContextValue,
   };
 }
-
-// function useCount() {
-//   const [count, setCount] = React.useState(0);
-//   const increment = () => setCount((prev) => prev + 1);
-//   return { count, increment };
-// }
-
-// const constate = createConstate(useCount);
-
-// export default function LayoutProvider({ children }: { children: React.ReactNode }) {
-//   useInitSessionUser();
-
-//   return (
-//     <constate.Provider>
-//       {children}
-//       <Toaster />
-//     </constate.Provider>
-//   );
-// }
-
-// export const useLayoutContext = constate.useContextValue;
