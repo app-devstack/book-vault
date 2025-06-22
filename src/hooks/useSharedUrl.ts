@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 }
 
 export const useSharedUrl = () => {
-  const [sharedUrl, setSharedUrl] = useState<SharedUrlData | null>({url: "https://claude.ai/chat/d2a75ea7-3a80-4738-a4a1-b88f6a1083a3", timestamp: 0});
+  const [sharedUrl, setSharedUrl] = useState<SharedUrlData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
