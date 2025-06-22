@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/chi-book.png",
-    "scheme": "bookstore",
+    "scheme": "bookvault",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
     "ios": {
@@ -20,7 +20,30 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.r.t7maru.bookvault",
-      "newArchEnabled": false
+      "newArchEnabled": false,
+      "intentFilters": [
+        {
+          "action": "SEND",
+          "category": ["DEFAULT"],
+          "data": {
+            "mimeType": "text/plain"
+          }
+        },
+        {
+          "action": "VIEW",
+          "category": ["DEFAULT", "BROWSABLE"],
+          "data": {
+            "scheme": "https"
+          }
+        },
+        {
+          "action": "VIEW",
+          "category": ["DEFAULT", "BROWSABLE"],
+          "data": {
+            "scheme": "http"
+          }
+        }
+      ]
     },
     "web": {
       "bundler": "metro",
