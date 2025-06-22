@@ -1,13 +1,13 @@
-import React from 'react';
-import { StyleSheet, Text, View, ViewStyle, TextStyle } from 'react-native';
 import { COLORS } from '@/utils/colors';
 import { FONT_SIZES } from '@/utils/constants';
+import React, { ReactNode } from 'react';
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 
 export type BadgeVariant = 'success' | 'warning' | 'error' | 'primary' | 'secondary';
 export type BadgeSize = 'small' | 'medium' | 'large';
 
 interface BadgeProps {
-  children: string;
+  children: string | ReactNode;
   variant?: BadgeVariant;
   size?: BadgeSize;
   style?: ViewStyle;
@@ -47,9 +47,16 @@ const Badge: React.FC<BadgeProps> = ({
     }
   };
 
+  const renderContent = () => {
+    if (typeof children === 'string') {
+      return <Text style={[styles.text, getTextSizeStyle(), textStyle]}>{children}</Text>;
+    }
+    return children;
+  };
+
   return (
     <View style={[styles.badge, getSizeStyle(), getVariantStyle(), style]}>
-      <Text style={[styles.text, getTextSizeStyle(), textStyle]}>{children}</Text>
+      {renderContent()}
     </View>
   );
 };
@@ -62,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   // Sizes
   badgeSmall: {
     paddingHorizontal: 6,

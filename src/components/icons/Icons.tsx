@@ -26,6 +26,7 @@ export type IconName =
   | "chevron-down"
   | "person"
   | "document-text"
+  | "link"
   | "information-circle";
 
 interface IconProps {
