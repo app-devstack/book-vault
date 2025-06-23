@@ -51,14 +51,14 @@ export const SeriesCreationModal: React.FC<SeriesCreationModalProps> = ({
         thumbnail: null,
         googleBooksSeriesId: null,
       });
-      
+
       setTitle("");
       setAuthor("");
       setDescription("");
       onClose();
     } catch (error) {
       console.error("Error creating series:", error);
-      Alert.alert("エラー", "シリーズの作成に失敗しました");
+      Alert.alert("シリーズの作成に失敗しました", `${error instanceof Error ? error.message : JSON.stringify(error,null,2)}`);
     } finally {
       setIsCreating(false);
     }

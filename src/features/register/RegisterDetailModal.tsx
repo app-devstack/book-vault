@@ -2,6 +2,7 @@ import { Icon } from "@/components/icons/Icons";
 import { useSharedUrlContext } from "@/components/providers/shared-url-provider";
 import Badge from "@/components/ui/Badge";
 import { SeriesSelector } from "@/components/ui/SeriesSelector";
+import { NewSeries } from "@/db/types";
 import { useCreateSeries } from "@/hooks/mutations/useCreateSeries";
 import { useSeriesOptions } from "@/hooks/queries/useSeriesOptions";
 import { BookSearchResult } from "@/types/book";
@@ -76,7 +77,7 @@ export default function RegisterDetailModal({
   }));
 
   // Wrapper function to return series ID after creation
-  const handleCreateSeries = async (seriesData: any) => {
+  const handleCreateSeries = async (seriesData:  Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newSeries = await createSeriesMutation.mutateAsync(seriesData);
     return newSeries.id;
   };
