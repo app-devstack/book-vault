@@ -23,6 +23,8 @@
     "preview": "eas build --platform android --profile preview",
     "preview:nocache": "bun run preview --clear-cache",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write src/ --ignore-path .prettierignore",
+    "format:check": "prettier --check src/ --ignore-path .prettierignore",
     "expo:check": "npx expo install --check",
     "postinstall": "patch-package"
   },
@@ -78,6 +80,7 @@
     "drizzle-kit": "^0.31.1",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
+    "prettier": "^3.6.0",
     "typescript": "~5.8.3"
   },
   "private": true
