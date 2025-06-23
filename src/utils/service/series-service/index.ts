@@ -1,6 +1,8 @@
 import db from "@/db";
 import schema from "@/db/schema";
 import { NewSeries } from "@/db/types";
+import { createDatabaseError } from "@/types/errors";
+import { logError } from "@/utils/errorLogger";
 
 class SeriesService {
   // constructor(parameters) {}
@@ -48,9 +50,17 @@ class SeriesService {
   }
 
   async createSeries(data:NewSeries) {
-    const [item] = await db.insert(schema.series).values(data).returning();
-
-    return item;
+    try {
+      const [item] = await db.insert(schema.series).values(data).returning();
+      return item;
+    } catch (error) {
+      await logError(error as Error, 'CREATE_SERIES');
+      const dbError = createDatabaseError(
+        `Failed to create series: ${error}`,
+        'シリーズの作成に失敗しました'
+      );
+      throw dbError;
+    }
   }
 
   async getAllSeriesWithBooks() {
@@ -99,7 +109,7 @@ class SeriesService {
         },
       },
     });
-    
+
     return items.map(series => ({
       id: series.id,
       title: series.title,
