@@ -23,7 +23,8 @@
     "preview": "eas build --platform android --profile preview",
     "preview:nocache": "bun run preview --clear-cache",
     "typecheck": "tsc --noEmit",
-    "expo:check": "npx expo install --check"
+    "expo:check": "npx expo install --check",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
@@ -47,12 +48,14 @@
     "expo-linking": "~7.1.5",
     "expo-media-library": "~17.1.7",
     "expo-router": "5.1.0",
+    "expo-share-intent": "^4.1.1",
     "expo-splash-screen": "~0.30.8",
     "expo-sqlite": "15.2.12",
     "expo-status-bar": "~2.2.3",
     "expo-symbols": "~0.4.4",
     "expo-system-ui": "5.0.9",
     "expo-web-browser": "14.2.0",
+    "patch-package": "^8.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.4",
