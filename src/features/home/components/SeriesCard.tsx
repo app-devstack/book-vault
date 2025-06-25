@@ -1,10 +1,10 @@
-import { Icon } from "@/components/icons/Icons";
-import { Book } from "@/db/types";
-import { SeriesStats } from "@/types/book";
-import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import LucideIcon from '@/components/ui/LucideIcon';
+import { Book } from '@/db/types';
+import { SeriesStats } from '@/types/book';
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface SeriesCardProps {
   seriesTitle: string;
@@ -24,14 +24,10 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
   );
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
+    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.content}>
         <Image
-          source={{ uri: latestBook.imageUrl || "" }}
+          source={{ uri: latestBook.imageUrl || '' }}
           style={styles.thumbnail}
           resizeMode="cover"
         />
@@ -72,7 +68,7 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
         </View>
 
         <View style={styles.chevronContainer}>
-          <Icon name="chevron-forward" size="medium" color="white" />
+          <LucideIcon name="ChevronRight" color="white" size="medium" />
         </View>
       </View>
     </TouchableOpacity>
@@ -89,8 +85,8 @@ const styles = StyleSheet.create({
     ...SHADOWS.medium,
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 20,
     gap: 16,
   },
@@ -105,7 +101,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: FONT_SIZES.xlarge,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 6,
   },
@@ -115,30 +111,30 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   statsContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
     marginBottom: 12,
   },
   statBadge: {
-    backgroundColor: COLORS.primary + "20",
+    backgroundColor: COLORS.primary + '20',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
   },
   priceBadge: {
-    backgroundColor: COLORS.accent + "20",
+    backgroundColor: COLORS.accent + '20',
   },
   statText: {
     fontSize: FONT_SIZES.small,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.primary,
   },
   priceText: {
     color: COLORS.success,
   },
   storesContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
   },
   storeDot: {
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.medium,
     width: 44,
     height: 44,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
