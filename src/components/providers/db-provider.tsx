@@ -1,6 +1,5 @@
-import db, { DATABASE_NAME } from "@/db";
-import { SQLiteProvider } from "expo-sqlite";
-import { ReactNode, Suspense, useEffect } from "react";
+import db from '@/db';
+import { ReactNode, Suspense, useEffect } from 'react';
 
 import { Text } from "@/components/Text";
 import { initializeDatabaseSeed } from "@/db/seed";
@@ -40,13 +39,13 @@ export default function DBProvider({ children }: { children: ReactNode }) {
 
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
-      <SQLiteProvider
+      {/* <SQLiteProvider
         databaseName={DATABASE_NAME}
         options={{ enableChangeListener: true }}
         useSuspense
-      >
+      > */}
         {children}
-      </SQLiteProvider>
+      {/* </SQLiteProvider> */}
     </Suspense>
   );
 }

@@ -2,6 +2,7 @@ import db from "@/db";
 import schema from "@/db/schema";
 import { BookWithRelations, NewBook } from "@/db/types";
 import { createDatabaseError } from "@/types/errors";
+import { logError } from "@/utils/errorLogger";
 import { count, eq, sql } from "drizzle-orm";
 
 class BookService {
@@ -50,10 +51,12 @@ class BookService {
 
       return items;
     } catch (error) {
-      throw createDatabaseError(
+      await logError(error as Error, 'GET_BOOKS');
+      const dbError = createDatabaseError(
         `Failed to fetch books: ${error}`,
         '書籍データの取得に失敗しました'
       );
+      throw dbError;
     }
   }
 
@@ -89,10 +92,12 @@ class BookService {
 
       return item;
     } catch (error) {
-      throw createDatabaseError(
+      await logError(error as Error, 'ADD_BOOK');
+      const dbError = createDatabaseError(
         `Failed to create book: ${error}`,
         '書籍の作成に失敗しました'
       );
+      throw dbError;
     }
   }
 
@@ -108,10 +113,12 @@ class BookService {
 
       return deletedItem;
     } catch (error) {
-      throw createDatabaseError(
+      await logError(error as Error, 'DELETE_BOOK');
+      const dbError = createDatabaseError(
         `Failed to delete book: ${error}`,
         '書籍の削除に失敗しました'
       );
+      throw dbError;
     }
   }
 
@@ -177,7 +184,7 @@ class BookService {
   // Google Books IDで登録済みかチェック
   async isBookRegistered(googleBooksId: string): Promise<boolean> {
     if (!googleBooksId) return false;
-    
+
     try {
       const book = await db.query.books.findFirst({
         where: (books, { eq }) => eq(books.googleBooksId, googleBooksId),

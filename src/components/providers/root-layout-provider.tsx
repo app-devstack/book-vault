@@ -1,11 +1,12 @@
 import DBProvider from "@/components/providers/db-provider";
 import { ProviderErrorBoundary } from "@/components/providers/ErrorBoundary";
+import SharedUrlProvider from "@/components/providers/shared-url-provider";
 // import ResetButton from "@/db/utils/resetButton";
+import { QUERY_CACHE_TIME } from "@/utils/constants/query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { QUERY_CACHE_TIME } from "@/utils/constants/query";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,12 +44,27 @@ export default function RootLayoutProvider({
           <QueryClientProvider client={queryClient}>
             <DBProvider>
               <ProviderErrorBoundary>
+              <AppProvider>
                 {children}
+              </AppProvider>
               </ProviderErrorBoundary>
               <Toast />
             </DBProvider>
           </QueryClientProvider>
         </SafeAreaView>
     </SafeAreaProvider>
+  );
+}
+
+
+function AppProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  return (
+    <SharedUrlProvider>
+      {children}
+    </SharedUrlProvider>
   );
 }

@@ -3,6 +3,7 @@ export const COLORS = {
   primaryDark: "#357ABD",
   primaryLight: "#7BB3F0",
   accent: "#88C999", // 薄緑のアクセント
+  accentDark: "#10B981", // 濃い緑のアクセント
   background: "#F0F8FF", // アリスブルー背景
   card: "#FFFFFF",
   text: "#2C3E50",
