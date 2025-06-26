@@ -145,13 +145,12 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
         data={results}
         renderItem={({ item }) => (
           <SearchResultItem
-            key={item.googleBooksId}
             item={item}
             handleBookSelect={handleBookSelect}
             isRegistered={registrationStatus[item.googleBooksId] || false}
           />
         )}
-        keyExtractor={(item) => item.googleBooksId}
+        keyExtractor={(item, idx) => `${item.googleBooksId}_${idx + 1}`}
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
       />

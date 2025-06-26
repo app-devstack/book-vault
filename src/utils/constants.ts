@@ -4,6 +4,7 @@ export const BORDER_RADIUS = {
   medium: 12,
   large: 16,
   xlarge: 20,
+  full: 9999,
 } as const;
 
 export const ICON_SIZES = {

@@ -5,6 +5,7 @@ import { useBookSearch } from '@/hooks/queries/useBookSearch';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
 import { BookSearchResult } from '@/types/book';
 import { useDebounce } from '@uidotdev/usehooks';
+import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 
 export interface BookRegistrationForm {
@@ -20,8 +21,9 @@ const SEARCH_DEBOUNCE_DELAY = 500;
  * 書籍登録画面で使用する検索・選択・登録機能を統合管理するフック
  */
 export const useBookRegistration = () => {
+  const { path: _, search } = useLocalSearchParams<{ path: string; search?: string }>();
   const [formData, setFormData] = useState<BookRegistrationForm>({
-    searchQuery: '',
+    searchQuery: search || '',
     selectedBook: null,
     selectedSeriesId: null,
     targetURL: '',

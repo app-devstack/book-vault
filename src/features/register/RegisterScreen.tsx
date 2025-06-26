@@ -8,14 +8,11 @@ import React from 'react';
 import {
   ActivityIndicator,
   ScrollView,
-  StyleProp,
   StyleSheet,
   Text,
   TextInput,
-  TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
 interface RegisterScreenProps {
   registerTab: RegisterTab;
@@ -29,19 +26,25 @@ interface RegisterScreenProps {
 
 const TabsTrigger = ({
   onPress,
-  StyleProp,
+  isActive,
+  text,
 }: {
   onPress: () => void;
-  StyleProp: StyleProp<TextStyle & ViewStyle>;
+  isActive: boolean;
+  text: string;
 }) => {
   return (
-    <TouchableOpacity style={[styles.tabButton, StyleProp]} onPress={onPress} activeOpacity={0.8}>
-      <Text style={[styles.tabButtonText, StyleProp]}>📧 Gmail連携</Text>
+    <TouchableOpacity
+      style={[styles.tabButton, isActive && styles.tabButtonActive]}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      <Text style={[styles.tabButtonText, isActive && styles.tabButtonTextActive]}>{text}</Text>
     </TouchableOpacity>
   );
 };
 
-export const RegisterScreen: React.FC<RegisterScreenProps> = ({
+export const RegisterScreen = ({
   registerTab,
   setRegisterTab,
   searchQuery,
@@ -49,7 +52,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   searchResults,
   isSearching,
   onSearch,
-}) => {
+}: RegisterScreenProps) => {
   const handleSearch = () => {
     if (searchQuery.trim()) {
       onSearch(searchQuery);
@@ -60,27 +63,16 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
     <View style={styles.container}>
       {/* タブセレクター */}
       <View style={styles.tabSelector}>
-        <TouchableOpacity
-          style={[styles.tabButton, registerTab === 'gmail' && styles.tabButtonActive]}
+        <TabsTrigger
+          text="📧 Gmail連携"
           onPress={() => setRegisterTab('gmail')}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={[styles.tabButtonText, registerTab === 'gmail' && styles.tabButtonTextActive]}
-          >
-            📧 Gmail連携
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.tabButton, registerTab === 'api' && styles.tabButtonActive]}
+          isActive={registerTab === 'gmail'}
+        />
+        <TabsTrigger
+          text="🔍 タイトル検索"
           onPress={() => setRegisterTab('api')}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.tabButtonText, registerTab === 'api' && styles.tabButtonTextActive]}>
-            🔍 タイトル検索
-          </Text>
-        </TouchableOpacity>
+          isActive={registerTab === 'api'}
+        />
       </View>
 
       <ScrollView
