@@ -26,7 +26,8 @@
     "format": "prettier --write src/ --ignore-path .prettierignore",
     "format:check": "prettier --check src/ --ignore-path .prettierignore",
     "expo:check": "npx expo install --check",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "knip":"bunx knip"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
