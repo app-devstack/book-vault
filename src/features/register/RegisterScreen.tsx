@@ -1,6 +1,6 @@
 import { Icon } from '@/components/icons/Icons';
-import { SearchResults } from '@/components/manga/SearchResults';
 import { RegisterTab } from '@/features/register/_types';
+import { SearchResults } from '@/features/register/components/SearchResults';
 import { BookSearchResult } from '@/types/book';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 interface RegisterScreenProps {
   registerTab: RegisterTab;
   setRegisterTab: (tab: RegisterTab) => void;
