@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  ScrollView, 
-  TouchableOpacity, 
-  Alert, 
-  StyleSheet, 
-  RefreshControl 
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  RefreshControl,
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { ErrorLogEntry } from '@/types/errorLog';
@@ -46,21 +46,17 @@ ${log.stack ? `スタック:\n${log.stack}` : ''}
   };
 
   const handleClearLogs = () => {
-    Alert.alert(
-      'ログクリア',
-      'すべてのエラーログを削除しますか？',
-      [
-        { text: 'キャンセル', style: 'cancel' },
-        {
-          text: '削除',
-          style: 'destructive',
-          onPress: async () => {
-            await clearErrorLogs();
-            setLogs([]);
-          },
+    Alert.alert('ログクリア', 'すべてのエラーログを削除しますか？', [
+      { text: 'キャンセル', style: 'cancel' },
+      {
+        text: '削除',
+        style: 'destructive',
+        onPress: async () => {
+          await clearErrorLogs();
+          setLogs([]);
         },
-      ]
-    );
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -78,11 +74,9 @@ ${log.stack ? `スタック:\n${log.stack}` : ''}
         )}
       </View>
 
-      <ScrollView 
+      <ScrollView
         style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {logs.length === 0 ? (
           <View style={styles.emptyContainer}>

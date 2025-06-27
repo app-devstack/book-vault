@@ -9,15 +9,15 @@ import Toast from 'react-native-toast-message';
  */
 export const useCreateSeries = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    mutationFn: (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>) => 
+    mutationFn: (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>) =>
       seriesService.createSeries(seriesData),
     onSuccess: (newSeries) => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERIES_LIST });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERIES_OPTIONS });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.APP_STATS });
-      
+
       Toast.show({
         type: 'success',
         text1: 'シリーズ作成完了',

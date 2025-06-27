@@ -1,9 +1,9 @@
-import db from "@/db";
-import schema from "@/db/schema";
-import { BookWithRelations, NewBook } from "@/db/types";
-import { createDatabaseError } from "@/types/errors";
-import { logError } from "@/utils/errorLogger";
-import { count, eq, sql } from "drizzle-orm";
+import db from '@/db';
+import schema from '@/db/schema';
+import { BookWithRelations, NewBook } from '@/db/types';
+import { createDatabaseError } from '@/types/errors';
+import { logError } from '@/utils/errorLogger';
+import { count, eq, sql } from 'drizzle-orm';
 
 class BookService {
   private readonly BOOKS_CACHE_TTL = 5 * 60 * 1000; // 5分
@@ -20,7 +20,11 @@ class BookService {
     return Date.now() - this.booksCache.timestamp < this.BOOKS_CACHE_TTL;
   }
 
-  async getAllBooks(options?: { useCache?: boolean; limit?: number; offset?: number }): Promise<BookWithRelations[]> {
+  async getAllBooks(options?: {
+    useCache?: boolean;
+    limit?: number;
+    offset?: number;
+  }): Promise<BookWithRelations[]> {
     const { useCache = true, limit, offset } = options || {};
 
     // キャッシュが有効な場合は使用（ページネーション無しの場合のみ）
@@ -36,7 +40,7 @@ class BookService {
           shop: true, // ショップ情報を含める
         },
         limit,
-        offset
+        offset,
       });
 
       const items = await queryBuilder;
@@ -45,7 +49,7 @@ class BookService {
       if (!limit && !offset) {
         this.booksCache = {
           data: items,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         };
       }
 
@@ -63,17 +67,13 @@ class BookService {
   // 統計情報を効率的に取得
   async getBooksStats() {
     try {
-      const [totalBooks] = await db
-        .select({ count: count() })
-        .from(schema.books);
+      const [totalBooks] = await db.select({ count: count() }).from(schema.books);
 
-      const [totalSeries] = await db
-        .select({ count: count() })
-        .from(schema.series);
+      const [totalSeries] = await db.select({ count: count() }).from(schema.series);
 
       return {
         totalBooks: totalBooks.count,
-        totalSeries: totalSeries.count
+        totalSeries: totalSeries.count,
       };
     } catch (error) {
       throw createDatabaseError(
@@ -130,7 +130,12 @@ class BookService {
       // IN演算子を使用してバルク削除
       const deletedItems = await db
         .delete(schema.books)
-        .where(sql`${schema.books.id} IN (${sql.join(bookIds.map(id => sql`${id}`), sql`,`)})`)
+        .where(
+          sql`${schema.books.id} IN (${sql.join(
+            bookIds.map((id) => sql`${id}`),
+            sql`,`
+          )})`
+        )
         .returning();
 
       this.invalidateCache();
@@ -151,15 +156,12 @@ class BookService {
         where: (books, { eq }) => eq(books.id, bookId),
         with: {
           series: true,
-          shop: true
-        }
+          shop: true,
+        },
       });
       return book || null;
     } catch (error) {
-      throw createDatabaseError(
-        `Failed to fetch book by ID: ${error}`,
-        '書籍の取得に失敗しました'
-      );
+      throw createDatabaseError(`Failed to fetch book by ID: ${error}`, '書籍の取得に失敗しました');
     }
   }
 
@@ -170,8 +172,8 @@ class BookService {
         where: (books, { eq }) => eq(books.seriesId, seriesId),
         orderBy: (books, { asc, desc }) => [asc(books.volume), desc(books.createdAt)],
         with: {
-          shop: true
-        }
+          shop: true,
+        },
       });
     } catch (error) {
       throw createDatabaseError(
@@ -188,7 +190,7 @@ class BookService {
     try {
       const book = await db.query.books.findFirst({
         where: (books, { eq }) => eq(books.googleBooksId, googleBooksId),
-        columns: { id: true }
+        columns: { id: true },
       });
       return !!book;
     } catch (error) {
@@ -204,12 +206,12 @@ class BookService {
     try {
       const registeredBooks = await db.query.books.findMany({
         where: (books, { inArray }) => inArray(books.googleBooksId, googleBooksIds.filter(Boolean)),
-        columns: { googleBooksId: true }
+        columns: { googleBooksId: true },
       });
 
       const registrationStatus: Record<string, boolean> = {};
-      googleBooksIds.forEach(id => {
-        registrationStatus[id] = registeredBooks.some(book => book.googleBooksId === id);
+      googleBooksIds.forEach((id) => {
+        registrationStatus[id] = registeredBooks.some((book) => book.googleBooksId === id);
       });
 
       return registrationStatus;

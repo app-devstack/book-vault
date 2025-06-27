@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 export const useErrorHandler = () => {
   const handleError = useCallback((error: Error, context?: string) => {
     console.error(`Error in ${context || 'unknown context'}:`, error);
-    
+
     // エラーの種類に応じた処理
     if (error.name === 'NetworkError') {
       Toast.show({
@@ -21,7 +21,10 @@ export const useErrorHandler = () => {
         text1: '入力エラー',
         text2: '入力内容を確認してください',
       });
-    } else if (error.message.includes('failed to fetch') || error.message.includes('Failed to fetch')) {
+    } else if (
+      error.message.includes('failed to fetch') ||
+      error.message.includes('Failed to fetch')
+    ) {
       Toast.show({
         type: 'error',
         text1: 'ネットワークエラー',
@@ -35,6 +38,6 @@ export const useErrorHandler = () => {
       });
     }
   }, []);
-  
+
   return { handleError };
 };

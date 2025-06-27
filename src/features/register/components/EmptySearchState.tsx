@@ -1,8 +1,8 @@
-import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import { Image } from "expo-image";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { Image } from 'expo-image';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export const EmptySearchState = () => {
   return (
@@ -23,15 +23,15 @@ export const EmptySearchState = () => {
 
 const styles = StyleSheet.create({
   emptyContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: SCREEN_PADDING,
     paddingVertical: 60,
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.xlarge,
     borderWidth: 2,
     borderColor: COLORS.border,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     ...SHADOWS.medium,
   },
   emptyIcon: {
@@ -41,15 +41,15 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: FONT_SIZES.xlarge,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   emptyDescription: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.textLight,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 20,
   },
 });

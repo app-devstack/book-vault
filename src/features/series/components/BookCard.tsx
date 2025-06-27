@@ -1,17 +1,10 @@
-import { Icon } from "@/components/icons/Icons";
-import { Book } from "@/db/types";
-import { BookDetailModal } from "@/features/series/components/BookDetailModal"; // パスは適宜調整
-import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import React, { useState } from "react";
-import {
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Icon } from '@/components/icons/Icons';
+import { Book } from '@/db/types';
+import { BookDetailModal } from '@/features/series/components/BookDetailModal'; // パスは適宜調整
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import React, { useState } from 'react';
+import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type BookCardProps = {
   book: Book;
@@ -19,18 +12,14 @@ type BookCardProps = {
   onBookDeleted?: (bookId: string) => void; // 削除時のコールバック
 };
 
-export const BookCard = ({
-  book,
-  showSeriesTitle = false,
-  onBookDeleted
-}: BookCardProps) => {
+export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookCardProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleLinkPress = async () => {
     try {
       await Linking.openURL(book.targetUrl);
     } catch (error) {
-      console.error("URLを開けませんでした:", error);
+      console.error('URLを開けませんでした:', error);
     }
   };
 
@@ -61,7 +50,7 @@ export const BookCard = ({
         <View style={styles.content}>
           <Image
             // TODO: 画像のURLがない場合はプレースホルダーを表示
-            source={{ uri: book.imageUrl || "" }}
+            source={{ uri: book.imageUrl || '' }}
             style={styles.thumbnail}
             resizeMode="cover"
           />
@@ -73,9 +62,7 @@ export const BookCard = ({
               </Text>
             )}
 
-            {book.volume && (
-              <Text style={styles.volumeTitle}>{book.volume}巻</Text>
-            )}
+            {book.volume && <Text style={styles.volumeTitle}>{book.volume}巻</Text>}
 
             <Text style={styles.volumeTitle} numberOfLines={3}>
               {book.title}
@@ -132,8 +119,8 @@ const styles = StyleSheet.create({
     ...SHADOWS.small,
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     gap: 16,
   },
@@ -148,13 +135,13 @@ const styles = StyleSheet.create({
   },
   seriesTitle: {
     fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 4,
   },
   volumeTitle: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 4,
   },
@@ -165,7 +152,7 @@ const styles = StyleSheet.create({
   },
   storeName: {
     fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 4,
   },
   purchaseInfo: {
@@ -177,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.medium,
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

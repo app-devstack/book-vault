@@ -1,22 +1,18 @@
-import { Text } from "@/components/Text";
+import { Text } from '@/components/Text';
 import {
   StyleProp,
   StyleSheet,
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
-} from "react-native";
+} from 'react-native';
 
 interface CustomButtonProps extends TouchableOpacityProps {
   children: React.ReactNode;
   textStyle?: StyleProp<TextStyle>;
 }
 
-export default function Button({
-  children,
-  textStyle,
-  ...props
-}: CustomButtonProps) {
+export default function Button({ children, textStyle, ...props }: CustomButtonProps) {
   return (
     <TouchableOpacity
       style={styles.button}
@@ -30,14 +26,14 @@ export default function Button({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "blue",
+    backgroundColor: 'blue',
     padding: 15,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   text: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

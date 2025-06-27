@@ -1,12 +1,12 @@
-import DBProvider from "@/components/providers/db-provider";
-import { ProviderErrorBoundary } from "@/components/providers/ErrorBoundary";
-import SharedUrlProvider from "@/components/providers/shared-url-provider";
+import DBProvider from '@/components/providers/db-provider';
+import { ProviderErrorBoundary } from '@/components/providers/ErrorBoundary';
+import SharedUrlProvider from '@/components/providers/shared-url-provider';
 // import ResetButton from "@/db/utils/resetButton";
-import { QUERY_CACHE_TIME } from "@/utils/constants/query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode } from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Toast from "react-native-toast-message";
+import { QUERY_CACHE_TIME } from '@/utils/constants/query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactNode } from 'react';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,42 +29,27 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function RootLayoutProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayoutProvider({ children }: { children: ReactNode }) {
   return (
     <SafeAreaProvider>
-        <SafeAreaView
-          style={{ flex: 1 }}
-          // edges={["top", "left", "right"]}
+      <SafeAreaView
+        style={{ flex: 1 }}
+        // edges={["top", "left", "right"]}
       >
         {/* <ResetButton /> */}
-          <QueryClientProvider client={queryClient}>
-            <DBProvider>
-              <ProviderErrorBoundary>
-              <AppProvider>
-                {children}
-              </AppProvider>
-              </ProviderErrorBoundary>
-              <Toast />
-            </DBProvider>
-          </QueryClientProvider>
-        </SafeAreaView>
+        <QueryClientProvider client={queryClient}>
+          <DBProvider>
+            <ProviderErrorBoundary>
+              <AppProvider>{children}</AppProvider>
+            </ProviderErrorBoundary>
+            <Toast />
+          </DBProvider>
+        </QueryClientProvider>
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 }
 
-
-function AppProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  return (
-    <SharedUrlProvider>
-      {children}
-    </SharedUrlProvider>
-  );
+function AppProvider({ children }: { children: ReactNode }) {
+  return <SharedUrlProvider>{children}</SharedUrlProvider>;
 }

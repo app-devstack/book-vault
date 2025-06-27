@@ -1,9 +1,9 @@
-import { Icon } from "@/components/icons/Icons";
-import { useDeleteBook } from "@/hooks/mutations/useDeleteBook";
-import { Book } from "@/db/types";
-import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import React from "react";
+import { Icon } from '@/components/icons/Icons';
+import { useDeleteBook } from '@/hooks/mutations/useDeleteBook';
+import { Book } from '@/db/types';
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import React from 'react';
 import {
   Alert,
   Dimensions,
@@ -12,13 +12,13 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from "react-native";
+  View,
+} from 'react-native';
 
 const {
   // width: _screenWidth,
   height: screenHeight,
-} = Dimensions.get("window");
+} = Dimensions.get('window');
 
 type BookDetailModalProps = {
   visible: boolean;
@@ -39,18 +39,18 @@ export const BookDetailModal = ({
 
   // 削除確認ダイアログ
   const handleDeletePress = async () => {
-     Alert.alert(
-      "本を削除",
-     // prettier-ignore
+    Alert.alert(
+      '本を削除',
+      // prettier-ignore
       `「${book.title}${book.volume ? ` ${book.volume}巻` : ""}」を削除しますか？`,
       [
         {
-          text: "キャンセル",
-          style: "cancel",
+          text: 'キャンセル',
+          style: 'cancel',
         },
         {
-          text: "削除",
-          style: "destructive",
+          text: '削除',
+          style: 'destructive',
           onPress: handleDeleteConfirm,
         },
       ]
@@ -67,7 +67,7 @@ export const BookDetailModal = ({
       onClose();
     } catch (error) {
       // エラーハンドリングはmutation内で実行済み
-      console.error("Delete error:", error);
+      console.error('Delete error:', error);
     }
   };
 
@@ -88,11 +88,7 @@ export const BookDetailModal = ({
       onRequestClose={onClose}
     >
       <AnimatedBackdrop>
-        <TouchableOpacity
-          style={styles.backdropTouchable}
-          activeOpacity={1}
-          onPress={onClose}
-        />
+        <TouchableOpacity style={styles.backdropTouchable} activeOpacity={1} onPress={onClose} />
 
         <AnimatedContainer>
           <View style={styles.modal}>
@@ -114,7 +110,7 @@ export const BookDetailModal = ({
               {/* サムネイル */}
               <View style={styles.thumbnailContainer}>
                 <Image
-                  source={{ uri: book.imageUrl || "" }}
+                  source={{ uri: book.imageUrl || '' }}
                   style={styles.thumbnail}
                   resizeMode="cover"
                 />
@@ -124,14 +120,10 @@ export const BookDetailModal = ({
               <View style={styles.infoSection}>
                 <Text style={styles.title}>
                   {book.title}
-                  {book.volume && (
-                    <Text style={styles.volume}> {book.volume}巻</Text>
-                  )}
+                  {book.volume && <Text style={styles.volume}> {book.volume}巻</Text>}
                 </Text>
 
-                {book.author && (
-                  <Text style={styles.author}>{book.author}</Text>
-                )}
+                {book.author && <Text style={styles.author}>{book.author}</Text>}
 
                 {/* {book.shop && (
                   <View style={styles.shopContainer}>
@@ -178,7 +170,7 @@ export const BookDetailModal = ({
               >
                 <Icon name="trash" size="small" color="white" />
                 <Text style={styles.deleteButtonText}>
-                  {deleteBookMutation.isPending ? "削除中..." : "削除"}
+                  {deleteBookMutation.isPending ? '削除中...' : '削除'}
                 </Text>
               </TouchableOpacity>
 
@@ -201,11 +193,11 @@ export const BookDetailModal = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   backdropTouchable: {
     flex: 1,
@@ -219,10 +211,10 @@ const styles = StyleSheet.create({
     ...SHADOWS.large,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     padding: 16,
-    paddingTop:8,
+    paddingTop: 8,
     paddingBottom: 8,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
@@ -230,8 +222,8 @@ const styles = StyleSheet.create({
   closeButton: {
     width: 32,
     height: 32,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: BORDER_RADIUS.small,
   },
   content: {
@@ -239,7 +231,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   thumbnailContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 24,
   },
   thumbnail: {
@@ -253,7 +245,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: FONT_SIZES.xlarge,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 8,
     lineHeight: FONT_SIZES.xlarge * 1.3,
@@ -267,19 +259,19 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   shopContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
     gap: 8,
   },
   shopName: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.primary,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   dateContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
     gap: 8,
   },
@@ -288,27 +280,27 @@ const styles = StyleSheet.create({
     color: COLORS.textLight,
   },
   isbnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     marginTop: 8,
   },
   isbnLabel: {
     fontSize: FONT_SIZES.small,
     color: COLORS.textLight,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   isbn: {
     fontSize: FONT_SIZES.small,
     color: COLORS.text,
-    fontFamily: "monospace",
+    fontFamily: 'monospace',
   },
   descriptionSection: {
     marginBottom: 24,
   },
   sectionTitle: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 12,
   },
@@ -318,7 +310,7 @@ const styles = StyleSheet.create({
     lineHeight: FONT_SIZES.medium * 1.5,
   },
   actions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderTopWidth: 1,
@@ -327,9 +319,9 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: BORDER_RADIUS.medium,
@@ -339,9 +331,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.error,
   },
   deleteButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: FONT_SIZES.medium,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   editButton: {
     backgroundColor: COLORS.card,
@@ -351,6 +343,6 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: COLORS.primary,
     fontSize: FONT_SIZES.medium,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });

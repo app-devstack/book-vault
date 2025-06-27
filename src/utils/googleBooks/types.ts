@@ -31,4 +31,4 @@ export type GoogleBooksResponse = {
   }[];
 };
 
-export type BookSearchItemType = GoogleBooksResponse["items"][number];
+export type BookSearchItemType = GoogleBooksResponse['items'][number];

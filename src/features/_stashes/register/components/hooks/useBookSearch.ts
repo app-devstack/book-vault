@@ -1,6 +1,6 @@
-import { BookSearchItemType } from "@/utils/googleBooks/types";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { BookSearchItemType } from '@/utils/googleBooks/types';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 const fetchBooks = async (query: string) => {
   const response = await fetch(
@@ -9,21 +9,21 @@ const fetchBooks = async (query: string) => {
     )}&langRestrict=ja`
   );
   if (!response.ok) {
-    throw new Error("データの取得に失敗しました");
+    throw new Error('データの取得に失敗しました');
   }
   return response.json();
 };
 
 export const useGetBookSearch = (searchTerm: string) => {
   return useQuery<BookSearchItemType[]>({
-    queryKey: ["books", searchTerm],
+    queryKey: ['books', searchTerm],
     queryFn: () => fetchBooks(searchTerm).then((data) => data.items || []),
     enabled: !!searchTerm,
   });
 };
 
 export const useBookSearch = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = () => {
     setSearchTerm(searchTerm);

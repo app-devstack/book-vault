@@ -2,7 +2,7 @@ import { useShareIntentContext } from 'expo-share-intent';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 
- interface SharedUrlData {
+interface SharedUrlData {
   url: string;
   timestamp: number;
 }
@@ -24,7 +24,7 @@ export const useSharedUrl = () => {
         text1: 'Shared URL Received',
         text2: shareIntent.webUrl || shareIntent.text || '',
       });
-      resetShareIntent();  // 次回受信に備えてリセット
+      resetShareIntent(); // 次回受信に備えてリセット
     }
 
     if (error) {
@@ -35,7 +35,7 @@ export const useSharedUrl = () => {
         text2: error,
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasShareIntent]);
 
   const clearSharedUrl = () => {

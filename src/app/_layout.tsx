@@ -1,9 +1,9 @@
-import RootLayoutProvider from "@/components/providers/root-layout-provider";
-import { Stack } from "expo-router";
-import { StatusBar } from "react-native";
+import RootLayoutProvider from '@/components/providers/root-layout-provider';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'react-native';
 
-import React from "react";
-import { COLORS } from "../utils/colors";
+import React from 'react';
+import { COLORS } from '../utils/colors';
 
 export default function RootLayout() {
   return (
@@ -20,7 +20,7 @@ export default function RootLayout() {
           name="series/[title]"
           options={{
             headerShown: false,
-            presentation: "card",
+            presentation: 'card',
           }}
         />
       </Stack>

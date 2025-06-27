@@ -19,7 +19,7 @@ export async function logError(error: Error, operation: string): Promise<void> {
 
     const existingLogs = await getErrorLogs();
     const newLogs = [logEntry, ...existingLogs].slice(0, MAX_LOGS);
-    
+
     await AsyncStorage.setItem(ERROR_LOG_KEY, JSON.stringify(newLogs));
   } catch (e) {
     // ログ記録自体でエラーが出ても何もしない

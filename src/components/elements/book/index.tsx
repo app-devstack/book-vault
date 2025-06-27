@@ -1,15 +1,9 @@
-import { IconSymbol } from "@/components/IconSymbol";
-import { Text } from "@/components/Text";
-import type { Book } from "@/db/types";
-import { Image as ExpoImage } from "expo-image";
+import { IconSymbol } from '@/components/IconSymbol';
+import { Text } from '@/components/Text';
+import type { Book } from '@/db/types';
+import { Image as ExpoImage } from 'expo-image';
 
-import {
-  Alert,
-  Linking,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function BookItem(item: Book) {
   const openExternalLink = async () => {
@@ -19,23 +13,16 @@ export default function BookItem(item: Book) {
 
       if (supported) await Linking.openURL(url);
     } catch (error) {
-      Alert.alert("エラー", `リンクを開く際にエラーが発生しました \n${error}`);
+      Alert.alert('エラー', `リンクを開く際にエラーが発生しました \n${error}`);
     }
   };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      activeOpacity={0.7}
-      onPress={openExternalLink}
-    >
+    <TouchableOpacity style={styles.container} activeOpacity={0.7} onPress={openExternalLink}>
       <View style={styles.content}>
         <ItemBookImg imageURL={item.imageUrl} />
 
-        <ItemTitleAndDescription
-          title={item.title}
-          description={item.description}
-        />
+        <ItemTitleAndDescription title={item.title} description={item.description} />
       </View>
       <IconSymbol name="chevron.right" size={20} color="#666666" />
     </TouchableOpacity>
@@ -75,12 +62,12 @@ const styles = StyleSheet.create({
   img: {
     width: 64,
     height: 90,
-    backgroundColor: "#dcdcdc",
+    backgroundColor: '#dcdcdc',
     borderRadius: 4,
   },
 
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 8,
     marginBottom: 12,
     padding: 12,
@@ -90,7 +77,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   content: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   thumbnail: {
     width: 50,
@@ -103,26 +90,26 @@ const styles = StyleSheet.create({
     height: 75,
     marginRight: 12,
     borderRadius: 4,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: '#f0f0f0',
   },
   info: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 4,
-    color: "#333",
+    color: '#333',
   },
   author: {
-    color: "#666",
+    color: '#666',
     fontSize: 14,
     marginBottom: 8,
   },
   tapHint: {
-    color: "#3868AA",
+    color: '#3868AA',
     fontSize: 12,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
 });

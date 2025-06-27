@@ -9,21 +9,21 @@ import Toast from 'react-native-toast-message';
  */
 export const useAddBook = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (bookData: NewBook) => bookService.createBook(bookData),
     onMutate: async (newBook) => {
       // 楽観的更新の準備
       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.BOOKS });
-      
+
       const previousBooks = queryClient.getQueryData(QUERY_KEYS.BOOKS);
-      
+
       // 楽観的更新実行
       queryClient.setQueryData(QUERY_KEYS.BOOKS, (old: any) => {
         if (!old) return [newBook];
         return [...old, { ...newBook, id: 'temp-' + Date.now() }];
       });
-      
+
       return { previousBooks };
     },
     onError: (err, newBook, context) => {
@@ -31,7 +31,7 @@ export const useAddBook = () => {
       if (context?.previousBooks) {
         queryClient.setQueryData(QUERY_KEYS.BOOKS, context.previousBooks);
       }
-      
+
       Toast.show({
         type: 'error',
         text1: '登録エラー',
@@ -43,13 +43,13 @@ export const useAddBook = () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.BOOKS });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERIES_LIST });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.APP_STATS });
-      
+
       if (variables.seriesId) {
-        queryClient.invalidateQueries({ 
-          queryKey: QUERY_KEYS.SERIES_DETAIL(variables.seriesId) 
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.SERIES_DETAIL(variables.seriesId),
         });
       }
-      
+
       Toast.show({
         type: 'success',
         text1: '登録完了',

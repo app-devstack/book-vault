@@ -1,9 +1,9 @@
-import { SeriesDetailScreen } from "@/features/series/SeriesDetailScreen";
-import { useSeriesDetail } from "@/hooks/screens/useSeriesDetail";
-import { COLORS } from "@/utils/colors";
-import { router, useLocalSearchParams } from "expo-router";
-import React from "react";
-import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
+import { SeriesDetailScreen } from '@/features/series/SeriesDetailScreen';
+import { useSeriesDetail } from '@/hooks/screens/useSeriesDetail';
+import { COLORS } from '@/utils/colors';
+import { router, useLocalSearchParams } from 'expo-router';
+import React from 'react';
+import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 
 export default function SeriesDetailPage() {
   const { seriesId } = useLocalSearchParams<{ seriesId: string }>();
@@ -34,7 +34,7 @@ export default function SeriesDetailPage() {
 
   // シリーズが見つからない場合はホームに戻る
   if (!series || !books || books.length === 0) {
-    router.push("/");
+    router.push('/');
     return null;
   }
 
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   centerContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
     fontSize: 16,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     color: COLORS.error,
-    textAlign: "center",
+    textAlign: 'center',
     paddingHorizontal: 32,
   },
 });

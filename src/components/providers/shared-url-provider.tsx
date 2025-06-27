@@ -1,18 +1,14 @@
-import { createConstate } from "@/components/providers/utils/constate";
-import { useSharedUrl } from "@/hooks/useSharedUrl";
-import React, { ReactNode } from "react";
+import { createConstate } from '@/components/providers/utils/constate';
+import { useSharedUrl } from '@/hooks/useSharedUrl';
+import React, { ReactNode } from 'react';
 
 interface SharedUrlProviderProps {
   children: ReactNode;
 }
 
-const constate = createConstate(useSharedUrl)
-export const useSharedUrlContext= constate.useContextValue;
+const constate = createConstate(useSharedUrl);
+export const useSharedUrlContext = constate.useContextValue;
 
-export default function SharedUrlProvider ({ children }: SharedUrlProviderProps) {
-  return (
-    <constate.Provider >
-      {children}
-    </constate.Provider>
-  );
-};
+export default function SharedUrlProvider({ children }: SharedUrlProviderProps) {
+  return <constate.Provider>{children}</constate.Provider>;
+}

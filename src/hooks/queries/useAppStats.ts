@@ -21,17 +21,18 @@ export const useAppStats = () => {
         bookService.getAllBooks(),
         seriesService.getAllSeries(),
       ]);
-      
+
       const now = new Date();
       const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       const recentlyAddedCount = books.filter(
-        book => new Date(book.createdAt) > oneWeekAgo
+        (book) => new Date(book.createdAt) > oneWeekAgo
       ).length;
-      
+
       return {
         totalBooks: books.length,
         totalSeries: series.length,
-        averageBooksPerSeries: series.length > 0 ? Math.round((books.length / series.length) * 10) / 10 : 0,
+        averageBooksPerSeries:
+          series.length > 0 ? Math.round((books.length / series.length) * 10) / 10 : 0,
         recentlyAddedCount,
       };
     },

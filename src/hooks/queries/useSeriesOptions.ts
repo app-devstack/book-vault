@@ -17,7 +17,6 @@ export const useSeriesOptions = () => {
     queryKey: QUERY_KEYS.SERIES_OPTIONS,
     queryFn: () => seriesService.getSeriesOptions(),
     ...QUERY_OPTIONS.STATIC,
-    select: (data: SeriesOption[]) => 
-      data.sort((a, b) => a.title.localeCompare(b.title)),
+    select: (data: SeriesOption[]) => data.sort((a, b) => a.title.localeCompare(b.title)),
   });
 };

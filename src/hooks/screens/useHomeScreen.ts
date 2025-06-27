@@ -25,7 +25,7 @@ export const useHomeScreen = () => {
       //   const bookDate = new Date(book.createdAt);
       //   return bookDate > latest ? bookDate : latest;
       // }, new Date(0)) : undefined,
-      latestVolumeDate:undefined
+      latestVolumeDate: undefined,
     });
   }, []);
 
@@ -37,10 +37,12 @@ export const useHomeScreen = () => {
   return {
     // データ
     seriesedBooks: seriesQuery.data || [],
-    totalStats: statsQuery.data ? {
-      seriesCount: statsQuery.data.totalSeries,
-      bookCount: statsQuery.data.totalBooks,
-    } : { seriesCount: 0, bookCount: 0 },
+    totalStats: statsQuery.data
+      ? {
+          seriesCount: statsQuery.data.totalSeries,
+          bookCount: statsQuery.data.totalBooks,
+        }
+      : { seriesCount: 0, bookCount: 0 },
 
     // 状態
     isLoading,

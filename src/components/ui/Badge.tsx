@@ -23,27 +23,38 @@ const Badge: React.FC<BadgeProps> = ({
 }) => {
   const getSizeStyle = () => {
     switch (size) {
-      case 'small': return styles.badgeSmall;
-      case 'large': return styles.badgeLarge;
-      default: return styles.badgeMedium;
+      case 'small':
+        return styles.badgeSmall;
+      case 'large':
+        return styles.badgeLarge;
+      default:
+        return styles.badgeMedium;
     }
   };
 
   const getVariantStyle = () => {
     switch (variant) {
-      case 'success': return styles.badgeSuccess;
-      case 'warning': return styles.badgeWarning;
-      case 'error': return styles.badgeError;
-      case 'secondary': return styles.badgeSecondary;
-      default: return styles.badgePrimary;
+      case 'success':
+        return styles.badgeSuccess;
+      case 'warning':
+        return styles.badgeWarning;
+      case 'error':
+        return styles.badgeError;
+      case 'secondary':
+        return styles.badgeSecondary;
+      default:
+        return styles.badgePrimary;
     }
   };
 
   const getTextSizeStyle = () => {
     switch (size) {
-      case 'small': return styles.textSmall;
-      case 'large': return styles.textLarge;
-      default: return styles.textMedium;
+      case 'small':
+        return styles.textSmall;
+      case 'large':
+        return styles.textLarge;
+      default:
+        return styles.textMedium;
     }
   };
 
@@ -55,9 +66,7 @@ const Badge: React.FC<BadgeProps> = ({
   };
 
   return (
-    <View style={[styles.badge, getSizeStyle(), getVariantStyle(), style]}>
-      {renderContent()}
-    </View>
+    <View style={[styles.badge, getSizeStyle(), getVariantStyle(), style]}>{renderContent()}</View>
   );
 };
 

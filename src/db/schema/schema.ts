@@ -1,9 +1,9 @@
-import { uuidv7 } from "@/lib/uuid";
-import { relations } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { uuidv7 } from '@/lib/uuid';
+import { relations } from 'drizzle-orm';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 const timestamp = (name: string) =>
-  integer(name, { mode: "timestamp_ms" })
+  integer(name, { mode: 'timestamp_ms' })
     .notNull()
     .$default(() => new Date());
 
@@ -13,53 +13,53 @@ const _schemaBase = {
     .$defaultFn(() => uuidv7())
     .primaryKey()
     .notNull(),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
+  createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .notNull()
     .$defaultFn(() => new Date()),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+  updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .notNull()
     .$defaultFn(() => new Date()),
 };
 
 // シリーズマスタ
-export const series = sqliteTable("series", {
+export const series = sqliteTable('series', {
   ..._schemaBase,
-  title: text("title").notNull().unique(), // ユニーク制約あり
-  author: text("author"), // 作者名
-  description: text("description"), // シリーズの概要・あらすじ
-  thumbnail: text("thumbnail"), // シリーズ代表画像のURL
+  title: text('title').notNull().unique(), // ユニーク制約あり
+  author: text('author'), // 作者名
+  description: text('description'), // シリーズの概要・あらすじ
+  thumbnail: text('thumbnail'), // シリーズ代表画像のURL
 
-  googleBooksSeriesId: text("google_books_series_id"), // Google BooksのシリーズID
+  googleBooksSeriesId: text('google_books_series_id'), // Google BooksのシリーズID
 });
 
 // ショップマスタ
-export const shops = sqliteTable("shops", {
+export const shops = sqliteTable('shops', {
   ..._schemaBase,
-  name: text("name").notNull().unique(), // ショップ名（ユニーク制約）
-  displayName: text("display_name").notNull(), // 表示名
-  baseUrl: text("base_url"), // ベースURL
-  logoUrl: text("logo_url"), // ロゴ画像URL
-  description: text("description"), // ショップ説明
+  name: text('name').notNull().unique(), // ショップ名（ユニーク制約）
+  displayName: text('display_name').notNull(), // 表示名
+  baseUrl: text('base_url'), // ベースURL
+  logoUrl: text('logo_url'), // ロゴ画像URL
+  description: text('description'), // ショップ説明
 });
 
 // 書籍テーブル
-export const books = sqliteTable("books", {
+export const books = sqliteTable('books', {
   ..._schemaBase,
-  title: text("title").notNull(), // タイトル
-  volume: integer("volume"), // 巻数
-  imageUrl: text("image_url"), // サムネイル
-  targetUrl: text("target_url").notNull(), // pURL
-  description: text("description"), // 説明
-  isbn: text("isbn"), // ISBN
-  author: text("author"), // 作者名
-  googleBooksId: text("google_books_id"), // Google Books ID
+  title: text('title').notNull(), // タイトル
+  volume: integer('volume'), // 巻数
+  imageUrl: text('image_url'), // サムネイル
+  targetUrl: text('target_url').notNull(), // pURL
+  description: text('description'), // 説明
+  isbn: text('isbn'), // ISBN
+  author: text('author'), // 作者名
+  googleBooksId: text('google_books_id'), // Google Books ID
 
-  purchaseDate: timestamp("purchase_date").notNull(), // 購入日
+  purchaseDate: timestamp('purchase_date').notNull(), // 購入日
 
-  seriesId: text("series_id")
+  seriesId: text('series_id')
     .notNull()
     .references(() => series.id), // シリーズIDへの外部キー
-  shopId: text("shop_id")
+  shopId: text('shop_id')
     .notNull()
     .references(() => shops.id), // 購入ショップIDへの外部キー
 });

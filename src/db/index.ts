@@ -1,13 +1,13 @@
-import schema from "@/db/schema";
-import { DrizzleConfig } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { openDatabaseSync } from "expo-sqlite";
+import schema from '@/db/schema';
+import { DrizzleConfig } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/expo-sqlite';
+import { openDatabaseSync } from 'expo-sqlite';
 
 /** The name of the database file to open. */
-export const DATABASE_NAME = "db.db";
+export const DATABASE_NAME = 'db.db';
 
 const options = {
-  casing: "snake_case" as const,
+  casing: 'snake_case' as const,
   schema: { ...schema },
   logger: true,
 } satisfies DrizzleConfig<typeof schema>;
