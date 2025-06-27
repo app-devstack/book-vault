@@ -1,19 +1,10 @@
-import { RegisterScreen } from "@/features/register/RegisterScreen";
-import { RegisterTab } from "@/features/register/_types";
-import { useBookRegistration } from "@/hooks/screens/useBookRegistration";
-import { COLORS } from "@/utils/colors";
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+
+const DEFAULT_REGISTER_TAB = 'api' satisfies RegisterTab;
 
 export default function RegisterPage() {
-  const [registerTab, setRegisterTab] = useState<RegisterTab>("api");
+  const [registerTab, setRegisterTab] = useState<RegisterTab>(DEFAULT_REGISTER_TAB);
 
-  const {
-    formData,
-    searchResults,
-    isSearching,
-    searchBooks,
-  } = useBookRegistration();
+  const { formData, searchResults, isSearching, searchBooks } = useBookRegistration();
 
   return (
     <View style={styles.container}>
