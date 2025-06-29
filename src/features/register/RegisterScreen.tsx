@@ -54,6 +54,8 @@ export const RegisterScreen = ({
   isSearching,
   onSearch,
 }: RegisterScreenProps) => {
+  const isSearchValueEmpty = searchQuery.trim() === '';
+
   const handleSearch = () => {
     if (searchQuery.trim()) {
       onSearch(searchQuery);
@@ -120,7 +122,7 @@ export const RegisterScreen = ({
             </View>
 
             {/* 検索結果 */}
-            <SearchResults results={searchResults} />
+            <SearchResults results={searchResults} isSearchValueEmpty={isSearchValueEmpty} />
           </View>
         )}
       </ScrollView>

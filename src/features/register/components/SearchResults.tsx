@@ -12,6 +12,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 
 type SearchResultsProps = {
   results: BookSearchResult[];
+  isSearchValueEmpty?: boolean;
 };
 
 type SearchResultItemProps = {
@@ -63,7 +64,7 @@ const SearchResultItem = ({
   );
 };
 
-export const SearchResults = ({ results }: SearchResultsProps) => {
+export const SearchResults = ({ results, isSearchValueEmpty }: SearchResultsProps) => {
   const addBookMutation = useAddBook();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState<Record<string, boolean>>({});
@@ -121,7 +122,7 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
   };
 
   if (results.length === 0) {
-    return <EmptySearchState />;
+    return <EmptySearchState isSearchValueEmpty={isSearchValueEmpty} />;
   }
 
   return (
