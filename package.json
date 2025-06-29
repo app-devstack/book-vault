@@ -3,7 +3,7 @@
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
-        "exclude": ["drizzle-orm", "uuid", "@uidotdev/usehooks"]
+        "exclude": ["drizzle-orm", "uuid", "@uidotdev/usehooks", "patch-package"]
       }
     }
   },
