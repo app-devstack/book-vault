@@ -1,5 +1,5 @@
 import { createConstate } from '@/components/providers/utils/constate';
-import { ShareIntentProvider } from "expo-share-intent";
+// import { ShareIntentProvider } from "expo-share-intent";
 import { useSharedUrl } from '@/hooks/useSharedUrl';
 import React, { ReactNode } from 'react';
 
@@ -13,9 +13,9 @@ export const useSharedUrlContext = constate.useContextValue;
 export default function SharedUrlProvider({ children }: SharedUrlProviderProps) {
   return (
     <constate.Provider>
-      <ShareIntentProvider>
+      {/* <ShareIntentProvider> */}
         {children}
-      </ShareIntentProvider>
+      {/* </ShareIntentProvider> */}
     </constate.Provider>
     );
 }
