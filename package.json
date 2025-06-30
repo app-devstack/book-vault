@@ -3,7 +3,7 @@
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
-        "exclude": ["drizzle-orm", "uuid", "@uidotdev/usehooks", "patch-package"]
+        "exclude": ["drizzle-orm", "uuid", "@uidotdev/usehooks"]
       }
     }
   },
@@ -51,7 +51,6 @@
     "expo-linking": "~7.1.5",
     "expo-media-library": "~17.1.7",
     "expo-router": "~5.1.1",
-    "expo-share-intent": "^4.1.1",
     "expo-splash-screen": "~0.30.8",
     "expo-sqlite": "15.2.12",
     "expo-status-bar": "~2.2.3",
@@ -59,7 +58,6 @@
     "expo-system-ui": "5.0.9",
     "expo-web-browser": "14.2.0",
     "lucide-react-native": "^0.523.0",
-    "patch-package": "^8.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.4",

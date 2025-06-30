@@ -14,8 +14,8 @@ export default function SharedUrlProvider({ children }: SharedUrlProviderProps) 
   return (
     <constate.Provider>
       {/* <ShareIntentProvider> */}
-        {children}
+      {children}
       {/* </ShareIntentProvider> */}
     </constate.Provider>
-    );
+  );
 }
