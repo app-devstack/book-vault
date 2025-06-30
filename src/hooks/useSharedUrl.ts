@@ -1,6 +1,6 @@
-import { useShareIntentContext } from 'expo-share-intent';
+// import * as Linking from 'expo-linking';
 import { useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 
 interface SharedUrlData {
   url: string;
@@ -8,35 +8,51 @@ interface SharedUrlData {
 }
 
 export const useSharedUrl = () => {
-  const { hasShareIntent, shareIntent, resetShareIntent, error } = useShareIntentContext();
   const [sharedUrl, setSharedUrl] = useState<SharedUrlData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    if (hasShareIntent) {
-      setSharedUrl({
-        url: shareIntent.webUrl || shareIntent.text || '',
-        timestamp: Date.now(),
-      });
+    // const handleInitialUrl = async () => {
+    //   try {
+    //     const initialUrl = await Linking.getInitialURL();
+    //     if (initialUrl) {
+    //       setSharedUrl({
+    //         url: initialUrl,
+    //         timestamp: Date.now(),
+    //       });
+    //       Toast.show({
+    //         type: 'info',
+    //         text1: 'Shared URL Detected',
+    //         text2: initialUrl,
+    //       });
+    //     }
+    //   } catch (error) {
+    //     console.error('Failed to get initial URL:', error);
+    //   }
+    // };
 
-      Toast.show({
-        type: 'success',
-        text1: 'Shared URL Received',
-        text2: shareIntent.webUrl || shareIntent.text || '',
-      });
-      resetShareIntent(); // 次回受信に備えてリセット
-    }
+    // const handleUrlChange = ({ url }: { url: string }) => {
+    //   if (url ) {
+    //     setSharedUrl({
+    //       url: url,
+    //       timestamp: Date.now(),
+    //     });
+    //     Toast.show({
+    //       type: 'info',
+    //       text1: 'Shared URL Detected',
+    //       text2: url,
+    //     });
+    //   }
+    // };
 
-    if (error) {
-      console.error('Share Intent Error:', error);
-      Toast.show({
-        type: 'error',
-        text1: 'Share Intent Error',
-        text2: error,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasShareIntent]);
+    // handleInitialUrl();
+
+    // const subscription = Linking.addEventListener('url', handleUrlChange);
+
+    // return () => {
+    //   subscription?.remove();
+    // };
+  }, []);
 
   const clearSharedUrl = () => {
     setSharedUrl(null);

@@ -67,13 +67,7 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-sqlite",
-      [
-        "expo-share-intent",
-        {
-          "androidIntentFilters": ["text/*", "image/*"]
-        }
-      ]
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true
