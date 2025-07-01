@@ -1,6 +1,6 @@
 import DBProvider from '@/components/providers/db-provider';
 import { ProviderErrorBoundary } from '@/components/providers/ErrorBoundary';
-import SharedUrlProvider from '@/components/providers/shared-url-provider';
+// import SharedUrlProvider from '@/components/providers/shared-url-provider';
 // import ResetButton from "@/db/utils/resetButton";
 import { QUERY_CACHE_TIME } from '@/utils/constants/query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -51,5 +51,5 @@ export default function RootLayoutProvider({ children }: { children: ReactNode }
 }
 
 function AppProvider({ children }: { children: ReactNode }) {
-  return <SharedUrlProvider>{children}</SharedUrlProvider>;
+  return <>{children}</>;
 }

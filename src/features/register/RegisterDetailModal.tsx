@@ -1,6 +1,5 @@
 import { Icon } from '@/components/icons/Icons';
-import { useSharedUrlContext } from '@/components/providers/shared-url-provider';
-import Badge from '@/components/ui/Badge';
+// import { useSharedUrlContext } from '@/components/providers/shared-url-provider';
 import LucideIcon from '@/components/ui/LucideIcon';
 import { SeriesSelector } from '@/components/ui/SeriesSelector';
 import { NewSeries } from '@/db/types';
@@ -8,7 +7,7 @@ import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
 import { BookSearchResult } from '@/types/book';
 import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
-import { BORDER_RADIUS, FONT_SIZES, ICON_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -60,14 +59,14 @@ export default function RegisterDetailModal({
   const [targetURL, setTargetURL] = useState('');
   const [selectedSeriesId, setSelectedSeriesId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [isSharedUrlVisible, setIsSharedUrlVisible] = useState(true);
+  // const [isSharedUrlVisible, setIsSharedUrlVisible] = useState(true);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
   const seriesOptionsQuery = useSeriesOptions();
   const createSeriesMutation = useCreateSeries();
 
-  const { sharedUrl } = useSharedUrlContext();
+  // const { sharedUrl } = useSharedUrlContext();
 
   // Convert SeriesOption[] to Series[] for SeriesSelector
   const seriesedBooks = (seriesOptionsQuery.data || []).map((option) => ({
@@ -89,23 +88,23 @@ export default function RegisterDetailModal({
     return newSeries.id;
   };
 
-  // アニメーション関数
-  const fadeOut = () => {
-    Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeOut).start(() => {
-      setIsSharedUrlVisible(false);
-    });
-  };
+  // // アニメーション関数
+  // const fadeOut = () => {
+  //   Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeOut).start(() => {
+  //     // setIsSharedUrlVisible(false);
+  //   });
+  // };
 
-  const fadeIn = () => {
-    setIsSharedUrlVisible(true);
-    Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeIn).start();
-  };
+  // const fadeIn = () => {
+  //   // setIsSharedUrlVisible(true);
+  //   Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeIn).start();
+  // };
 
   useEffect(() => {
     if (book) {
       setTargetURL(``);
       setSelectedSeriesId(null);
-      setIsSharedUrlVisible(true);
+      // setIsSharedUrlVisible(true);
       fadeAnim.setValue(1);
     }
   }, [book, fadeAnim]);
@@ -122,18 +121,18 @@ export default function RegisterDetailModal({
     }
   };
 
-  const handleUseSharedUrl = () => {
-    if (sharedUrl) {
-      setTargetURL(sharedUrl.url);
-      fadeOut();
-    }
-  };
+  // const handleUseSharedUrl = () => {
+  //   if (sharedUrl) {
+  //     setTargetURL(sharedUrl.url);
+  //     fadeOut();
+  //   }
+  // };
 
-  const handleBadgePress = () => {
-    if (!isSharedUrlVisible) {
-      fadeIn();
-    }
-  };
+  // const handleBadgePress = () => {
+  //   if (!isSharedUrlVisible) {
+  //     fadeIn();
+  //   }
+  // };
 
   if (!book) return null;
 
@@ -225,7 +224,7 @@ export default function RegisterDetailModal({
               <Text style={styles.sectionTitle}>リンクURL</Text>
 
               {/* 共有URL検出インジケーター */}
-              {sharedUrl && (
+              {/* {sharedUrl && (
                 <TouchableOpacity
                   onPress={handleBadgePress}
                   activeOpacity={0.7}
@@ -238,11 +237,11 @@ export default function RegisterDetailModal({
                     </View>
                   </Badge>
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
 
             {/* プレミアムな共有URL表示 */}
-            {sharedUrl && isSharedUrlVisible && (
+            {/* {sharedUrl && isSharedUrlVisible && (
               <Animated.View style={[styles.premiumSharedUrlContainer, { opacity: fadeAnim }]}>
                 <LinearGradient
                   colors={[COLORS.accent + '15', COLORS.accent + '08']}
@@ -273,7 +272,7 @@ export default function RegisterDetailModal({
                   </TouchableOpacity>
                 </LinearGradient>
               </Animated.View>
-            )}
+            )} */}
 
             <TextInput
               style={styles.urlInput}
