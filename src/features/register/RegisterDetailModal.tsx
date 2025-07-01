@@ -5,6 +5,8 @@ import { SeriesSelector } from '@/components/ui/SeriesSelector';
 import { NewSeries } from '@/db/types';
 import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
+import { useSafeState } from '@/hooks/useSafeState';
+import { seriesService } from '@/utils/service/series-service';
 import { BookSearchResult } from '@/types/book';
 import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
@@ -62,6 +64,7 @@ export default function RegisterDetailModal({
   // const [isSharedUrlVisible, setIsSharedUrlVisible] = useState(true);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const { safeSetState } = useSafeState();
 
   const seriesOptionsQuery = useSeriesOptions();
   const createSeriesMutation = useCreateSeries();
@@ -80,12 +83,38 @@ export default function RegisterDetailModal({
     updatedAt: new Date(),
   }));
 
-  // Wrapper function to return series ID after creation
+  // Wrapper function to return series ID after creation (重複チェック付き)
   const handleCreateSeries = async (
     seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>
   ) => {
-    const newSeries = await createSeriesMutation.mutateAsync(seriesData);
-    return newSeries.id;
+    try {
+      // タイトルと著者による重複チェック
+      const existingSeries = await seriesService.getSeriesByTitleAndAuthor(
+        seriesData.title,
+        seriesData.author || ''
+      );
+
+      if (existingSeries) {
+        // 既存のシリーズが見つかった場合は、そのIDを使用
+        return existingSeries.id;
+      }
+
+      // 重複がない場合は新規作成
+      const newSeries = await createSeriesMutation.mutateAsync(seriesData);
+      return newSeries.id;
+    } catch (error) {
+      // UNIQUE制約エラーの場合は再度検索して既存のIDを返す
+      if (error instanceof Error && error.message.includes('UNIQUE constraint failed')) {
+        const existingSeries = await seriesService.getSeriesByTitleAndAuthor(
+          seriesData.title,
+          seriesData.author || ''
+        );
+        if (existingSeries) {
+          return existingSeries.id;
+        }
+      }
+      throw error;
+    }
   };
 
   // // アニメーション関数
@@ -102,23 +131,35 @@ export default function RegisterDetailModal({
 
   useEffect(() => {
     if (book) {
-      setTargetURL(``);
-      setSelectedSeriesId(null);
-      // setIsSharedUrlVisible(true);
-      fadeAnim.setValue(1);
+      safeSetState(() => {
+        setTargetURL(``);
+        setSelectedSeriesId(null);
+        // setIsSharedUrlVisible(true);
+        fadeAnim.setValue(1);
+      });
     }
-  }, [book, fadeAnim]);
+  }, [book, fadeAnim, safeSetState]);
 
   const handleRegister = async () => {
     if (!book) return;
 
-    setIsRegistering(true);
+    safeSetState(() => setIsRegistering(true));
     try {
       await onRegister(book, targetURL, selectedSeriesId);
-      onClose();
+      safeSetState(() => onClose());
     } finally {
-      setIsRegistering(false);
+      safeSetState(() => setIsRegistering(false));
     }
+  };
+
+  // モーダルクローズ時の安全な処理
+  const handleClose = () => {
+    safeSetState(() => {
+      setTargetURL('');
+      setSelectedSeriesId(null);
+      setIsRegistering(false);
+    });
+    onClose();
   };
 
   // const handleUseSharedUrl = () => {
@@ -141,7 +182,7 @@ export default function RegisterDetailModal({
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <View style={styles.container}>
         {/* ヘッダー */}
@@ -151,7 +192,7 @@ export default function RegisterDetailModal({
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
             <LucideIcon name="ArrowLeft" size="medium" color="white" />
           </TouchableOpacity>
           <Text style={styles.title}>📚 書籍詳細</Text>
@@ -290,7 +331,7 @@ export default function RegisterDetailModal({
         <View style={styles.footer}>
           <TouchableOpacity
             style={[styles.footerButton, styles.cancelButton]}
-            onPress={onClose}
+            onPress={handleClose}
             activeOpacity={0.8}
           >
             <Text style={styles.cancelButtonText}>キャンセル</Text>

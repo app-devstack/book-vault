@@ -39,17 +39,11 @@ export default function RootLayoutProvider({ children }: { children: ReactNode }
         {/* <ResetButton /> */}
         <QueryClientProvider client={queryClient}>
           <DBProvider>
-            <ProviderErrorBoundary>
-              <AppProvider>{children}</AppProvider>
-            </ProviderErrorBoundary>
+            <ProviderErrorBoundary>{children}</ProviderErrorBoundary>
             <Toast />
           </DBProvider>
         </QueryClientProvider>
       </SafeAreaView>
     </SafeAreaProvider>
   );
-}
-
-function AppProvider({ children }: { children: ReactNode }) {
-  return <>{children}</>;
 }

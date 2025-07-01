@@ -4,9 +4,11 @@ import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
 import { useBookSearch } from '@/hooks/queries/useBookSearch';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
 import { BookSearchResult } from '@/types/book';
+import { seriesService } from '@/utils/service/series-service';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
+import { useSafeState } from '@/hooks/useSafeState';
 
 export interface BookRegistrationForm {
   searchQuery: string;
@@ -28,6 +30,7 @@ export const useBookRegistration = () => {
     selectedSeriesId: null,
     targetURL: '',
   });
+  const { safeSetState } = useSafeState();
 
   // デバウンスされた検索クエリ
   const debouncedSearchQuery = useDebounce(formData.searchQuery, SEARCH_DEBOUNCE_DELAY);
@@ -44,37 +47,91 @@ export const useBookRegistration = () => {
     (formData.searchQuery !== debouncedSearchQuery && formData.searchQuery.length >= 2);
 
   // 検索実行
-  const searchBooks = useCallback((query: string) => {
-    setFormData((prev) => ({ ...prev, searchQuery: query }));
-  }, []);
+  const searchBooks = useCallback(
+    (query: string) => {
+      safeSetState(() => {
+        setFormData((prev) => ({ ...prev, searchQuery: query }));
+      });
+    },
+    [safeSetState]
+  );
 
   // 書籍選択
-  const selectBook = useCallback((book: BookSearchResult) => {
-    setFormData((prev) => ({
-      ...prev,
-      selectedBook: book,
-      targetURL: ``,
-    }));
-  }, []);
+  const selectBook = useCallback(
+    (book: BookSearchResult) => {
+      safeSetState(() => {
+        setFormData((prev) => ({
+          ...prev,
+          selectedBook: book,
+          targetURL: ``,
+        }));
+      });
+    },
+    [safeSetState]
+  );
 
   // シリーズ選択
-  const selectSeries = useCallback((seriesId: string | null) => {
-    setFormData((prev) => ({ ...prev, selectedSeriesId: seriesId }));
-  }, []);
+  const selectSeries = useCallback(
+    (seriesId: string | null) => {
+      safeSetState(() => {
+        setFormData((prev) => ({ ...prev, selectedSeriesId: seriesId }));
+      });
+    },
+    [safeSetState]
+  );
 
   // URL設定
-  const setTargetURL = useCallback((url: string) => {
-    setFormData((prev) => ({ ...prev, targetURL: url }));
-  }, []);
+  const setTargetURL = useCallback(
+    (url: string) => {
+      safeSetState(() => {
+        setFormData((prev) => ({ ...prev, targetURL: url }));
+      });
+    },
+    [safeSetState]
+  );
 
-  // 新しいシリーズ作成
+  // 新しいシリーズ作成（重複チェック付き）
   const createSeries = useCallback(
     async (seriesData: any) => {
-      const newSeries = await createSeriesMutation.mutateAsync(seriesData);
-      setFormData((prev) => ({ ...prev, selectedSeriesId: newSeries.id }));
-      return newSeries.id;
+      try {
+        // タイトルと著者による重複チェック
+        const existingSeries = await seriesService.getSeriesByTitleAndAuthor(
+          seriesData.title,
+          seriesData.author
+        );
+
+        if (existingSeries) {
+          // 既存のシリーズが見つかった場合は、そのIDを使用
+          safeSetState(() => {
+            setFormData((prev) => ({ ...prev, selectedSeriesId: existingSeries.id }));
+          });
+          return existingSeries.id;
+        }
+
+        // 重複がない場合は新規作成
+        const newSeries = await createSeriesMutation.mutateAsync(seriesData);
+        safeSetState(() => {
+          setFormData((prev) => ({ ...prev, selectedSeriesId: newSeries.id }));
+        });
+        return newSeries.id;
+      } catch (error) {
+        // UNIQUE制約エラーの場合は再度検索して既存のIDを返す
+        if (error instanceof Error && error.message.includes('UNIQUE constraint failed')) {
+          const existingSeries = await seriesService.getSeriesByTitleAndAuthor(
+            seriesData.title,
+            seriesData.author
+          );
+          if (existingSeries) {
+            safeSetState(() => {
+              setFormData((prev) => ({ ...prev, selectedSeriesId: existingSeries.id }));
+            });
+            return existingSeries.id;
+          }
+        }
+        throw error;
+      }
     },
-    [createSeriesMutation]
+    [createSeriesMutation, safeSetState]
   );
 
   // 書籍登録
@@ -98,18 +155,22 @@ export const useBookRegistration = () => {
     await addBookMutation.mutateAsync(bookData);
 
     // フォームリセット
-    setFormData({
-      searchQuery: '',
-      selectedBook: null,
-      selectedSeriesId: null,
-      targetURL: '',
+    safeSetState(() => {
+      setFormData({
+        searchQuery: '',
+        selectedBook: null,
+        selectedSeriesId: null,
+        targetURL: '',
+      });
     });
-  }, [formData, addBookMutation]);
+  }, [formData, addBookMutation, safeSetState]);
 
   // 検索結果クリア
   const clearResults = useCallback(() => {
-    setFormData((prev) => ({ ...prev, searchQuery: '', selectedBook: null }));
-  }, []);
+    safeSetState(() => {
+      setFormData((prev) => ({ ...prev, searchQuery: '', selectedBook: null }));
+    });
+  }, [safeSetState]);
 
   return {
     // フォームデータ

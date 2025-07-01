@@ -43,6 +43,30 @@ class SeriesService {
     return item;
   }
 
+  // async getSeriesByTitle(title: string) {
+  //   const item = await db.query.series.findFirst({
+  //     where: (series, { eq }) => eq(series.title, title),
+  //     with: {
+  //       books: {
+  //         orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
+  //       },
+  //     },
+  //   });
+  //   return item;
+  // }
+
+  async getSeriesByTitleAndAuthor(title: string, author: string) {
+    const item = await db.query.series.findFirst({
+      where: (series, { eq, and }) => and(eq(series.title, title), eq(series.author, author)),
+      with: {
+        books: {
+          orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
+        },
+      },
+    });
+    return item;
+  }
+
   async createSeries(data: NewSeries) {
     try {
       const [item] = await db.insert(schema.series).values(data).returning();

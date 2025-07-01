@@ -9,6 +9,7 @@ import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from '@/uti
 import { bookService } from '@/utils/service/book-service';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSafeState } from '@/hooks/useSafeState';
 
 type SearchResultsProps = {
   results: BookSearchResult[];
@@ -69,20 +70,31 @@ export const SearchResults = ({ results, isSearching, isSearchValueEmpty }: Sear
   const addBookMutation = useAddBook();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState<Record<string, boolean>>({});
-
   const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
+  const { safeSetState } = useSafeState();
 
   // 検索結果が変更されたら登録状況をチェック
   useEffect(() => {
     if (results.length > 0) {
       const googleBooksIds = results.map((result) => result.googleBooksId).filter(Boolean);
+      const abortController = new AbortController();
 
       bookService
         .getBooksRegistrationStatus(googleBooksIds)
-        .then((status) => setRegistrationStatus(status))
-        .catch((error) => console.error('Registration status check failed:', error));
+        .then((status) => {
+          safeSetState(() => setRegistrationStatus(status));
+        })
+        .catch((error) => {
+          if (!abortController.signal.aborted) {
+            console.error('Registration status check failed:', error);
+          }
+        });
+
+      return () => {
+        abortController.abort();
+      };
     }
-  }, [results]);
+  }, [results, safeSetState]);
 
   const handleBookSelect = (book: BookSearchResult) => {
     setSelectedBook(book);
@@ -90,8 +102,10 @@ export const SearchResults = ({ results, isSearching, isSearchValueEmpty }: Sear
   };
 
   const closeModal = () => {
-    setIsModalVisible(false);
-    setSelectedBook(null);
+    safeSetState(() => {
+      setIsModalVisible(false);
+      setSelectedBook(null);
+    });
   };
 
   const handleBookRegister = async (
@@ -110,10 +124,12 @@ export const SearchResults = ({ results, isSearching, isSearchValueEmpty }: Sear
       await addBookMutation.mutateAsync(formattedBook);
 
       // 登録成功後に登録状況を更新
-      setRegistrationStatus((prev) => ({
-        ...prev,
-        [book.googleBooksId]: true,
-      }));
+      safeSetState(() => {
+        setRegistrationStatus((prev) => ({
+          ...prev,
+          [book.googleBooksId]: true,
+        }));
+      });
 
       closeModal();
     } catch (error) {
