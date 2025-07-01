@@ -122,7 +122,11 @@ export const RegisterScreen = ({
             </View>
 
             {/* 検索結果 */}
-            <SearchResults results={searchResults} isSearchValueEmpty={isSearchValueEmpty} />
+            <SearchResults
+              results={searchResults}
+              isSearching={isSearching}
+              isSearchValueEmpty={isSearchValueEmpty}
+            />
           </View>
         )}
       </ScrollView>
