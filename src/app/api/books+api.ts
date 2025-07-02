@@ -1,4 +1,4 @@
-import mockdata from "./_mockdata.json";
+import mockdata from './_mockdata.json';
 
 export function GET(request: Request) {
   const results = mockdata;

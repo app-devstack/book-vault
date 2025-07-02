@@ -1,16 +1,13 @@
-import Button from "@/components/ui/button";
-import React from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import Button from '@/components/ui/button';
+import React from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
 
 interface SearchFormProps {
   searchTerm: string;
   onSearchTermChange: (term: string) => void;
 }
 
-export const SearchForm: React.FC<SearchFormProps> = ({
-  searchTerm,
-  onSearchTermChange,
-}) => {
+export const SearchForm: React.FC<SearchFormProps> = ({ searchTerm, onSearchTermChange }) => {
   const handleSearch = () => {
     onSearchTermChange(searchTerm);
   };
@@ -40,14 +37,14 @@ const searchStyles = StyleSheet.create({
     borderWidth: 1,
     padding: 8,
     borderRadius: 4,
-    backgroundColor: "#fff",
-    borderColor: "#ccc",
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
     fontSize: 16,
   },
   searchButton: {
-    backgroundColor: "#313131",
+    backgroundColor: '#313131',
     padding: 8,
     borderRadius: 4,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });

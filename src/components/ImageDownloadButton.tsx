@@ -50,10 +50,7 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
       // 権限の確認・要求
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert(
-          '権限が必要です',
-          'フォトライブラリに保存するには権限が必要です。'
-        );
+        Alert.alert('権限が必要です', 'フォトライブラリに保存するには権限が必要です。');
         return;
       }
 
@@ -82,21 +79,14 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
       setShowPreviewModal(false);
 
       // 成功メッセージ
-      Alert.alert(
-        'ダウンロード完了',
-        '画像をフォトライブラリに保存しました。'
-      );
+      Alert.alert('ダウンロード完了', '画像をフォトライブラリに保存しました。');
 
       // 一時ファイルを削除
       await FileSystem.deleteAsync(localUri, { idempotent: true });
-
     } catch (error) {
       console.error('Download error:', error);
       setShowPreviewModal(false);
-      Alert.alert(
-        'エラー',
-        '画像のダウンロードに失敗しました。再度お試しください。'
-      );
+      Alert.alert('エラー', '画像のダウンロードに失敗しました。再度お試しください。');
     } finally {
       setIsDownloading(false);
     }
@@ -111,14 +101,13 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
         activeOpacity={0.7}
       >
         <LinearGradient
-            colors={GRADIENTS.primary}
-            style={styles.emptyButtonGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}>
+          colors={GRADIENTS.primary}
+          style={styles.emptyButtonGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
           <Text style={styles.downloadIcon}>📱</Text>
-          <Text style={styles.downloadButtonText}>
-            {buttonText}
-          </Text>
+          <Text style={styles.downloadButtonText}>{buttonText}</Text>
         </LinearGradient>
       </TouchableOpacity>
 
@@ -133,22 +122,14 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
           <View style={styles.modalContent}>
             {/* プレビュー画像 */}
             <View style={styles.previewContainer}>
-              <Image
-                source={imageSource}
-                style={styles.previewImage}
-                resizeMode="contain"
-              />
+              <Image source={imageSource} style={styles.previewImage} resizeMode="contain" />
             </View>
 
             {/* タイトル */}
-            <Text style={styles.modalTitle}>
-              この画像をダウンロードしますか？
-            </Text>
+            <Text style={styles.modalTitle}>この画像をダウンロードしますか？</Text>
 
             {/* 説明 */}
-            <Text style={styles.modalDescription}>
-              画像をフォトライブラリに保存します。
-            </Text>
+            <Text style={styles.modalDescription}>画像をフォトライブラリに保存します。</Text>
 
             {/* ボタン群 */}
             <View style={styles.modalButtons}>
@@ -161,10 +142,7 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[
-                  styles.confirmButton,
-                  isDownloading && styles.confirmButtonDisabled
-                ]}
+                style={[styles.confirmButton, isDownloading && styles.confirmButtonDisabled]}
                 onPress={downloadImage}
                 disabled={isDownloading}
               >
@@ -175,14 +153,10 @@ export const ImageDownloadButton: React.FC<ImageDownloadButtonProps> = ({
                       color={COLORS.background}
                       style={styles.loadingIcon}
                     />
-                    <Text style={styles.confirmButtonText}>
-                      保存中...
-                    </Text>
+                    <Text style={styles.confirmButtonText}>保存中...</Text>
                   </>
                 ) : (
-                  <Text style={styles.confirmButtonText}>
-                    ダウンロード
-                  </Text>
+                  <Text style={styles.confirmButtonText}>ダウンロード</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -203,7 +177,7 @@ const styles = StyleSheet.create({
   },
   downloadButton: {
     borderRadius: BORDER_RADIUS.xlarge,
-    overflow: "hidden",
+    overflow: 'hidden',
     ...SHADOWS.medium,
     minWidth: 240,
   },
@@ -307,5 +281,4 @@ const styles = StyleSheet.create({
   loadingIcon: {
     marginRight: 8,
   },
-
 });

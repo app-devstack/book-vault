@@ -1,0 +1,10 @@
+node_modules/
+.git/
+dist/
+build/
+.expo/
+.expo-shared/
+src/packages/
+*.md
+*.json
+*.lock

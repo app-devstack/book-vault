@@ -5,7 +5,7 @@ export const fetchBooks = async (query: string) => {
     )}&langRestrict=ja`
   );
   if (!response.ok) {
-    throw new Error("データの取得に失敗しました");
+    throw new Error('データの取得に失敗しました');
   }
   return response.json();
 };

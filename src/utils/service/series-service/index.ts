@@ -1,6 +1,6 @@
-import db from "@/db";
-import schema from "@/db/schema";
-import { NewSeries } from "@/db/types";
+import db from '@/db';
+import schema from '@/db/schema';
+import { NewSeries } from '@/db/types';
 
 class SeriesService {
   // constructor(parameters) {}
@@ -16,14 +16,11 @@ class SeriesService {
 
   async getSeriesById(seriesId: string) {
     const item = await db.query.series.findFirst({
-      where: (series,{eq}) => eq(series.id, seriesId),
+      where: (series, { eq }) => eq(series.id, seriesId),
       with: {
         // シリーズに関連する書籍情報を含める
         books: {
-          orderBy: (books, { desc }) => [
-            desc(books.volume),
-            desc(books.createdAt),
-          ],
+          orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
         },
       },
     });
@@ -33,21 +30,18 @@ class SeriesService {
   async getSeriesByGoogleBooksSeriesId(googleBooksSeriesId: string) {
     // googleBooksSeriesIdで検索
     const item = await db.query.series.findFirst({
-      where: (series,{eq}) => eq(series.googleBooksSeriesId, googleBooksSeriesId),
+      where: (series, { eq }) => eq(series.googleBooksSeriesId, googleBooksSeriesId),
       with: {
         // シリーズに関連する書籍情報を含める
         books: {
-          orderBy: (books, { desc }) => [
-            desc(books.volume),
-            desc(books.createdAt),
-          ],
+          orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
         },
       },
     });
     return item;
   }
 
-  async createSeries(data:NewSeries) {
+  async createSeries(data: NewSeries) {
     const [item] = await db.insert(schema.series).values(data).returning();
 
     return item;
@@ -58,10 +52,7 @@ class SeriesService {
       orderBy: (series, { desc }) => [desc(series.updatedAt)],
       with: {
         books: {
-          orderBy: (books, { desc }) => [
-            desc(books.volume),
-            desc(books.createdAt),
-          ],
+          orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
         },
       },
     });
@@ -73,10 +64,7 @@ class SeriesService {
       where: (series, { eq }) => eq(series.id, seriesId),
       with: {
         books: {
-          orderBy: (books, { desc }) => [
-            desc(books.volume),
-            desc(books.createdAt),
-          ],
+          orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
         },
       },
     });
@@ -99,8 +87,8 @@ class SeriesService {
         },
       },
     });
-    
-    return items.map(series => ({
+
+    return items.map((series) => ({
       id: series.id,
       title: series.title,
       author: series.author,

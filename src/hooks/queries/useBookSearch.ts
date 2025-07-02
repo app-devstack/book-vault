@@ -37,7 +37,6 @@ export const useBookSearch = (query: string) => {
     },
     ...QUERY_OPTIONS.SEARCH,
     enabled: query.length >= 2,
-    select: (data: BookSearchResult[]) => 
-      data.filter(book => book.title && book.author),
+    select: (data: BookSearchResult[]) => data.filter((book) => book.title && book.author),
   });
 };

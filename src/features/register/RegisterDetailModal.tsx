@@ -1,14 +1,14 @@
-import { Icon } from "@/components/icons/Icons";
-import { useSharedUrlContext } from "@/components/providers/shared-url-provider";
-import Badge from "@/components/ui/Badge";
-import { SeriesSelector } from "@/components/ui/SeriesSelector";
-import { useCreateSeries } from "@/hooks/mutations/useCreateSeries";
-import { useSeriesOptions } from "@/hooks/queries/useSeriesOptions";
-import { BookSearchResult } from "@/types/book";
-import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, ICON_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import { LinearGradient } from "expo-linear-gradient";
-import React, { useEffect, useRef, useState } from "react";
+import { Icon } from '@/components/icons/Icons';
+import { useSharedUrlContext } from '@/components/providers/shared-url-provider';
+import Badge from '@/components/ui/Badge';
+import { SeriesSelector } from '@/components/ui/SeriesSelector';
+import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
+import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
+import { BookSearchResult } from '@/types/book';
+import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, ICON_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -21,7 +21,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 // アニメーション用定数
 const ANIMATION_CONFIG = {
@@ -42,7 +42,11 @@ type RegisterDetailModalProps = {
   visible: boolean;
   book: BookSearchResult | null;
   onClose: () => void;
-  onRegister: (book: BookSearchResult, targetURL: string, selectedSeriesId?: string | null) => Promise<void>;
+  onRegister: (
+    book: BookSearchResult,
+    targetURL: string,
+    selectedSeriesId?: string | null
+  ) => Promise<void>;
 };
 
 export default function RegisterDetailModal({
@@ -51,7 +55,7 @@ export default function RegisterDetailModal({
   onClose,
   onRegister,
 }: RegisterDetailModalProps) {
-  const [targetURL, setTargetURL] = useState("");
+  const [targetURL, setTargetURL] = useState('');
   const [selectedSeriesId, setSelectedSeriesId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
   const [isSharedUrlVisible, setIsSharedUrlVisible] = useState(true);
@@ -64,7 +68,7 @@ export default function RegisterDetailModal({
   const { sharedUrl } = useSharedUrlContext();
 
   // Convert SeriesOption[] to Series[] for SeriesSelector
-  const seriesedBooks = (seriesOptionsQuery.data || []).map(option => ({
+  const seriesedBooks = (seriesOptionsQuery.data || []).map((option) => ({
     id: option.id,
     title: option.title,
     author: option.author,
@@ -205,8 +209,8 @@ export default function RegisterDetailModal({
               onSelectSeries={setSelectedSeriesId}
               onCreateSeries={handleCreateSeries}
               placeholder="既存シリーズから選択 または 新規作成"
-              initialTitle={book?.title ? book.title.split(' ')[0] : ""}
-              initialAuthor={book?.author || ""}
+              initialTitle={book?.title ? book.title.split(' ')[0] : ''}
+              initialAuthor={book?.author || ''}
             />
           </View>
 
@@ -223,11 +227,7 @@ export default function RegisterDetailModal({
                   activeOpacity={0.7}
                   style={styles.sharedUrlBadgeButton}
                 >
-                  <Badge
-                    variant="success"
-                    size="small"
-                    style={styles.sharedUrlBadgeCustom}
-                  >
+                  <Badge variant="success" size="small" style={styles.sharedUrlBadgeCustom}>
                     <View style={styles.badgeContent}>
                       <Icon name="link" size={ICON_SIZES.xsmall} color="white" />
                       <Text style={styles.badgeText}>共有URL</Text>
@@ -239,12 +239,7 @@ export default function RegisterDetailModal({
 
             {/* プレミアムな共有URL表示 */}
             {sharedUrl && isSharedUrlVisible && (
-              <Animated.View
-                style={[
-                  styles.premiumSharedUrlContainer,
-                  { opacity: fadeAnim }
-                ]}
-              >
+              <Animated.View style={[styles.premiumSharedUrlContainer, { opacity: fadeAnim }]}>
                 <LinearGradient
                   colors={[COLORS.accent + '15', COLORS.accent + '08']}
                   style={styles.sharedUrlGradientCard}
@@ -315,9 +310,7 @@ export default function RegisterDetailModal({
               ) : (
                 <Icon name="add" size="medium" color="white" />
               )}
-              <Text style={styles.registerButtonText}>
-                {isRegistering ? "登録中..." : "登録"}
-              </Text>
+              <Text style={styles.registerButtonText}>{isRegistering ? '登録中...' : '登録'}</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -332,26 +325,26 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingTop: 12,
     paddingBottom: 12,
     paddingHorizontal: SCREEN_PADDING,
     ...SHADOWS.large,
   },
   closeButton: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: BORDER_RADIUS.medium,
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: FONT_SIZES.title,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   placeholder: {
     width: 44,
@@ -371,7 +364,7 @@ const styles = StyleSheet.create({
     ...SHADOWS.medium,
   },
   bookDetailContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 16,
   },
   bookImage: {
@@ -385,20 +378,20 @@ const styles = StyleSheet.create({
   },
   bookTitle: {
     fontSize: FONT_SIZES.xlarge,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 12,
     color: COLORS.text,
     lineHeight: 24,
   },
   infoRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     marginBottom: 12,
   },
   infoLabel: {
     fontSize: FONT_SIZES.small,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.textLight,
   },
   infoText: {
@@ -407,15 +400,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statusBadge: {
-    backgroundColor: COLORS.primary + "20",
+    backgroundColor: COLORS.primary + '20',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: BORDER_RADIUS.xlarge,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   statusText: {
     fontSize: FONT_SIZES.small,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.primary,
   },
   descriptionCard: {
@@ -449,13 +442,13 @@ const styles = StyleSheet.create({
     ...SHADOWS.medium,
   },
   sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   sectionTitle: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
   },
   descriptionText: {
@@ -474,7 +467,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   footer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: SCREEN_PADDING,
     paddingTop: 8,
     paddingBottom: 12,
@@ -487,39 +480,39 @@ const styles = StyleSheet.create({
   footerButton: {
     flex: 1,
     borderRadius: BORDER_RADIUS.xlarge,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   cancelButton: {
     backgroundColor: COLORS.card,
     borderWidth: 2,
     borderColor: COLORS.border,
     paddingVertical: 16,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cancelButtonText: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.textLight,
   },
   registerButton: {
     ...SHADOWS.medium,
   },
   registerButtonGradient: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 16,
     gap: 8,
   },
   registerButtonText: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   // 共有URL検出インジケーター
   sharedUrlBadgeButton: {
-    marginLeft: "auto",
+    marginLeft: 'auto',
   },
   sharedUrlBadgeCustom: {
     backgroundColor: COLORS.accentDark,
@@ -527,14 +520,14 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   badgeContent: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
   },
   badgeText: {
     fontSize: FONT_SIZES.small,
-    fontWeight: "600",
-    color: "white",
+    fontWeight: '600',
+    color: 'white',
   },
 
   // プレミアム共有URLコンテナ
@@ -545,20 +538,20 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.large,
     padding: 16,
     borderWidth: 2,
-    borderColor: COLORS.accent + "40",
+    borderColor: COLORS.accent + '40',
   },
 
   // 共有URLヘッダー
   sharedUrlHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 12,
   },
   sharedUrlBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.accent + "20",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.accent + '20',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: BORDER_RADIUS.medium,
@@ -567,28 +560,28 @@ const styles = StyleSheet.create({
   sharedUrlDescription: {
     fontSize: FONT_SIZES.small,
     color: COLORS.textLight,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 
   // URL プレビューコンテナ
   urlPreviewContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    backgroundColor: "white",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'white',
     borderRadius: BORDER_RADIUS.medium,
     padding: 12,
     marginBottom: 12,
     borderWidth: 1.5,
-    borderColor: COLORS.accent + "30",
+    borderColor: COLORS.accent + '30',
     gap: 12,
   },
   urlIconContainer: {
-    backgroundColor: COLORS.accent + "15",
+    backgroundColor: COLORS.accent + '15',
     width: 36,
     height: 36,
     borderRadius: BORDER_RADIUS.medium,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 2,
   },
   urlPreviewText: {
@@ -602,21 +595,21 @@ const styles = StyleSheet.create({
   // 使用ボタン
   useSharedUrlButton: {
     borderRadius: BORDER_RADIUS.medium,
-    overflow: "hidden",
-    width: "100%",
+    overflow: 'hidden',
+    width: '100%',
     ...SHADOWS.small,
   },
   useSharedUrlButtonGradient: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 10,
     paddingHorizontal: 16,
     gap: 6,
   },
   useSharedUrlButtonText: {
     fontSize: FONT_SIZES.medium,
-    fontWeight: "600",
-    color: "white",
+    fontWeight: '600',
+    color: 'white',
   },
 });

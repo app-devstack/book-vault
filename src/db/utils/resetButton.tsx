@@ -20,7 +20,7 @@ export default function ResetButton() {
         await existingDb.closeAsync();
         console.log('✓ 既存DB接続を閉じました');
       } catch (e) {
-        console.log('既存DBなし、新規作成します',e);
+        console.log('既存DBなし、新規作成します', e);
       }
 
       // Expo Go環境でのファイル削除
@@ -48,7 +48,6 @@ export default function ResetButton() {
         await db.closeAsync();
         console.log('✓ テーブル手動削除完了');
       }
-
     } catch (error) {
       console.error('❌ リセット失敗:', error);
       Alert.alert('エラー', `リセット失敗: ${error}`);
@@ -56,23 +55,15 @@ export default function ResetButton() {
   };
 
   const handlePress = () => {
-    Alert.alert(
-      '警告',
-      'データベースを完全にリセットしますか？\n全てのデータが削除されます。',
-      [
-        { text: 'キャンセル', style: 'cancel' },
-        { text: 'リセット実行', style: 'destructive', onPress: completeReset }
-      ]
-    );
+    Alert.alert('警告', 'データベースを完全にリセットしますか？\n全てのデータが削除されます。', [
+      { text: 'キャンセル', style: 'cancel' },
+      { text: 'リセット実行', style: 'destructive', onPress: completeReset },
+    ]);
   };
 
   return (
     <View style={styles.container}>
-      <Button
-        title="🔥 DB完全リセット (開発用)"
-        onPress={handlePress}
-        color="#ff4444"
-      />
+      <Button title="🔥 DB完全リセット (開発用)" onPress={handlePress} color="#ff4444" />
     </View>
   );
 }
@@ -86,5 +77,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.9)',
     padding: 10,
     borderRadius: 5,
-  }
+  },
 });

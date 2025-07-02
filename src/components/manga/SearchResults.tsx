@@ -1,21 +1,14 @@
-import { NewBook } from "@/db/types";
-import { EmptySearchState } from "@/features/register/components/EmptySearchState";
-import RegisterDetailModal from "@/features/register/RegisterDetailModal";
-import { useAddBook } from "@/hooks/mutations/useAddBook";
-import { BookSearchResult } from "@/types/book";
-import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from "@/utils/constants";
-import { bookService } from "@/utils/service/book-service";
-import Badge from "@/components/ui/Badge";
-import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { NewBook } from '@/db/types';
+import { EmptySearchState } from '@/features/register/components/EmptySearchState';
+import RegisterDetailModal from '@/features/register/RegisterDetailModal';
+import { useAddBook } from '@/hooks/mutations/useAddBook';
+import { BookSearchResult } from '@/types/book';
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from '@/utils/constants';
+import { bookService } from '@/utils/service/book-service';
+import Badge from '@/components/ui/Badge';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type SearchResultsProps = {
   results: BookSearchResult[];
@@ -38,11 +31,7 @@ const SearchResultItem = ({
 
   return (
     <View style={[styles.resultItem, isRegistered && styles.registeredItem]}>
-      <Image
-        source={{ uri: item.imageUrl }}
-        style={styles.resultThumbnail}
-        resizeMode="cover"
-      />
+      <Image source={{ uri: item.imageUrl }} style={styles.resultThumbnail} resizeMode="cover" />
 
       <View style={styles.resultDetails}>
         <View style={styles.titleContainer}>
@@ -61,15 +50,13 @@ const SearchResultItem = ({
         <TouchableOpacity
           style={[
             styles.storeButton,
-            { backgroundColor: isRegistered ? COLORS.textLight : "#00A0DC" }
+            { backgroundColor: isRegistered ? COLORS.textLight : '#00A0DC' },
           ]}
           onPress={handleAddBook}
           activeOpacity={0.8}
           disabled={isRegistered}
         >
-          <Text style={styles.storeButtonText}>
-            {isRegistered ? "登録済み" : "本を登録する"}
-          </Text>
+          <Text style={styles.storeButtonText}>{isRegistered ? '登録済み' : '本を登録する'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -81,18 +68,17 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState<Record<string, boolean>>({});
 
-  const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(
-    null
-  );
+  const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
 
   // 検索結果が変更されたら登録状況をチェック
   useEffect(() => {
     if (results.length > 0) {
-      const googleBooksIds = results.map(result => result.googleBooksId).filter(Boolean);
+      const googleBooksIds = results.map((result) => result.googleBooksId).filter(Boolean);
 
-      bookService.getBooksRegistrationStatus(googleBooksIds)
-        .then(status => setRegistrationStatus(status))
-        .catch(error => console.error('Registration status check failed:', error));
+      bookService
+        .getBooksRegistrationStatus(googleBooksIds)
+        .then((status) => setRegistrationStatus(status))
+        .catch((error) => console.error('Registration status check failed:', error));
     }
   }, [results]);
 
@@ -116,21 +102,21 @@ export const SearchResults = ({ results }: SearchResultsProps) => {
         ...book,
         seriesId: selectedSeriesId || book.seriesId || EMPTY_SERIES_ID,
         shopId: EMPTY_SHOP_ID,
-        targetUrl
-      } satisfies NewBook
+        targetUrl,
+      } satisfies NewBook;
 
       await addBookMutation.mutateAsync(formattedBook);
 
       // 登録成功後に登録状況を更新
-      setRegistrationStatus(prev => ({
+      setRegistrationStatus((prev) => ({
         ...prev,
-        [book.googleBooksId]: true
+        [book.googleBooksId]: true,
       }));
 
       closeModal();
     } catch (error) {
       // エラーハンドリングはmutation内で実行済み
-      console.error("登録エラー:", error);
+      console.error('登録エラー:', error);
     }
   };
 
@@ -172,7 +158,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 16,
   },
@@ -181,7 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.large,
     padding: 20,
     marginBottom: 16,
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 20,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -208,7 +194,7 @@ const styles = StyleSheet.create({
   },
   resultTitle: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     flex: 1,
   },
@@ -224,20 +210,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   storeButtons: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
   },
   storeButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   storeButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: FONT_SIZES.small,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

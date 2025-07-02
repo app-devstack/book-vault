@@ -1,36 +1,31 @@
-import { Icon } from "@/components/icons/Icons";
-import { SeriesCreationModal } from "@/components/ui/SeriesCreationModal";
-import { NewSeries, Series } from "@/db/types";
-import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES } from "@/utils/constants";
-import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Icon } from '@/components/icons/Icons';
+import { SeriesCreationModal } from '@/components/ui/SeriesCreationModal';
+import { NewSeries, Series } from '@/db/types';
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface SeriesSelectorProps {
   series: Series[];
   selectedSeriesId: string | null;
   onSelectSeries: (seriesId: string | null) => void;
-  onCreateSeries?: (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>) => Promise<string>;
+  onCreateSeries?: (
+    seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>
+  ) => Promise<string>;
   placeholder?: string;
   initialTitle?: string;
   initialAuthor?: string;
 }
 
 export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
-  series:seriesProps,
+  series: seriesProps,
   selectedSeriesId,
   onSelectSeries,
   onCreateSeries,
-  placeholder = "シリーズを選択",
-  initialTitle = "",
-  initialAuthor = "",
+  placeholder = 'シリーズを選択',
+  initialTitle = '',
+  initialAuthor = '',
 }) => {
   const [series, setSeries] = useState<Series[]>(seriesProps);
 
@@ -42,9 +37,7 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCreationModalVisible, setIsCreationModalVisible] = useState(false);
 
-  const selectedSeries = selectedSeriesId
-    ? series.find((s) => s.id === selectedSeriesId)
-    : null;
+  const selectedSeries = selectedSeriesId ? series.find((s) => s.id === selectedSeriesId) : null;
 
   const handleSeriesSelect = (seriesId: string | null) => {
     onSelectSeries(seriesId);
@@ -56,8 +49,10 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
     setIsCreationModalVisible(true);
   };
 
-  const handleSeriesCreated = async (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>) => {
-    if (!onCreateSeries) return "";
+  const handleSeriesCreated = async (
+    seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>
+  ) => {
+    if (!onCreateSeries) return '';
 
     const newSeriesId = await onCreateSeries(seriesData);
     onSelectSeries(newSeriesId);
@@ -66,18 +61,13 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
 
   const renderSeriesItem = ({ item }: { item: Series }) => (
     <TouchableOpacity
-      style={[
-        styles.seriesItem,
-        selectedSeriesId === item.id && styles.selectedSeriesItem,
-      ]}
+      style={[styles.seriesItem, selectedSeriesId === item.id && styles.selectedSeriesItem]}
       onPress={() => handleSeriesSelect(item.id)}
       activeOpacity={0.8}
     >
       <View style={styles.seriesInfo}>
         <Text style={styles.seriesTitle}>{item.title}</Text>
-        {item.author && (
-          <Text style={styles.seriesAuthor}>著者: {item.author}</Text>
-        )}
+        {item.author && <Text style={styles.seriesAuthor}>著者: {item.author}</Text>}
       </View>
       {selectedSeriesId === item.id && (
         <Icon name="checkmark" size="medium" color={COLORS.primary} />
@@ -107,10 +97,7 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>シリーズを選択</Text>
-            <TouchableOpacity
-              onPress={() => setIsModalVisible(false)}
-              style={styles.closeButton}
-            >
+            <TouchableOpacity onPress={() => setIsModalVisible(false)} style={styles.closeButton}>
               <Icon name="close" size="medium" color={COLORS.text} />
             </TouchableOpacity>
           </View>
@@ -153,9 +140,9 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
 
 const styles = StyleSheet.create({
   selector: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: COLORS.background,
     borderWidth: 2,
     borderColor: COLORS.primary,
@@ -176,9 +163,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   modalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
@@ -186,7 +173,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: FONT_SIZES.title,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
   },
   closeButton: {
@@ -194,8 +181,8 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.medium,
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: COLORS.border,
   },
@@ -207,9 +194,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   seriesItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.large,
     padding: 16,
@@ -220,11 +207,11 @@ const styles = StyleSheet.create({
   },
   selectedSeriesItem: {
     borderColor: COLORS.primary,
-    backgroundColor: COLORS.primary + "10",
+    backgroundColor: COLORS.primary + '10',
   },
   newSeriesItem: {
     borderColor: COLORS.primary,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     marginBottom: 24,
   },
   seriesInfo: {
@@ -232,7 +219,7 @@ const styles = StyleSheet.create({
   },
   seriesTitle: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 4,
   },
@@ -242,7 +229,7 @@ const styles = StyleSheet.create({
   },
   newSeriesText: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.primary,
   },
 });

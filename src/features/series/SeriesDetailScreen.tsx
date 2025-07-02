@@ -1,20 +1,13 @@
-import { Icon } from "@/components/icons/Icons";
-import { BookCard } from "@/features/series/components/BookCard";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Icon } from '@/components/icons/Icons';
+import { BookCard } from '@/features/series/components/BookCard';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { Book } from "@/db/types";
-import { SeriesDetailStats } from "@/hooks/screens/useSeriesDetail";
-import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
+import { Book } from '@/db/types';
+import { SeriesDetailStats } from '@/hooks/screens/useSeriesDetail';
+import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
 
 interface SeriesDetailScreenProps {
   seriesTitle: string;
@@ -29,16 +22,11 @@ export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
   stats,
   onBack,
 }) => {
-
   return (
     <SafeAreaView style={styles.container}>
       {/* ヘッダー */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={onBack}
-          activeOpacity={0.7}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
           <Icon name="arrow-back" size="medium" color={COLORS.primary} />
         </TouchableOpacity>
 
@@ -82,8 +70,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: SCREEN_PADDING,
     gap: 12,
   },
@@ -94,8 +82,8 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.medium,
     width: 44,
     height: 44,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     ...SHADOWS.small,
   },
   headerText: {
@@ -103,7 +91,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: FONT_SIZES.title,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
   },
   headerAuthor: {
@@ -123,50 +111,50 @@ const styles = StyleSheet.create({
     ...SHADOWS.large,
   },
   statsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     // marginBottom: 16,
   },
   statItem: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   statNumber: {
     fontSize: FONT_SIZES.hero,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
     marginBottom: 4,
   },
   statLabel: {
     fontSize: FONT_SIZES.small,
-    color: "rgba(255,255,255,0.9)",
+    color: 'rgba(255,255,255,0.9)',
   },
   storesInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.2)",
+    borderTopColor: 'rgba(255,255,255,0.2)',
     gap: 8,
   },
   storesLabel: {
     fontSize: FONT_SIZES.small,
-    color: "rgba(255,255,255,0.9)",
+    color: 'rgba(255,255,255,0.9)',
   },
   storesList: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 8,
     flex: 1,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   storeTag: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: 'rgba(255,255,255,0.2)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: BORDER_RADIUS.medium,
   },
   storeTagText: {
     fontSize: 11,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
 });

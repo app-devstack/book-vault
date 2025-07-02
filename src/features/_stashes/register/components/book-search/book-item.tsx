@@ -1,6 +1,6 @@
-import { BookSearchItemType } from "@/utils/googleBooks/types";
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { BookSearchItemType } from '@/utils/googleBooks/types';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type BookItemProps = {
   item: BookSearchItemType;
@@ -16,10 +16,7 @@ export const BookItem = ({ item, onPress }: BookItemProps) => {
     >
       <View style={styles.content}>
         {item.volumeInfo.imageLinks?.thumbnail ? (
-          <Image
-            source={{ uri: item.volumeInfo.imageLinks.thumbnail }}
-            style={styles.thumbnail}
-          />
+          <Image source={{ uri: item.volumeInfo.imageLinks.thumbnail }} style={styles.thumbnail} />
         ) : (
           <View style={styles.noThumbnail} />
         )}
@@ -28,7 +25,7 @@ export const BookItem = ({ item, onPress }: BookItemProps) => {
             {item.volumeInfo.title}
           </Text>
           <Text style={styles.author} numberOfLines={1}>
-            {item.volumeInfo.authors?.join(", ") || "著者不明"}
+            {item.volumeInfo.authors?.join(', ') || '著者不明'}
           </Text>
           <Text style={styles.tapHint}>タップして詳細を表示</Text>
         </View>
@@ -39,7 +36,7 @@ export const BookItem = ({ item, onPress }: BookItemProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 8,
     marginBottom: 12,
     padding: 12,
@@ -49,7 +46,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   content: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   thumbnail: {
     width: 50,
@@ -62,26 +59,26 @@ const styles = StyleSheet.create({
     height: 75,
     marginRight: 12,
     borderRadius: 4,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: '#f0f0f0',
   },
   info: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 4,
-    color: "#333",
+    color: '#333',
   },
   author: {
-    color: "#666",
+    color: '#666',
     fontSize: 14,
     marginBottom: 8,
   },
   tapHint: {
-    color: "#3868AA",
+    color: '#3868AA',
     fontSize: 12,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
 });

@@ -1,1 +1,1 @@
-export type RegisterTab = "gmail" | "api";
+export type RegisterTab = 'gmail' | 'api';

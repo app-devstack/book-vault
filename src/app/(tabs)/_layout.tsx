@@ -1,8 +1,8 @@
-import { COLORS } from "@/utils/colors";
-import { FONT_SIZES } from "@/utils/constants";
-import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-import React from "react";
+import { COLORS } from '@/utils/colors';
+import { FONT_SIZES } from '@/utils/constants';
+import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import React from 'react';
 
 export default function TabLayout() {
   return (
@@ -27,7 +27,7 @@ export default function TabLayout() {
         tabBarInactiveTintColor: COLORS.textLight,
         tabBarLabelStyle: {
           fontSize: FONT_SIZES.xsmall,
-          fontWeight: "bold",
+          fontWeight: 'bold',
           marginTop: 2,
         },
         tabBarIconStyle: {
@@ -38,39 +38,27 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "ホーム",
+          title: 'ホーム',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "home" : "home-outline"}
-              size={24}
-              color={color}
-            />
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="register"
         options={{
-          title: "登録",
+          title: '登録',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "add" : "add-outline"}
-              size={24}
-              color={color}
-            />
+            <Ionicons name={focused ? 'add' : 'add-outline'} size={24} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: "設定",
+          title: '設定',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "settings" : "settings-outline"}
-              size={24}
-              color={color}
-            />
+            <Ionicons name={focused ? 'settings' : 'settings-outline'} size={24} color={color} />
           ),
         }}
       />

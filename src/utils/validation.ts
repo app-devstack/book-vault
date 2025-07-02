@@ -1,22 +1,22 @@
-import { NewBook, NewSeries } from "@/db/types";
-import { createValidationError } from "@/types/errors";
-import { z } from "zod";
+import { NewBook, NewSeries } from '@/db/types';
+import { createValidationError } from '@/types/errors';
+import { z } from 'zod';
 
- interface BookValidationResult {
+interface BookValidationResult {
   isValid: boolean;
   errors: string[];
   warnings: string[];
 }
 
- interface SeriesValidationResult {
+interface SeriesValidationResult {
   isValid: boolean;
   errors: string[];
   warnings: string[];
 }
-
 
 // ISBN正規表現パターン
-const ISBN_REGEX = /^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$/;
+const ISBN_REGEX =
+  /^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$/;
 
 // URL正規表現パターン
 const URL_REGEX = /^https?:\/\/.+/;
@@ -24,99 +24,85 @@ const URL_REGEX = /^https?:\/\/.+/;
 // Zodスキーマ定義
 export const BOOK_VALIDATION_SCHEMA = z.object({
   title: z
-    .string({ required_error: "タイトルは必須です" })
-    .min(1, "タイトルは1文字以上である必要があります")
-    .max(500, "タイトルは500文字以内である必要があります")
-    .transform(str => str.trim().replace(/\s+/g, ' ')),
+    .string({ required_error: 'タイトルは必須です' })
+    .min(1, 'タイトルは1文字以上である必要があります')
+    .max(500, 'タイトルは500文字以内である必要があります')
+    .transform((str) => str.trim().replace(/\s+/g, ' ')),
 
   author: z
-    .string({ required_error: "著者名は必須です" })
-    .min(1, "著者名は1文字以上である必要があります")
-    .max(200, "著者名は200文字以内である必要があります")
-    .transform(str => str.trim().replace(/\s+/g, ' ')),
+    .string({ required_error: '著者名は必須です' })
+    .min(1, '著者名は1文字以上である必要があります')
+    .max(200, '著者名は200文字以内である必要があります')
+    .transform((str) => str.trim().replace(/\s+/g, ' ')),
 
   targetUrl: z
-    .string({ required_error: "購入URLは必須です" })
-    .regex(URL_REGEX, "有効なURLを入力してください"),
+    .string({ required_error: '購入URLは必須です' })
+    .regex(URL_REGEX, '有効なURLを入力してください'),
 
   isbn: z
     .string()
-    .regex(ISBN_REGEX, "正しいISBN形式で入力してください")
-    .transform(str => str.replace(/[-\s]/g, ''))
+    .regex(ISBN_REGEX, '正しいISBN形式で入力してください')
+    .transform((str) => str.replace(/[-\s]/g, ''))
     .optional()
-    .or(z.literal("")),
+    .or(z.literal('')),
 
   volume: z
     .number()
-    .int("巻数は整数である必要があります")
-    .min(1, "巻数は1以上である必要があります")
-    .max(9999, "巻数は9999以下である必要があります")
+    .int('巻数は整数である必要があります')
+    .min(1, '巻数は1以上である必要があります')
+    .max(9999, '巻数は9999以下である必要があります')
     .optional(),
 
   description: z
     .string()
-    .max(2000, "説明は2000文字以内である必要があります")
-    .transform(str => str?.trim().replace(/\s+/g, ' ') || "")
+    .max(2000, '説明は2000文字以内である必要があります')
+    .transform((str) => str?.trim().replace(/\s+/g, ' ') || '')
     .optional(),
 
-  imageUrl: z
-    .string()
-    .url("有効なURL形式で入力してください")
-    .optional()
-    .or(z.literal("")),
+  imageUrl: z.string().url('有効なURL形式で入力してください').optional().or(z.literal('')),
 
   googleBooksId: z.string().optional(),
 
   purchaseDate: z
-    .date({ required_error: "購入日は必須です" })
-    .refine(
-      (date) => {
-        const now = new Date();
-        const oneYearFromNow = new Date();
-        oneYearFromNow.setFullYear(now.getFullYear() + 1);
-        return date <= oneYearFromNow;
-      },
-      "購入日が未来すぎます"
-    )
-    .refine(
-      (date) => {
-        const tenYearsAgo = new Date();
-        tenYearsAgo.setFullYear(new Date().getFullYear() - 10);
-        return date >= tenYearsAgo;
-      },
-      "購入日が古すぎます"
-    ),
+    .date({ required_error: '購入日は必須です' })
+    .refine((date) => {
+      const now = new Date();
+      const oneYearFromNow = new Date();
+      oneYearFromNow.setFullYear(now.getFullYear() + 1);
+      return date <= oneYearFromNow;
+    }, '購入日が未来すぎます')
+    .refine((date) => {
+      const tenYearsAgo = new Date();
+      tenYearsAgo.setFullYear(new Date().getFullYear() - 10);
+      return date >= tenYearsAgo;
+    }, '購入日が古すぎます'),
 
-  seriesId: z.string({ required_error: "シリーズIDは必須です" }),
-  shopId: z.string({ required_error: "ショップIDは必須です" })
+  seriesId: z.string({ required_error: 'シリーズIDは必須です' }),
+  shopId: z.string({ required_error: 'ショップIDは必須です' }),
 });
 
 export const SERIES_VALIDATION_SCHEMA = z.object({
   title: z
-    .string({ required_error: "シリーズタイトルは必須です" })
-    .min(1, "シリーズタイトルは1文字以上である必要があります")
-    .max(500, "シリーズタイトルは500文字以内である必要があります")
-    .transform(str => str.trim().replace(/\s+/g, ' ')),
+    .string({ required_error: 'シリーズタイトルは必須です' })
+    .min(1, 'シリーズタイトルは1文字以上である必要があります')
+    .max(500, 'シリーズタイトルは500文字以内である必要があります')
+    .transform((str) => str.trim().replace(/\s+/g, ' ')),
 
   author: z
-    .string({ required_error: "著者名は必須です" })
-    .min(1, "著者名は1文字以上である必要があります")
-    .max(200, "著者名は200文字以内である必要があります")
-    .transform(str => str.trim().replace(/\s+/g, ' ')),
+    .string({ required_error: '著者名は必須です' })
+    .min(1, '著者名は1文字以上である必要があります')
+    .max(200, '著者名は200文字以内である必要があります')
+    .transform((str) => str.trim().replace(/\s+/g, ' ')),
 
   description: z
     .string()
-    .max(2000, "説明は2000文字以内である必要があります")
-    .transform(str => str?.trim().replace(/\s+/g, ' ') || "")
+    .max(2000, '説明は2000文字以内である必要があります')
+    .transform((str) => str?.trim().replace(/\s+/g, ' ') || '')
     .optional(),
 
-  thumbnail: z
-    .string()
-    .url("有効なURL形式で入力してください")
-    .optional()
-    .or(z.literal("")),
+  thumbnail: z.string().url('有効なURL形式で入力してください').optional().or(z.literal('')),
 
-  googleBooksSeriesId: z.string().optional()
+  googleBooksSeriesId: z.string().optional(),
 });
 
 // Zod用の型定義
@@ -132,14 +118,14 @@ export const validateBook = (bookData: Partial<NewBook>): BookValidationResult =
       return {
         isValid: true,
         errors: [],
-        warnings: []
+        warnings: [],
       };
     }
 
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    result.error.issues.forEach(issue => {
+    result.error.issues.forEach((issue) => {
       // カスタム警告の判定
       if (issue.message.includes('未来すぎ') || issue.message.includes('古すぎ')) {
         warnings.push(issue.message);
@@ -151,13 +137,13 @@ export const validateBook = (bookData: Partial<NewBook>): BookValidationResult =
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   } catch {
     return {
       isValid: false,
       errors: ['予期しない検証エラーが発生しました'],
-      warnings: []
+      warnings: [],
     };
   }
 };
@@ -170,14 +156,14 @@ export const validateSeries = (seriesData: Partial<NewSeries>): SeriesValidation
       return {
         isValid: true,
         errors: [],
-        warnings: []
+        warnings: [],
       };
     }
 
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    result.error.issues.forEach(issue => {
+    result.error.issues.forEach((issue) => {
       // URL形式の警告を分類
       if (issue.path.includes('thumbnail') && issue.message.includes('URL')) {
         warnings.push(`サムネイル${issue.message}`);
@@ -189,13 +175,13 @@ export const validateSeries = (seriesData: Partial<NewSeries>): SeriesValidation
     return {
       isValid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   } catch {
     return {
       isValid: false,
       errors: ['予期しない検証エラーが発生しました'],
-      warnings: []
+      warnings: [],
     };
   }
 };
@@ -207,7 +193,7 @@ export const validateBookOrThrow = (bookData: Partial<NewBook>): ValidatedBook =
     return result;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessages = error.issues.map(issue => issue.message);
+      const errorMessages = error.issues.map((issue) => issue.message);
       throw createValidationError(
         `Book validation failed: ${errorMessages.join(', ')}`,
         errorMessages.join('、')
@@ -226,7 +212,7 @@ export const validateSeriesOrThrow = (seriesData: Partial<NewSeries>): Validated
     return result;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessages = error.issues.map(issue => issue.message);
+      const errorMessages = error.issues.map((issue) => issue.message);
       throw createValidationError(
         `Series validation failed: ${errorMessages.join(', ')}`,
         errorMessages.join('、')

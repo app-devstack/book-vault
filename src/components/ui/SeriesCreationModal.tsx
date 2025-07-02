@@ -1,9 +1,9 @@
-import { Icon } from "@/components/icons/Icons";
-import { NewSeries } from "@/db/types";
-import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import { Icon } from '@/components/icons/Icons';
+import { NewSeries } from '@/db/types';
+import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -14,12 +14,14 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 interface SeriesCreationModalProps {
   visible: boolean;
   onClose: () => void;
-  onCreateSeries: (seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>) => Promise<string>;
+  onCreateSeries: (
+    seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>
+  ) => Promise<string>;
   initialTitle?: string;
   initialAuthor?: string;
 }
@@ -28,17 +30,17 @@ export const SeriesCreationModal: React.FC<SeriesCreationModalProps> = ({
   visible,
   onClose,
   onCreateSeries,
-  initialTitle = "",
-  initialAuthor = "",
+  initialTitle = '',
+  initialAuthor = '',
 }) => {
   const [title, setTitle] = useState(initialTitle);
   const [author, setAuthor] = useState(initialAuthor);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreate = async () => {
     if (!title.trim()) {
-      Alert.alert("エラー", "シリーズタイトルを入力してください");
+      Alert.alert('エラー', 'シリーズタイトルを入力してください');
       return;
     }
 
@@ -51,14 +53,14 @@ export const SeriesCreationModal: React.FC<SeriesCreationModalProps> = ({
         thumbnail: null,
         googleBooksSeriesId: null,
       });
-      
-      setTitle("");
-      setAuthor("");
-      setDescription("");
+
+      setTitle('');
+      setAuthor('');
+      setDescription('');
       onClose();
     } catch (error) {
-      console.error("Error creating series:", error);
-      Alert.alert("エラー", "シリーズの作成に失敗しました");
+      console.error('Error creating series:', error);
+      Alert.alert('エラー', 'シリーズの作成に失敗しました');
     } finally {
       setIsCreating(false);
     }
@@ -67,7 +69,7 @@ export const SeriesCreationModal: React.FC<SeriesCreationModalProps> = ({
   const handleClose = () => {
     setTitle(initialTitle);
     setAuthor(initialAuthor);
-    setDescription("");
+    setDescription('');
     onClose();
   };
 
@@ -182,9 +184,7 @@ export const SeriesCreationModal: React.FC<SeriesCreationModalProps> = ({
               ) : (
                 <Icon name="add" size="medium" color="white" />
               )}
-              <Text style={styles.createButtonText}>
-                {isCreating ? "作成中..." : "作成"}
-              </Text>
+              <Text style={styles.createButtonText}>{isCreating ? '作成中...' : '作成'}</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -199,26 +199,26 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingTop: 12,
     paddingBottom: 12,
     paddingHorizontal: SCREEN_PADDING,
     ...SHADOWS.large,
   },
   closeButton: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: BORDER_RADIUS.medium,
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: FONT_SIZES.title,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   placeholder: {
     width: 40,
@@ -237,14 +237,14 @@ const styles = StyleSheet.create({
     ...SHADOWS.medium,
   },
   sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     marginBottom: 16,
   },
   sectionTitle: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
   },
   textInput: {
@@ -260,14 +260,14 @@ const styles = StyleSheet.create({
     minHeight: 100,
   },
   noteCard: {
-    backgroundColor: COLORS.warning + "10",
+    backgroundColor: COLORS.warning + '10',
     borderRadius: BORDER_RADIUS.large,
     padding: 16,
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     gap: 12,
     borderWidth: 1,
-    borderColor: COLORS.warning + "30",
+    borderColor: COLORS.warning + '30',
     marginBottom: 20,
   },
   noteText: {
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   footer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: SCREEN_PADDING,
     paddingTop: 8,
     paddingBottom: 12,
@@ -290,28 +290,28 @@ const styles = StyleSheet.create({
   footerButton: {
     flex: 1,
     borderRadius: BORDER_RADIUS.xlarge,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   cancelButton: {
     backgroundColor: COLORS.card,
     borderWidth: 2,
     borderColor: COLORS.border,
     paddingVertical: 16,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cancelButtonText: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.textLight,
   },
   createButton: {
     ...SHADOWS.medium,
   },
   createButtonGradient: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 16,
     gap: 8,
   },
@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
   },
   createButtonText: {
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
 });

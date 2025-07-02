@@ -8,27 +8,27 @@ import Toast from 'react-native-toast-message';
  */
 export const useDeleteBook = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (bookId: string) => bookService.deleteBook(bookId),
     onMutate: async (deletedBookId) => {
       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.BOOKS });
-      
+
       const previousBooks = queryClient.getQueryData(QUERY_KEYS.BOOKS);
-      
+
       // 楽観的更新
       queryClient.setQueryData(QUERY_KEYS.BOOKS, (old: any) => {
         if (!old) return [];
         return old.filter((book: any) => book.id !== deletedBookId);
       });
-      
+
       return { previousBooks, deletedBookId };
     },
     onError: (err, deletedBookId, context) => {
       if (context?.previousBooks) {
         queryClient.setQueryData(QUERY_KEYS.BOOKS, context.previousBooks);
       }
-      
+
       Toast.show({
         type: 'error',
         text1: '削除エラー',
@@ -39,7 +39,7 @@ export const useDeleteBook = () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.BOOKS });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERIES_LIST });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.APP_STATS });
-      
+
       Toast.show({
         type: 'success',
         text1: '削除完了',

@@ -1,20 +1,20 @@
-import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import { LinearGradient } from "expo-linear-gradient";
-import React, { useMemo } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useMemo } from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 
-import { BookWithRelations } from "@/db/types";
-import EmptyBooksState from "@/features/home/components/EmptyBooksState";
-import { SeriesCard } from "@/features/home/components/SeriesCard";
-import { useBooks, useBooksStats } from "@/hooks/tanstack";
-import { router } from "expo-router";
+import { BookWithRelations } from '@/db/types';
+import EmptyBooksState from '@/features/home/components/EmptyBooksState';
+import { SeriesCard } from '@/features/home/components/SeriesCard';
+import { useBooks, useBooksStats } from '@/hooks/tanstack';
+import { router } from 'expo-router';
 
 // 既存のデータ変換ロジックを再利用
 const transformBooksToSeries = (books: BookWithRelations[]) => {
   const seriesMap = new Map();
 
-  books.forEach(book => {
+  books.forEach((book) => {
     if (!book.series) return;
 
     const seriesId = book.series.id;
@@ -24,7 +24,7 @@ const transformBooksToSeries = (books: BookWithRelations[]) => {
         title: book.series.title,
         author: book.series.author,
         description: book.series.description,
-        books: []
+        books: [],
       });
     }
     seriesMap.get(seriesId).books.push(book);
@@ -156,18 +156,18 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.xlarge + 4,
     padding: 24,
     marginBottom: 24,
-    alignItems: "center",
+    alignItems: 'center',
     ...SHADOWS.large,
   },
   headerTitle: {
     fontSize: FONT_SIZES.hero,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: FONT_SIZES.large,
-    color: "rgba(255,255,255,0.9)",
+    color: 'rgba(255,255,255,0.9)',
     marginBottom: 12,
   },
 });

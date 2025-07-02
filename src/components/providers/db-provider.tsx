@@ -1,12 +1,12 @@
-import db, { DATABASE_NAME } from "@/db";
-import { SQLiteProvider } from "expo-sqlite";
-import { ReactNode, Suspense, useEffect } from "react";
+import db, { DATABASE_NAME } from '@/db';
+import { SQLiteProvider } from 'expo-sqlite';
+import { ReactNode, Suspense, useEffect } from 'react';
 
-import { Text } from "@/components/Text";
-import { initializeDatabaseSeed } from "@/db/seed";
-import migrations from "@/packages/drizzle/migrations";
-import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { ActivityIndicator, View } from "react-native";
+import { Text } from '@/components/Text';
+import { initializeDatabaseSeed } from '@/db/seed';
+import migrations from '@/packages/drizzle/migrations';
+import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
+import { ActivityIndicator, View } from 'react-native';
 // import Toast from "react-native-toast-message";
 
 export default function DBProvider({ children }: { children: ReactNode }) {
@@ -32,7 +32,7 @@ export default function DBProvider({ children }: { children: ReactNode }) {
 
   if (error) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Migration error: {error.message}</Text>
       </View>
     );

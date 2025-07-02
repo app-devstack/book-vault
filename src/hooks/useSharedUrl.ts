@@ -2,7 +2,7 @@ import * as Linking from 'expo-linking';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 
- interface SharedUrlData {
+interface SharedUrlData {
   url: string;
   timestamp: number;
 }
@@ -32,7 +32,7 @@ export const useSharedUrl = () => {
     };
 
     const handleUrlChange = ({ url }: { url: string }) => {
-      if (url ) {
+      if (url) {
         setSharedUrl({
           url: url,
           timestamp: Date.now(),

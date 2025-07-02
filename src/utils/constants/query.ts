@@ -22,7 +22,7 @@ export const QUERY_KEYS = {
   SERIES_BOOKS: (seriesId: string) => ['books', 'series', seriesId] as const,
   /** 統計情報 */
   BOOKS_STATS: ['books', 'stats'] as const,
-  
+
   // 新しいクエリキー
   /** シリーズ一覧 */
   SERIES_LIST: ['series'] as const,
