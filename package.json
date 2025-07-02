@@ -3,7 +3,11 @@
   "expo": {
     "doctor": {
       "reactNativeDirectoryCheck": {
-        "exclude": ["drizzle-orm", "uuid", "@uidotdev/usehooks"]
+        "exclude": [
+          "drizzle-orm",
+          "uuid",
+          "@uidotdev/usehooks"
+        ]
       }
     }
   },
@@ -12,13 +16,14 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
     "db:generate": "npx drizzle-kit generate",
     "db:generate:custom": "npx drizzle-kit generate --custom",
     "db:reset": "drizzle-kit drop",
+    "prebuild": "expo prebuild",
     "deploy": "eas build --platform android --profile development",
     "preview": "eas build --platform android --profile preview",
     "preview:local": "eas build --platform android --profile preview --local",
@@ -30,6 +35,7 @@
     "knip": "bunx knip"
   },
   "dependencies": {
+    "@expo/config-plugins": "~10.0.0",
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",

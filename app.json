@@ -10,7 +10,8 @@
     "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
-      "newArchEnabled": false
+      "newArchEnabled": false,
+      "bundleIdentifier": "com.r.t7maru.bookvault"
     },
     "android": {
       "adaptiveIcon": {
