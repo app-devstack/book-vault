@@ -2,6 +2,12 @@ import db from '@/db';
 import schema from '@/db/schema';
 import { EMPTY_SERIES_ID, EMPTY_SHOP_ID } from '@/utils/constants';
 
+const EMPTY_SHOP_DEFAULT = {
+  id: EMPTY_SHOP_ID,
+  name: '未分類ショップ',
+  displayName: '未分類ショップ',
+};
+
 export async function initializeDatabaseSeed() {
   const existingSeries = await db.query.series.findFirst({
     where: (series, { eq }) => eq(series.id, EMPTY_SERIES_ID),
@@ -16,10 +22,6 @@ export async function initializeDatabaseSeed() {
   });
 
   if (!existingShop) {
-    await db.insert(schema.shops).values({
-      id: EMPTY_SHOP_ID,
-      name: '未分類ショップ',
-      displayName: '未分類ショップ',
-    });
+    await db.insert(schema.shops).values(EMPTY_SHOP_DEFAULT);
   }
 }
