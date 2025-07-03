@@ -1,6 +1,7 @@
 import { Icon } from '@/components/icons/Icons';
 import { useSharedUrlContext } from '@/components/providers/shared-url-provider';
 import Badge from '@/components/ui/Badge';
+import LucideIcon from '@/components/ui/LucideIcon';
 import { SeriesSelector } from '@/components/ui/SeriesSelector';
 import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
@@ -149,7 +150,7 @@ export default function RegisterDetailModal({
           end={{ x: 1, y: 1 }}
         >
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Icon name="arrow-back" size="medium" color="white" />
+            <LucideIcon name="arrow-left" size="medium" color="white" />
           </TouchableOpacity>
           <Text style={styles.title}>📚 書籍詳細</Text>
           <View style={styles.placeholder} />
