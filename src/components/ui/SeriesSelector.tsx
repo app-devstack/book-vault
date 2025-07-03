@@ -2,7 +2,7 @@ import { Icon } from '@/components/icons/Icons';
 import { SeriesCreationModal } from '@/components/ui/SeriesCreationModal';
 import { NewSeries, Series } from '@/db/types';
 import { COLORS, SHADOWS } from '@/utils/colors';
-import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -188,10 +188,11 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
-    padding: 20,
+    padding: SCREEN_PADDING,
+    // paddingBottom: 100,
   },
   seriesList: {
-    flex: 1,
+    // flex: 1,
   },
   seriesItem: {
     flexDirection: 'row',
