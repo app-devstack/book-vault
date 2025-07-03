@@ -1,6 +1,6 @@
 import DBProvider from '@/components/providers/db-provider';
 import { ProviderErrorBoundary } from '@/components/providers/ErrorBoundary';
-import SharedUrlProvider from '@/components/providers/shared-url-provider';
+// import SharedUrlProvider from '@/components/providers/shared-url-provider';
 // import ResetButton from "@/db/utils/resetButton";
 import { QUERY_CACHE_TIME } from '@/utils/constants/query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -13,18 +13,20 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: QUERY_CACHE_TIME.STALE_TIME,
       gcTime: QUERY_CACHE_TIME.GC_TIME,
-      retry: 3,
-      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retry: 1, // リトライ回数
+      retryDelay: 1000, // リトライ間隔（ミリ秒）
       // ネットワークエラー時の処理
-      networkMode: 'offlineFirst',
-      // バックグラウンドでの自動更新
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
+      networkMode: 'online',
+
+      // タブ切り替え時の自動更新を無効化
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
     },
     mutations: {
-      retry: 2,
-      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 10000),
-      networkMode: 'offlineFirst',
+      retry: 1,
+      retryDelay: 1000,
+      networkMode: 'online',
     },
   },
 });
@@ -40,16 +42,12 @@ export default function RootLayoutProvider({ children }: { children: ReactNode }
         <QueryClientProvider client={queryClient}>
           <DBProvider>
             <ProviderErrorBoundary>
-              <AppProvider>{children}</AppProvider>
+              {children}
+              <Toast />
             </ProviderErrorBoundary>
-            <Toast />
           </DBProvider>
         </QueryClientProvider>
       </SafeAreaView>
     </SafeAreaProvider>
   );
-}
-
-function AppProvider({ children }: { children: ReactNode }) {
-  return <SharedUrlProvider>{children}</SharedUrlProvider>;
 }

@@ -17,10 +17,10 @@ export interface ErrorBoundaryProps {
 }
 
 // デフォルトのフォールバックコンポーネント
-const DefaultFallbackComponent: React.FC<{
-  error: Error;
-  retry: () => void;
-}> = ({ error, retry }) => (
+const DefaultFallbackComponent: React.FC<{ error: Error; retry: () => void }> = ({
+  error,
+  retry,
+}) => (
   <View style={styles.container}>
     <View style={styles.errorCard}>
       <Text style={styles.title}>予期しないエラーが発生しました</Text>
