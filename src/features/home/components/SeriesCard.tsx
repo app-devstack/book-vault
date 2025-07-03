@@ -1,4 +1,4 @@
-import LucideIcon from '@/components/ui/LucideIcon';
+import { Icon } from '@/components/icons/Icons';
 import { Book } from '@/db/types';
 import { SeriesStats } from '@/types/book';
 import { COLORS, SHADOWS } from '@/utils/colors';
@@ -68,7 +68,7 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
         </View>
 
         <View style={styles.chevronContainer}>
-          <LucideIcon name="chevron-right" color="white" size="medium" />
+          <Icon name="chevron-forward" size="medium" color="white" />
         </View>
       </View>
     </TouchableOpacity>
