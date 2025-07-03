@@ -1,12 +1,14 @@
 import { Icon } from '@/components/icons/Icons';
-import { useSharedUrlContext } from '@/components/providers/shared-url-provider';
-import Badge from '@/components/ui/Badge';
+// import { useSharedUrlContext } from '@/components/providers/shared-url-provider';
 import { SeriesSelector } from '@/components/ui/SeriesSelector';
+import { NewSeries } from '@/db/types';
 import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
+import { useSafeState } from '@/hooks/useSafeState';
 import { BookSearchResult } from '@/types/book';
 import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
-import { BORDER_RADIUS, FONT_SIZES, ICON_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { seriesService } from '@/utils/service/series-service';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -24,19 +26,19 @@ import {
 } from 'react-native';
 
 // アニメーション用定数
-const ANIMATION_CONFIG = {
-  duration: 300,
-  fadeOut: {
-    toValue: 0,
-    duration: 300,
-    useNativeDriver: true,
-  },
-  fadeIn: {
-    toValue: 1,
-    duration: 300,
-    useNativeDriver: true,
-  },
-} as const;
+// const ANIMATION_CONFIG = {
+//   duration: 300,
+//   fadeOut: {
+//     toValue: 0,
+//     duration: 300,
+//     useNativeDriver: true,
+//   },
+//   fadeIn: {
+//     toValue: 1,
+//     duration: 300,
+//     useNativeDriver: true,
+//   },
+// } as const;
 
 type RegisterDetailModalProps = {
   visible: boolean;
@@ -58,14 +60,15 @@ export default function RegisterDetailModal({
   const [targetURL, setTargetURL] = useState('');
   const [selectedSeriesId, setSelectedSeriesId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [isSharedUrlVisible, setIsSharedUrlVisible] = useState(true);
+  // const [isSharedUrlVisible, setIsSharedUrlVisible] = useState(true);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const { safeSetState } = useSafeState();
 
   const seriesOptionsQuery = useSeriesOptions();
   const createSeriesMutation = useCreateSeries();
 
-  const { sharedUrl } = useSharedUrlContext();
+  // const { sharedUrl } = useSharedUrlContext();
 
   // Convert SeriesOption[] to Series[] for SeriesSelector
   const seriesedBooks = (seriesOptionsQuery.data || []).map((option) => ({
@@ -79,57 +82,97 @@ export default function RegisterDetailModal({
     updatedAt: new Date(),
   }));
 
-  // Wrapper function to return series ID after creation
-  const handleCreateSeries = async (seriesData: any) => {
-    const newSeries = await createSeriesMutation.mutateAsync(seriesData);
-    return newSeries.id;
+  // Wrapper function to return series ID after creation (重複チェック付き)
+  const handleCreateSeries = async (
+    seriesData: Omit<NewSeries, 'id' | 'createdAt' | 'updatedAt'>
+  ) => {
+    try {
+      // タイトルと著者による重複チェック
+      const existingSeries = await seriesService.getSeriesByTitleAndAuthor(
+        seriesData.title,
+        seriesData.author || ''
+      );
+
+      if (existingSeries) {
+        // 既存のシリーズが見つかった場合は、そのIDを使用
+        return existingSeries.id;
+      }
+
+      // 重複がない場合は新規作成
+      const newSeries = await createSeriesMutation.mutateAsync(seriesData);
+      return newSeries.id;
+    } catch (error) {
+      // UNIQUE制約エラーの場合は再度検索して既存のIDを返す
+      if (error instanceof Error && error.message.includes('UNIQUE constraint failed')) {
+        const existingSeries = await seriesService.getSeriesByTitleAndAuthor(
+          seriesData.title,
+          seriesData.author || ''
+        );
+        if (existingSeries) {
+          return existingSeries.id;
+        }
+      }
+      throw error;
+    }
   };
 
-  // アニメーション関数
-  const fadeOut = () => {
-    Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeOut).start(() => {
-      setIsSharedUrlVisible(false);
-    });
-  };
+  // // アニメーション関数
+  // const fadeOut = () => {
+  //   Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeOut).start(() => {
+  //     // setIsSharedUrlVisible(false);
+  //   });
+  // };
 
-  const fadeIn = () => {
-    setIsSharedUrlVisible(true);
-    Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeIn).start();
-  };
+  // const fadeIn = () => {
+  //   // setIsSharedUrlVisible(true);
+  //   Animated.timing(fadeAnim, ANIMATION_CONFIG.fadeIn).start();
+  // };
 
   useEffect(() => {
     if (book) {
-      setTargetURL(``);
-      setSelectedSeriesId(null);
-      setIsSharedUrlVisible(true);
-      fadeAnim.setValue(1);
+      safeSetState(() => {
+        setTargetURL(``);
+        setSelectedSeriesId(null);
+        // setIsSharedUrlVisible(true);
+        fadeAnim.setValue(1);
+      });
     }
-  }, [book, fadeAnim]);
+  }, [book, fadeAnim, safeSetState]);
 
   const handleRegister = async () => {
     if (!book) return;
 
-    setIsRegistering(true);
+    safeSetState(() => setIsRegistering(true));
     try {
       await onRegister(book, targetURL, selectedSeriesId);
-      onClose();
+      safeSetState(() => onClose());
     } finally {
+      safeSetState(() => setIsRegistering(false));
+    }
+  };
+
+  // モーダルクローズ時の安全な処理
+  const handleClose = () => {
+    safeSetState(() => {
+      setTargetURL('');
+      setSelectedSeriesId(null);
       setIsRegistering(false);
-    }
+    });
+    onClose();
   };
 
-  const handleUseSharedUrl = () => {
-    if (sharedUrl) {
-      setTargetURL(sharedUrl.url);
-      fadeOut();
-    }
-  };
+  // const handleUseSharedUrl = () => {
+  //   if (sharedUrl) {
+  //     setTargetURL(sharedUrl.url);
+  //     fadeOut();
+  //   }
+  // };
 
-  const handleBadgePress = () => {
-    if (!isSharedUrlVisible) {
-      fadeIn();
-    }
-  };
+  // const handleBadgePress = () => {
+  //   if (!isSharedUrlVisible) {
+  //     fadeIn();
+  //   }
+  // };
 
   if (!book) return null;
 
@@ -138,7 +181,7 @@ export default function RegisterDetailModal({
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <View style={styles.container}>
         {/* ヘッダー */}
@@ -221,7 +264,7 @@ export default function RegisterDetailModal({
               <Text style={styles.sectionTitle}>リンクURL</Text>
 
               {/* 共有URL検出インジケーター */}
-              {sharedUrl && (
+              {/* {sharedUrl && (
                 <TouchableOpacity
                   onPress={handleBadgePress}
                   activeOpacity={0.7}
@@ -234,11 +277,11 @@ export default function RegisterDetailModal({
                     </View>
                   </Badge>
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
 
             {/* プレミアムな共有URL表示 */}
-            {sharedUrl && isSharedUrlVisible && (
+            {/* {sharedUrl && isSharedUrlVisible && (
               <Animated.View style={[styles.premiumSharedUrlContainer, { opacity: fadeAnim }]}>
                 <LinearGradient
                   colors={[COLORS.accent + '15', COLORS.accent + '08']}
@@ -269,7 +312,7 @@ export default function RegisterDetailModal({
                   </TouchableOpacity>
                 </LinearGradient>
               </Animated.View>
-            )}
+            )} */}
 
             <TextInput
               style={styles.urlInput}
@@ -287,7 +330,7 @@ export default function RegisterDetailModal({
         <View style={styles.footer}>
           <TouchableOpacity
             style={[styles.footerButton, styles.cancelButton]}
-            onPress={onClose}
+            onPress={handleClose}
             activeOpacity={0.8}
           >
             <Text style={styles.cancelButtonText}>キャンセル</Text>

@@ -1,6 +1,7 @@
 import db from '@/db';
 import schema from '@/db/schema';
 import { NewSeries } from '@/db/types';
+import { createDatabaseError } from '@/types/errors';
 
 class SeriesService {
   // constructor(parameters) {}
@@ -41,10 +42,42 @@ class SeriesService {
     return item;
   }
 
-  async createSeries(data: NewSeries) {
-    const [item] = await db.insert(schema.series).values(data).returning();
+  // async getSeriesByTitle(title: string) {
+  //   const item = await db.query.series.findFirst({
+  //     where: (series, { eq }) => eq(series.title, title),
+  //     with: {
+  //       books: {
+  //         orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
+  //       },
+  //     },
+  //   });
+  //   return item;
+  // }
 
+  async getSeriesByTitleAndAuthor(title: string, author: string) {
+    const item = await db.query.series.findFirst({
+      where: (series, { eq, and }) => and(eq(series.title, title), eq(series.author, author)),
+      with: {
+        books: {
+          orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
+        },
+      },
+    });
     return item;
+  }
+
+  async createSeries(data: NewSeries) {
+    try {
+      const [item] = await db.insert(schema.series).values(data).returning();
+      return item;
+    } catch (error) {
+      // await logError(error as Error, 'CREATE_SERIES');
+      const dbError = createDatabaseError(
+        `Failed to create series: ${error}`,
+        'シリーズの作成に失敗しました'
+      );
+      throw dbError;
+    }
   }
 
   async getAllSeriesWithBooks() {

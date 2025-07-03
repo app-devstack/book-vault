@@ -1,6 +1,6 @@
 import { Icon } from '@/components/icons/Icons';
-import { SearchResults } from '@/components/manga/SearchResults';
 import { RegisterTab } from '@/features/register/_types';
+import { SearchResults } from '@/features/register/components/SearchResults';
 import { BookSearchResult } from '@/types/book';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
@@ -25,7 +25,27 @@ interface RegisterScreenProps {
   onSearch: (query: string) => void;
 }
 
-export const RegisterScreen: React.FC<RegisterScreenProps> = ({
+const TabsTrigger = ({
+  onPress,
+  isActive,
+  text,
+}: {
+  onPress: () => void;
+  isActive: boolean;
+  text: string;
+}) => {
+  return (
+    <TouchableOpacity
+      style={[styles.tabButton, isActive && styles.tabButtonActive]}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      <Text style={[styles.tabButtonText, isActive && styles.tabButtonTextActive]}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+export const RegisterScreen = ({
   registerTab,
   setRegisterTab,
   searchQuery,
@@ -33,7 +53,9 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   searchResults,
   isSearching,
   onSearch,
-}) => {
+}: RegisterScreenProps) => {
+  const isSearchValueEmpty = searchQuery.trim() === '';
+
   const handleSearch = () => {
     if (searchQuery.trim()) {
       onSearch(searchQuery);
@@ -44,27 +66,16 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
     <View style={styles.container}>
       {/* タブセレクター */}
       <View style={styles.tabSelector}>
-        <TouchableOpacity
-          style={[styles.tabButton, registerTab === 'gmail' && styles.tabButtonActive]}
+        <TabsTrigger
+          text="📧 Gmail連携"
           onPress={() => setRegisterTab('gmail')}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={[styles.tabButtonText, registerTab === 'gmail' && styles.tabButtonTextActive]}
-          >
-            📧 Gmail連携
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.tabButton, registerTab === 'api' && styles.tabButtonActive]}
+          isActive={registerTab === 'gmail'}
+        />
+        <TabsTrigger
+          text="🔍 タイトル検索"
           onPress={() => setRegisterTab('api')}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.tabButtonText, registerTab === 'api' && styles.tabButtonTextActive]}>
-            🔍 タイトル検索
-          </Text>
-        </TouchableOpacity>
+          isActive={registerTab === 'api'}
+        />
       </View>
 
       <ScrollView
@@ -111,7 +122,11 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             </View>
 
             {/* 検索結果 */}
-            <SearchResults results={searchResults} />
+            <SearchResults
+              results={searchResults}
+              isSearching={isSearching}
+              isSearchValueEmpty={isSearchValueEmpty}
+            />
           </View>
         )}
       </ScrollView>

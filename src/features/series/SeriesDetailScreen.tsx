@@ -1,13 +1,13 @@
-import { Icon } from '@/components/icons/Icons';
 import { BookCard } from '@/features/series/components/BookCard';
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { Icon } from '@/components/icons/Icons';
 import { Book } from '@/db/types';
 import { SeriesDetailStats } from '@/hooks/screens/useSeriesDetail';
-import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { router } from 'expo-router';
 
 interface SeriesDetailScreenProps {
   seriesTitle: string;
@@ -16,47 +16,50 @@ interface SeriesDetailScreenProps {
   onBack: () => void;
 }
 
-export const SeriesDetailScreen: React.FC<SeriesDetailScreenProps> = ({
+const SeriesDetailHeader = ({
+  onBack,
+  seriesTitle,
+}: {
+  onBack: () => void;
+  seriesTitle: string;
+}) => {
+  const handlePress = () => {
+    router.push(`/register?search=${seriesTitle}`);
+  };
+
+  return (
+    <View style={styles.header}>
+      <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
+        <Icon name="chevron-forward" size="medium" color={COLORS.primary} />
+      </TouchableOpacity>
+
+      <View style={styles.headerText}>
+        <Text style={styles.headerTitle} numberOfLines={2}>
+          {seriesTitle}
+        </Text>
+      </View>
+
+      <TouchableOpacity style={styles.plusButton} onPress={handlePress} activeOpacity={0.7}>
+        <Icon name="add" size="medium" color={COLORS.primary} />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export const SeriesDetailScreen = ({
   seriesTitle,
   seriesBooks,
-  stats,
   onBack,
-}) => {
+}: SeriesDetailScreenProps) => {
   return (
     <SafeAreaView style={styles.container}>
       {/* ヘッダー */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
-          <Icon name="arrow-back" size="medium" color={COLORS.primary} />
-        </TouchableOpacity>
-
-        <View style={styles.headerText}>
-          <Text style={styles.headerTitle} numberOfLines={2}>
-            {seriesTitle}
-          </Text>
-          <Text style={styles.headerAuthor}>{seriesBooks[0].author}</Text>
-        </View>
-      </View>
+      <SeriesDetailHeader seriesTitle={seriesTitle} onBack={onBack} />
 
       <FlatList
         data={seriesBooks}
         renderItem={({ item }) => <BookCard book={item} />}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={() => (
-          <LinearGradient
-            colors={GRADIENTS.primary}
-            style={styles.statsCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <View style={styles.statsGrid}>
-              <View style={styles.statItem}>
-                <Text style={styles.statNumber}>{stats.volumeCount}</Text>
-                <Text style={styles.statLabel}>所有巻数</Text>
-              </View>
-            </View>
-          </LinearGradient>
-        )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
@@ -75,13 +78,24 @@ const styles = StyleSheet.create({
     padding: SCREEN_PADDING,
     gap: 12,
   },
+  plusButton: {
+    backgroundColor: COLORS.card,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: BORDER_RADIUS.full,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...SHADOWS.small,
+  },
   backButton: {
     backgroundColor: COLORS.card,
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: BORDER_RADIUS.medium,
-    width: 44,
-    height: 44,
+    width: 40,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
     ...SHADOWS.small,
