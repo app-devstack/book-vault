@@ -7,12 +7,10 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-nativ
 import EmptyBooksState from '@/features/home/components/EmptyBooksState';
 import { SeriesCard } from '@/features/home/components/SeriesCard';
 import { useHomeScreen } from '@/hooks/screens/useHomeScreen';
-import { useSharedUrl } from '@/hooks/useSharedUrl';
 import { router } from 'expo-router';
 
 export const HomeScreen = () => {
   const { seriesedBooks, getSeriesStats, totalStats, isLoading, error } = useHomeScreen();
-  const { sharedUrl } = useSharedUrl();
 
   const onSeriesPress = (seriesId: string) => {
     router.push(`/series/${seriesId}`);
@@ -42,25 +40,6 @@ export const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={[
-          styles.centerContainer,
-          {
-            padding: SCREEN_PADDING,
-            backgroundColor: COLORS.background,
-            borderRadius: BORDER_RADIUS.medium,
-          },
-        ]}
-      >
-        <Text>
-          {sharedUrl ? (
-            <Text style={{ color: COLORS.primary }}>共有されたURL: {sharedUrl.url}</Text>
-          ) : (
-            <Text style={{ color: COLORS.textLight }}>共有されたURLはありません</Text>
-          )}
-        </Text>
-      </View>
-
       <FlatList
         ListHeaderComponent={() => (
           <LinearGradient

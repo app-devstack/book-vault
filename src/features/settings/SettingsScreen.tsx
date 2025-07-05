@@ -1,4 +1,5 @@
 import { ImageDownloadButton } from '@/components/ImageDownloadButton';
+import { useSharedUrl } from '@/hooks/useSharedUrl';
 // import { ErrorLogScreen } from '@/components/ui/ErrorLogScreen';
 import { COLORS } from '@/utils/colors';
 import { FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
@@ -6,6 +7,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export const SettingsScreen: React.FC = () => {
+  const { sharedUrl } = useSharedUrl();
   const [showErrorLogs, setShowErrorLogs] = useState(false);
 
   if (showErrorLogs) {
@@ -29,9 +31,9 @@ export const SettingsScreen: React.FC = () => {
       </Text>
 
       {/* エラーログ表示ボタン */}
-      <TouchableOpacity style={styles.errorLogButton} onPress={() => setShowErrorLogs(true)}>
+      {/* <TouchableOpacity style={styles.errorLogButton} onPress={() => setShowErrorLogs(true)}>
         <Text style={styles.errorLogButtonText}>エラーログを表示</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* アセットダウンロードボタン */}
       <ImageDownloadButton
@@ -39,6 +41,12 @@ export const SettingsScreen: React.FC = () => {
         buttonText="アセット画像をダウンロード"
         downloadFileName="book_vault_asset"
       />
+
+      {sharedUrl && (
+        <View style={{ marginTop: 20 }}>
+          <Text style={styles.description}>{sharedUrl?.url}</Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
