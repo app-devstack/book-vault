@@ -30,7 +30,7 @@ const SeriesDetailHeader = ({
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
-        <Icon name="chevron-forward" size="medium" color={COLORS.primary} />
+        <Icon name="chevron-back" size="medium" color={COLORS.primary} />
       </TouchableOpacity>
 
       <View style={styles.headerText}>
