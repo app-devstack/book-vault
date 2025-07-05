@@ -7,10 +7,12 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-nativ
 import EmptyBooksState from '@/features/home/components/EmptyBooksState';
 import { SeriesCard } from '@/features/home/components/SeriesCard';
 import { useHomeScreen } from '@/hooks/screens/useHomeScreen';
+import { useSharedUrl } from '@/hooks/useSharedUrl';
 import { router } from 'expo-router';
 
 export const HomeScreen = () => {
   const { seriesedBooks, getSeriesStats, totalStats, isLoading, error } = useHomeScreen();
+  const { sharedUrl } = useSharedUrl();
 
   const onSeriesPress = (seriesId: string) => {
     router.push(`/series/${seriesId}`);
@@ -40,7 +42,44 @@ export const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <View
+        style={[
+          styles.centerContainer,
+          {
+            padding: SCREEN_PADDING,
+            backgroundColor: COLORS.background,
+            borderRadius: BORDER_RADIUS.medium,
+          },
+        ]}
+      >
+        <Text>
+          {sharedUrl ? (
+            <Text style={{ color: COLORS.primary }}>共有されたURL: {sharedUrl.url}</Text>
+          ) : (
+            <Text style={{ color: COLORS.textLight }}>共有されたURLはありません</Text>
+          )}
+        </Text>
+      </View>
+
       <FlatList
+        ListHeaderComponent={() => (
+          <LinearGradient
+            colors={GRADIENTS.primary}
+            style={styles.headerCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Text style={styles.headerTitle}>📚 本ライブラリ</Text>
+            <Text style={styles.headerSubtitle}>
+              {totalStats.seriesCount}シリーズ • {totalStats.bookCount}冊
+            </Text>
+            {/* <View style={styles.totalPriceContainer}>
+                    <Text style={styles.totalPriceText}>
+                      総額: ¥{totalStats.totalPrice.toLocaleString()}
+                    </Text>
+                  </View> */}
+          </LinearGradient>
+        )}
         data={seriesedBooks}
         renderItem={({ item: seriese }) => {
           const stats = getSeriesStats(seriese.books);
@@ -56,24 +95,6 @@ export const HomeScreen = () => {
           );
         }}
         keyExtractor={(seriese) => seriese.id}
-        ListHeaderComponent={() => (
-          <LinearGradient
-            colors={GRADIENTS.primary}
-            style={styles.headerCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <Text style={styles.headerTitle}>📚 本ライブラリ</Text>
-            <Text style={styles.headerSubtitle}>
-              {totalStats.seriesCount}シリーズ • {totalStats.bookCount}冊
-            </Text>
-            {/* <View style={styles.totalPriceContainer}>
-              <Text style={styles.totalPriceText}>
-                総額: ¥{totalStats.totalPrice.toLocaleString()}
-              </Text>
-            </View> */}
-          </LinearGradient>
-        )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />

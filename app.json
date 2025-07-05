@@ -79,7 +79,13 @@
         }
       ],
       "expo-sqlite",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-share-intent",
+        {
+          "androidIntentFilters": ["text/*", "image/*"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

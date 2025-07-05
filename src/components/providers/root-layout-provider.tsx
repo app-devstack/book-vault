@@ -1,6 +1,6 @@
 import DBProvider from '@/components/providers/db-provider';
 import { ProviderErrorBoundary } from '@/components/providers/ErrorBoundary';
-// import SharedUrlProvider from '@/components/providers/shared-url-provider';
+import { ShareIntentProvider } from 'expo-share-intent';
 // import ResetButton from "@/db/utils/resetButton";
 import { QUERY_CACHE_TIME } from '@/utils/constants/query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -42,8 +42,10 @@ export default function RootLayoutProvider({ children }: { children: ReactNode }
         <QueryClientProvider client={queryClient}>
           <DBProvider>
             <ProviderErrorBoundary>
-              {children}
-              <Toast />
+              <ShareIntentProvider>
+                {children}
+                <Toast />
+              </ShareIntentProvider>
             </ProviderErrorBoundary>
           </DBProvider>
         </QueryClientProvider>
