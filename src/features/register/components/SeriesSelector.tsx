@@ -4,15 +4,7 @@ import { SeriesCreationModal } from '@/features/register/components/SeriesCreati
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
 import React, { useEffect, useState } from 'react';
-import {
-  FlatList,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface SeriesSelectorProps {
   series: Series[];
@@ -84,7 +76,8 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
   );
 
   return (
-    <>
+    <View>
+      {/* 選択中のシリーズ名 */}
       <TouchableOpacity
         style={styles.selector}
         onPress={() => setIsModalVisible(true)}
@@ -103,6 +96,7 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
         onRequestClose={() => setIsModalVisible(false)}
       >
         <View style={styles.modalContainer}>
+          {/* モーダルヘッダー */}
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>シリーズを選択</Text>
             <TouchableOpacity onPress={() => setIsModalVisible(false)} style={styles.closeButton}>
@@ -110,26 +104,27 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
-            <TouchableOpacity
-              style={[styles.seriesItem, styles.newSeriesItem]}
-              onPress={onCreateSeries ? handleCreateNewSeries : () => handleSeriesSelect(null)}
-              activeOpacity={0.8}
-            >
-              <View style={styles.seriesInfo}>
-                <Text style={styles.newSeriesText}>新しいシリーズを作成</Text>
-              </View>
-              <Icon name="add" size="medium" color={COLORS.primary} />
-            </TouchableOpacity>
-
-            <FlatList
-              data={series}
-              renderItem={renderSeriesItem}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              style={styles.seriesList}
-            />
-          </ScrollView>
+          <FlatList
+            data={series}
+            renderItem={renderSeriesItem}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            style={styles.modalContent}
+            ListHeaderComponent={
+              <TouchableOpacity
+                style={[styles.seriesItem, styles.newSeriesItem]}
+                onPress={onCreateSeries ? handleCreateNewSeries : () => handleSeriesSelect(null)}
+                activeOpacity={0.8}
+              >
+                <View style={styles.seriesInfo}>
+                  <Text style={styles.newSeriesText}>新しいシリーズを作成</Text>
+                </View>
+                <Icon name="add" size="medium" color={COLORS.primary} />
+              </TouchableOpacity>
+            }
+            contentContainerStyle={styles.listContainer}
+            nestedScrollEnabled={true} // Android用
+          />
         </View>
       </Modal>
 
@@ -142,11 +137,19 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
           initialAuthor={initialAuthor}
         />
       )}
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+  },
+  contentContainer: {
+    padding: SCREEN_PADDING,
+    paddingTop: 0,
+    paddingBottom: 40,
+  },
   selector: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -196,11 +199,10 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
-    padding: SCREEN_PADDING,
-    // paddingBottom: 100,
   },
-  seriesList: {
-    // flex: 1,
+  listContainer: {
+    padding: SCREEN_PADDING,
+    paddingBottom: 20,
   },
   seriesItem: {
     flexDirection: 'row',

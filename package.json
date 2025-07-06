@@ -23,7 +23,7 @@
     "db:generate": "npx drizzle-kit generate",
     "db:generate:custom": "npx drizzle-kit generate --custom",
     "db:reset": "drizzle-kit drop",
-    "prebuild": "expo prebuild",
+    "prebuild": "expo prebuild --platform android",
     "deploy": "eas build --platform android --profile development",
     "preview": "eas build --platform android --profile preview",
     "preview:local": "eas build --platform android --profile preview --local",
@@ -33,7 +33,8 @@
     "format:check": "prettier --check --cache --cache-strategy metadata src/ #CI/CDでのフォーマット検証用",
     "expo:check": "npx expo install --check",
     "knip": "bunx knip",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "preview:deploy": "bash src/script/preview-local-build.sh"
   },
   "dependencies": {
     "@expo/config-plugins": "~9.0.0",

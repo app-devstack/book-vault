@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: SCREEN_PADDING,
-    paddingBottom: 100,
+    paddingBottom: 20,
   },
 
   headerCard: {
