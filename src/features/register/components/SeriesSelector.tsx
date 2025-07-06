@@ -1,10 +1,18 @@
 import { Icon } from '@/components/icons/Icons';
-import { SeriesCreationModal } from '@/components/ui/SeriesCreationModal';
 import { NewSeries, Series } from '@/db/types';
+import { SeriesCreationModal } from '@/features/register/components/SeriesCreationModal';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 interface SeriesSelectorProps {
   series: Series[];
@@ -102,7 +110,7 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
             </TouchableOpacity>
           </View>
 
-          <View style={styles.modalContent}>
+          <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
             <TouchableOpacity
               style={[styles.seriesItem, styles.newSeriesItem]}
               onPress={onCreateSeries ? handleCreateNewSeries : () => handleSeriesSelect(null)}
@@ -121,7 +129,7 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
               showsVerticalScrollIndicator={false}
               style={styles.seriesList}
             />
-          </View>
+          </ScrollView>
         </View>
       </Modal>
 

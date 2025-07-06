@@ -1,7 +1,7 @@
 import { Icon } from '@/components/icons/Icons';
 import Badge from '@/components/ui/Badge';
-import { SeriesSelector } from '@/components/ui/SeriesSelector';
 import { NewSeries } from '@/db/types';
+import { SeriesSelector } from '@/features/register/components/SeriesSelector';
 import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
 import { useSafeState } from '@/hooks/useSafeState';
