@@ -42,6 +42,8 @@ export const SettingsScreen: React.FC = () => {
         downloadFileName="book_vault_asset"
       />
 
+      <Text>ver:{process.env.EXPO_PUBLIC_VERSION}</Text>
+
       {sharedUrl && (
         <View style={{ marginTop: 20 }}>
           <Text style={styles.description}>{sharedUrl?.url}</Text>

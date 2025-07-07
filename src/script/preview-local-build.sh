@@ -42,6 +42,11 @@ bun run expo:check
 # fi
 
 echo "🚀 全てのチェックが完了しました。ビルドを開始します..."
+
+build_version=$(git log -1 --pretty=format:"%h %s")
+echo "ビルドバージョン: '${build_version}'"
+echo "${build_version}" >> .env.local
+
 echo "📱 プリビルドを実行中..."
 bun run prebuild
 
