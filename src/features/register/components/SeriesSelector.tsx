@@ -4,7 +4,8 @@ import { SeriesCreationModal } from '@/features/register/components/SeriesCreati
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface SeriesSelectorProps {
   series: Series[];
@@ -92,10 +93,10 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
       <Modal
         visible={isModalVisible}
         animationType="slide"
-        presentationStyle="pageSheet"
+        presentationStyle={Platform.OS === 'ios' ? 'formSheet' : undefined}
         onRequestClose={() => setIsModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
+        <SafeAreaView style={styles.modalContainer}>
           {/* モーダルヘッダー */}
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>シリーズを選択</Text>
@@ -110,6 +111,9 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             style={styles.modalContent}
+            scrollEnabled={true}
+            bounces={Platform.OS === 'ios'}
+            nestedScrollEnabled={true}
             ListHeaderComponent={
               <TouchableOpacity
                 style={[styles.seriesItem, styles.newSeriesItem]}
@@ -123,9 +127,8 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
               </TouchableOpacity>
             }
             contentContainerStyle={styles.listContainer}
-            nestedScrollEnabled={true} // Android用
           />
-        </View>
+        </SafeAreaView>
       </Modal>
 
       {onCreateSeries && (
@@ -199,6 +202,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
+    minHeight: 0, // Android対応
   },
   listContainer: {
     padding: SCREEN_PADDING,
