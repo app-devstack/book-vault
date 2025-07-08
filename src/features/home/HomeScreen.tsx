@@ -1,13 +1,13 @@
-import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 
-import EmptyBooksState from "@/features/home/components/EmptyBooksState";
-import { SeriesCard } from "@/features/home/components/SeriesCard";
-import { useHomeScreen } from "@/hooks/screens/useHomeScreen";
-import { router } from "expo-router";
+import EmptyBooksState from '@/features/home/components/EmptyBooksState';
+import { SeriesCard } from '@/features/home/components/SeriesCard';
+import { useHomeScreen } from '@/hooks/screens/useHomeScreen';
+import { router } from 'expo-router';
 
 export const HomeScreen = () => {
   const { seriesedBooks, getSeriesStats, totalStats, isLoading, error } = useHomeScreen();
@@ -41,8 +41,26 @@ export const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <FlatList
+        ListHeaderComponent={() => (
+          <LinearGradient
+            colors={GRADIENTS.primary}
+            style={styles.headerCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Text style={styles.headerTitle}>📚 本ライブラリ</Text>
+            <Text style={styles.headerSubtitle}>
+              {totalStats.seriesCount}シリーズ • {totalStats.bookCount}冊
+            </Text>
+            {/* <View style={styles.totalPriceContainer}>
+                    <Text style={styles.totalPriceText}>
+                      総額: ¥{totalStats.totalPrice.toLocaleString()}
+                    </Text>
+                  </View> */}
+          </LinearGradient>
+        )}
         data={seriesedBooks}
-        renderItem={({ item:seriese }) => {
+        renderItem={({ item: seriese }) => {
           const stats = getSeriesStats(seriese.books);
 
           if (seriese.books.length === 0) return null;
@@ -56,24 +74,6 @@ export const HomeScreen = () => {
           );
         }}
         keyExtractor={(seriese) => seriese.id}
-        ListHeaderComponent={() => (
-          <LinearGradient
-            colors={GRADIENTS.primary}
-            style={styles.headerCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <Text style={styles.headerTitle}>📚 本ライブラリ</Text>
-            <Text style={styles.headerSubtitle}>
-              {totalStats.seriesCount}シリーズ • {totalStats.bookCount}冊
-            </Text>
-            {/* <View style={styles.totalPriceContainer}>
-              <Text style={styles.totalPriceText}>
-                総額: ¥{totalStats.totalPrice.toLocaleString()}
-              </Text>
-            </View> */}
-          </LinearGradient>
-        )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
@@ -88,41 +88,41 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: SCREEN_PADDING,
-    paddingBottom: 100,
+    paddingBottom: 20,
   },
 
   headerCard: {
     borderRadius: BORDER_RADIUS.xlarge + 4,
     padding: 24,
     marginBottom: 24,
-    alignItems: "center",
+    alignItems: 'center',
     ...SHADOWS.large,
   },
   headerTitle: {
     fontSize: FONT_SIZES.hero,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: FONT_SIZES.large,
-    color: "rgba(255,255,255,0.9)",
+    color: 'rgba(255,255,255,0.9)',
     marginBottom: 12,
   },
   totalPriceContainer: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: BORDER_RADIUS.medium,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   totalPriceText: {
     fontSize: FONT_SIZES.medium,
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
   },
   centerContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
     fontSize: FONT_SIZES.medium,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.error,
-    textAlign: "center",
+    textAlign: 'center',
     paddingHorizontal: 32,
   },
 });

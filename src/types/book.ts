@@ -1,4 +1,4 @@
-import { Book } from "@/db/types";
+import { Book } from '@/db/types';
 
 export interface BookSearchResult {
   // id: string;
@@ -14,7 +14,7 @@ export interface BookSearchResult {
   seriesId?: string;
 }
 
-export type StoreKey = "kindle" | "kobo" | "bookwalker";
+export type StoreKey = 'kindle' | 'kobo' | 'bookwalker';
 
 export interface SeriesStats {
   volumeCount: number;

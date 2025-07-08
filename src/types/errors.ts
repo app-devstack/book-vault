@@ -4,7 +4,7 @@ export enum ErrorType {
   DATABASE = 'DATABASE',
   NOT_FOUND = 'NOT_FOUND',
   PERMISSION = 'PERMISSION',
-  UNKNOWN = 'UNKNOWN'
+  UNKNOWN = 'UNKNOWN',
 }
 
 export interface BookError {
@@ -47,11 +47,14 @@ export class BookVaultError extends Error {
       message: this.message,
       userMessage: this.userMessage,
       retryable: this.retryable,
-      details: this.details
+      details: this.details,
     };
   }
 
-  static fromError(error: unknown, fallbackUserMessage: string = '予期しないエラーが発生しました'): BookVaultError {
+  static fromError(
+    error: unknown,
+    fallbackUserMessage: string = '予期しないエラーが発生しました'
+  ): BookVaultError {
     if (error instanceof BookVaultError) {
       return error;
     }

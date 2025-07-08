@@ -1,10 +1,10 @@
-import { Icon } from "@/components/icons/Icons";
-import { SearchResults } from "@/components/manga/SearchResults";
-import { RegisterTab } from "@/features/register/_types";
-import { BookSearchResult } from "@/types/book";
-import { COLORS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import React from "react";
+import { Icon } from '@/components/icons/Icons';
+import { RegisterTab } from '@/features/register/_types';
+import { SearchResults } from '@/features/register/components/SearchResults';
+import { BookSearchResult } from '@/types/book';
+import { COLORS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import React from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -13,7 +13,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 
 interface RegisterScreenProps {
   registerTab: RegisterTab;
@@ -25,7 +25,27 @@ interface RegisterScreenProps {
   onSearch: (query: string) => void;
 }
 
-export const RegisterScreen: React.FC<RegisterScreenProps> = ({
+const TabsTrigger = ({
+  onPress,
+  isActive,
+  text,
+}: {
+  onPress: () => void;
+  isActive: boolean;
+  text: string;
+}) => {
+  return (
+    <TouchableOpacity
+      style={[styles.tabButton, isActive && styles.tabButtonActive]}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      <Text style={[styles.tabButtonText, isActive && styles.tabButtonTextActive]}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+export const RegisterScreen = ({
   registerTab,
   setRegisterTab,
   searchQuery,
@@ -33,7 +53,9 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   searchResults,
   isSearching,
   onSearch,
-}) => {
+}: RegisterScreenProps) => {
+  const isSearchValueEmpty = searchQuery.trim() === '';
+
   const handleSearch = () => {
     if (searchQuery.trim()) {
       onSearch(searchQuery);
@@ -44,41 +66,16 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
     <View style={styles.container}>
       {/* タブセレクター */}
       <View style={styles.tabSelector}>
-        <TouchableOpacity
-          style={[
-            styles.tabButton,
-            registerTab === "gmail" && styles.tabButtonActive,
-          ]}
-          onPress={() => setRegisterTab("gmail")}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={[
-              styles.tabButtonText,
-              registerTab === "gmail" && styles.tabButtonTextActive,
-            ]}
-          >
-            📧 Gmail連携
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.tabButton,
-            registerTab === "api" && styles.tabButtonActive,
-          ]}
-          onPress={() => setRegisterTab("api")}
-          activeOpacity={0.8}
-        >
-          <Text
-            style={[
-              styles.tabButtonText,
-              registerTab === "api" && styles.tabButtonTextActive,
-            ]}
-          >
-            🔍 タイトル検索
-          </Text>
-        </TouchableOpacity>
+        <TabsTrigger
+          text="📧 Gmail連携"
+          onPress={() => setRegisterTab('gmail')}
+          isActive={registerTab === 'gmail'}
+        />
+        <TabsTrigger
+          text="🔍 タイトル検索"
+          onPress={() => setRegisterTab('api')}
+          isActive={registerTab === 'api'}
+        />
       </View>
 
       <ScrollView
@@ -86,13 +83,13 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        {registerTab === "gmail" ? (
+        {registerTab === 'gmail' ? (
           /* Gmail連携タブ（準備中） */
           <View style={styles.comingSoonContainer}>
             <Text style={styles.comingSoonIcon}>🚧</Text>
             <Text style={styles.comingSoonTitle}>準備中です</Text>
             <Text style={styles.comingSoonDescription}>
-              Gmail連携機能は現在開発中です。{"\n"}
+              Gmail連携機能は現在開発中です。{'\n'}
               しばらくお待ちください。
             </Text>
           </View>
@@ -125,7 +122,11 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
             </View>
 
             {/* 検索結果 */}
-            <SearchResults results={searchResults} />
+            <SearchResults
+              results={searchResults}
+              isSearching={isSearching}
+              isSearchValueEmpty={isSearchValueEmpty}
+            />
           </View>
         )}
       </ScrollView>
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   tabSelector: {
-    flexDirection: "row",
+    flexDirection: 'row',
     margin: SCREEN_PADDING,
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.large,
@@ -153,18 +154,18 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: BORDER_RADIUS.medium,
-    alignItems: "center",
+    alignItems: 'center',
   },
   tabButtonActive: {
     backgroundColor: COLORS.primary,
   },
   tabButtonText: {
     fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.textLight,
   },
   tabButtonTextActive: {
-    color: "white",
+    color: 'white',
   },
   content: {
     flex: 1,
@@ -178,10 +179,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.xlarge,
     padding: 40,
-    alignItems: "center",
+    alignItems: 'center',
     borderWidth: 2,
     borderColor: COLORS.border,
-    borderStyle: "dashed",
+    borderStyle: 'dashed',
     ...SHADOWS.medium,
   },
   comingSoonIcon: {
@@ -190,26 +191,26 @@ const styles = StyleSheet.create({
   },
   comingSoonTitle: {
     fontSize: FONT_SIZES.xxlarge,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.warning,
     marginBottom: 12,
   },
   comingSoonDescription: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.textLight,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 20,
   },
   searchContainer: {
     flex: 1,
   },
   searchBar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.large,
     borderWidth: 2,
     borderColor: COLORS.primary,
-    overflow: "hidden",
+    overflow: 'hidden',
     marginBottom: 24,
     ...SHADOWS.medium,
   },
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     paddingHorizontal: 24,
     paddingVertical: 16,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

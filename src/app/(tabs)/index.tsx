@@ -1,6 +1,6 @@
-import { HomeScreen } from "@/features/home/HomeScreen";
-import { COLORS } from "@/utils/colors";
-import { StyleSheet, View } from "react-native";
+import { HomeScreen } from '@/features/home/HomeScreen';
+import { COLORS } from '@/utils/colors';
+import { StyleSheet, View } from 'react-native';
 
 export default function HomePage() {
   return (

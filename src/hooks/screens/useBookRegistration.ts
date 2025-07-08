@@ -5,6 +5,7 @@ import { useBookSearch } from '@/hooks/queries/useBookSearch';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
 import { BookSearchResult } from '@/types/book';
 import { useDebounce } from '@uidotdev/usehooks';
+import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 
 export interface BookRegistrationForm {
@@ -20,8 +21,9 @@ const SEARCH_DEBOUNCE_DELAY = 500;
  * 書籍登録画面で使用する検索・選択・登録機能を統合管理するフック
  */
 export const useBookRegistration = () => {
+  const { path: _, search } = useLocalSearchParams<{ path: string; search?: string }>();
   const [formData, setFormData] = useState<BookRegistrationForm>({
-    searchQuery: '',
+    searchQuery: search || '',
     selectedBook: null,
     selectedSeriesId: null,
     targetURL: '',
@@ -37,16 +39,18 @@ export const useBookRegistration = () => {
   const createSeriesMutation = useCreateSeries();
 
   // 検索状態の判定
-  const isSearching = searchQuery.isLoading || (formData.searchQuery !== debouncedSearchQuery && formData.searchQuery.length >= 2);
+  const isSearching =
+    searchQuery.isLoading ||
+    (formData.searchQuery !== debouncedSearchQuery && formData.searchQuery.length >= 2);
 
   // 検索実行
   const searchBooks = useCallback((query: string) => {
-    setFormData(prev => ({ ...prev, searchQuery: query }));
+    setFormData((prev) => ({ ...prev, searchQuery: query }));
   }, []);
 
   // 書籍選択
   const selectBook = useCallback((book: BookSearchResult) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       selectedBook: book,
       targetURL: ``,
@@ -55,20 +59,23 @@ export const useBookRegistration = () => {
 
   // シリーズ選択
   const selectSeries = useCallback((seriesId: string | null) => {
-    setFormData(prev => ({ ...prev, selectedSeriesId: seriesId }));
+    setFormData((prev) => ({ ...prev, selectedSeriesId: seriesId }));
   }, []);
 
   // URL設定
   const setTargetURL = useCallback((url: string) => {
-    setFormData(prev => ({ ...prev, targetURL: url }));
+    setFormData((prev) => ({ ...prev, targetURL: url }));
   }, []);
 
   // 新しいシリーズ作成
-  const createSeries = useCallback(async (seriesData: any) => {
-    const newSeries = await createSeriesMutation.mutateAsync(seriesData);
-    setFormData(prev => ({ ...prev, selectedSeriesId: newSeries.id }));
-    return newSeries.id;
-  }, [createSeriesMutation]);
+  const createSeries = useCallback(
+    async (seriesData: any) => {
+      const newSeries = await createSeriesMutation.mutateAsync(seriesData);
+      setFormData((prev) => ({ ...prev, selectedSeriesId: newSeries.id }));
+      return newSeries.id;
+    },
+    [createSeriesMutation]
+  );
 
   // 書籍登録
   const registerBook = useCallback(async () => {
@@ -101,7 +108,7 @@ export const useBookRegistration = () => {
 
   // 検索結果クリア
   const clearResults = useCallback(() => {
-    setFormData(prev => ({ ...prev, searchQuery: '', selectedBook: null }));
+    setFormData((prev) => ({ ...prev, searchQuery: '', selectedBook: null }));
   }, []);
 
   return {

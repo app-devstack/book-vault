@@ -10,6 +10,7 @@ export const useSeriesList = () => {
     queryKey: QUERY_KEYS.SERIES_LIST,
     queryFn: seriesService.getAllSeriesWithBooks,
     ...QUERY_OPTIONS.DEFAULT,
-    select: (data) => data.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()),
+    select: (data) =>
+      data.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()),
   });
 };

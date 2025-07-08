@@ -17,13 +17,15 @@ export interface ErrorBoundaryProps {
 }
 
 // デフォルトのフォールバックコンポーネント
-const DefaultFallbackComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
+const DefaultFallbackComponent: React.FC<{ error: Error; retry: () => void }> = ({
+  error,
+  retry,
+}) => (
   <View style={styles.container}>
     <View style={styles.errorCard}>
       <Text style={styles.title}>予期しないエラーが発生しました</Text>
       <Text style={styles.message}>
-        アプリの実行中に問題が発生しました。
-        以下のボタンを押して再試行してください。
+        アプリの実行中に問題が発生しました。 以下のボタンを押して再試行してください。
       </Text>
 
       <TouchableOpacity style={styles.retryButton} onPress={retry}>
@@ -49,21 +51,21 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     this.state = {
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     };
   }
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return {
       hasError: true,
-      error
+      error,
     };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({
       error,
-      errorInfo
+      errorInfo,
     });
 
     // カスタムエラーハンドラがある場合は呼び出し
@@ -75,7 +77,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     console.error('ErrorBoundary caught an error:', {
       error: error.message,
       stack: error.stack,
-      componentStack: errorInfo.componentStack
+      componentStack: errorInfo.componentStack,
     });
   }
 
@@ -90,7 +92,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     this.setState({
       hasError: false,
       error: null,
-      errorInfo: null
+      errorInfo: null,
     });
 
     // 少し遅延を入れてからリセット（UIの反応性向上）
@@ -104,12 +106,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     if (this.state.hasError && this.state.error) {
       const FallbackComponent = this.props.fallback || DefaultFallbackComponent;
 
-      return (
-        <FallbackComponent
-          error={this.state.error}
-          retry={this.handleRetry}
-        />
-      );
+      return <FallbackComponent error={this.state.error} retry={this.handleRetry} />;
     }
 
     return this.props.children;
@@ -124,7 +121,7 @@ export const ProviderErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
       name: error.name,
       message: error.message,
       stack: error.stack,
-      componentStack: errorInfo.componentStack
+      componentStack: errorInfo.componentStack,
     });
 
     // プロダクション環境では外部ログサービスに送信
@@ -143,7 +140,7 @@ export const ProviderErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
       message: error.message,
       stack: error.stack || 'スタックトレースが利用できません',
       timestamp: new Date().toISOString(),
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A',
     };
 
     const handleCopyError = async () => {
@@ -159,7 +156,7 @@ export const ProviderErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
 
         User Agent: ${errorDetails.userAgent}
         =====================================
-`       .trim();
+`.trim();
 
       try {
         await Clipboard.setString(errorText);
@@ -203,36 +200,48 @@ export const ProviderErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
                 </TouchableOpacity>
               </View>
 
-              {copyFeedback ? (
-                <Text style={styles.copyFeedback}>{copyFeedback}</Text>
-              ) : null}
+              {copyFeedback ? <Text style={styles.copyFeedback}>{copyFeedback}</Text> : null}
 
               <ScrollView style={styles.errorLogContainer} showsVerticalScrollIndicator={true}>
                 <View style={styles.errorSection}>
                   <Text style={styles.errorSectionTitle}>🏷️ エラー名</Text>
-                  <Text style={styles.errorSectionContent} selectable>{errorDetails.name}</Text>
+                  <Text style={styles.errorSectionContent} selectable>
+                    {errorDetails.name}
+                  </Text>
                 </View>
 
                 <View style={styles.errorSection}>
                   <Text style={styles.errorSectionTitle}>💬 メッセージ</Text>
-                  <Text style={styles.errorSectionContent} selectable>{errorDetails.message}</Text>
+                  <Text style={styles.errorSectionContent} selectable>
+                    {errorDetails.message}
+                  </Text>
                 </View>
 
                 <View style={styles.errorSection}>
                   <Text style={styles.errorSectionTitle}>📍 スタックトレース</Text>
-                  <ScrollView style={styles.stackTraceContainer} horizontal showsHorizontalScrollIndicator={true}>
-                    <Text style={styles.stackTraceText} selectable>{errorDetails.stack}</Text>
+                  <ScrollView
+                    style={styles.stackTraceContainer}
+                    horizontal
+                    showsHorizontalScrollIndicator={true}
+                  >
+                    <Text style={styles.stackTraceText} selectable>
+                      {errorDetails.stack}
+                    </Text>
                   </ScrollView>
                 </View>
 
                 <View style={styles.errorSection}>
                   <Text style={styles.errorSectionTitle}>⏰ 発生時刻</Text>
-                  <Text style={styles.errorSectionContent} selectable>{errorDetails.timestamp}</Text>
+                  <Text style={styles.errorSectionContent} selectable>
+                    {errorDetails.timestamp}
+                  </Text>
                 </View>
 
                 <View style={styles.errorSection}>
                   <Text style={styles.errorSectionTitle}>🖥️ 環境情報</Text>
-                  <Text style={styles.errorSectionContent} selectable>{errorDetails.userAgent}</Text>
+                  <Text style={styles.errorSectionContent} selectable>
+                    {errorDetails.userAgent}
+                  </Text>
                 </View>
               </ScrollView>
             </View>
@@ -255,7 +264,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.background,
-    padding: 20
+    padding: 20,
   },
   errorCard: {
     backgroundColor: COLORS.card,
@@ -263,51 +272,51 @@ const styles = StyleSheet.create({
     padding: 24,
     maxWidth: 400,
     width: '100%',
-    ...SHADOWS.large
+    ...SHADOWS.large,
   },
   title: {
     fontSize: FONT_SIZES.xlarge,
     fontWeight: 'bold',
     color: COLORS.error,
     marginBottom: 12,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   message: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.textLight,
     lineHeight: 20,
     marginBottom: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   retryButton: {
     backgroundColor: COLORS.primary,
     borderRadius: BORDER_RADIUS.medium,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   retryButtonText: {
     color: 'white',
     fontSize: FONT_SIZES.medium,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   debugInfo: {
     marginTop: 20,
     padding: 12,
     backgroundColor: COLORS.background,
-    borderRadius: BORDER_RADIUS.medium
+    borderRadius: BORDER_RADIUS.medium,
   },
   debugTitle: {
     fontSize: FONT_SIZES.small,
     fontWeight: 'bold',
     color: COLORS.textLight,
-    marginBottom: 8
+    marginBottom: 8,
   },
   debugText: {
     fontSize: FONT_SIZES.small,
     color: COLORS.textLight,
     fontFamily: 'monospace',
-    marginBottom: 4
+    marginBottom: 4,
   },
 
   // Provider専用スタイル - 詳細エラー表示
@@ -324,21 +333,21 @@ const styles = StyleSheet.create({
     maxHeight: '90%',
     borderWidth: 2,
     borderColor: COLORS.error + '20',
-    ...SHADOWS.large
+    ...SHADOWS.large,
   },
   providerErrorTitle: {
     fontSize: FONT_SIZES.xxlarge,
     fontWeight: 'bold',
     color: COLORS.error,
     marginBottom: 12,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   providerErrorMessage: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.text,
     lineHeight: 22,
     marginBottom: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -352,12 +361,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: 'center',
     flex: 1,
-    ...SHADOWS.medium
+    ...SHADOWS.medium,
   },
   providerRetryButtonText: {
     color: 'white',
     fontSize: FONT_SIZES.medium,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   detailsButton: {
     backgroundColor: COLORS.warning + '20',
@@ -367,12 +376,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     borderWidth: 1,
-    borderColor: COLORS.warning + '40'
+    borderColor: COLORS.warning + '40',
   },
   detailsButtonText: {
     color: COLORS.warning,
     fontSize: FONT_SIZES.medium,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   errorDetailsContainer: {
     flex: 1,
@@ -380,7 +389,7 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.large,
     padding: 16,
     borderWidth: 1,
-    borderColor: COLORS.border
+    borderColor: COLORS.border,
   },
   errorDetailsHeader: {
     flexDirection: 'row',
@@ -389,38 +398,38 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border
+    borderBottomColor: COLORS.border,
   },
   errorDetailsTitle: {
     fontSize: FONT_SIZES.large,
     fontWeight: 'bold',
-    color: COLORS.text
+    color: COLORS.text,
   },
   copyButton: {
     backgroundColor: COLORS.accent,
     borderRadius: BORDER_RADIUS.medium,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    ...SHADOWS.small
+    ...SHADOWS.small,
   },
   copyButtonText: {
     color: 'white',
     fontSize: FONT_SIZES.small,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   copyFeedback: {
     color: COLORS.success,
     fontSize: FONT_SIZES.small,
     textAlign: 'center',
     marginBottom: 8,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   errorLogContainer: {
     flex: 1,
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.medium,
     padding: 12,
-    maxHeight: 400
+    maxHeight: 400,
   },
   errorSection: {
     marginBottom: 16,
@@ -428,19 +437,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     borderRadius: BORDER_RADIUS.medium,
     borderLeftWidth: 4,
-    borderLeftColor: COLORS.primary
+    borderLeftColor: COLORS.primary,
   },
   errorSectionTitle: {
     fontSize: FONT_SIZES.medium,
     fontWeight: 'bold',
     color: COLORS.primary,
-    marginBottom: 8
+    marginBottom: 8,
   },
   errorSectionContent: {
     fontSize: FONT_SIZES.small,
     color: COLORS.text,
     lineHeight: 18,
-    fontFamily: 'monospace'
+    fontFamily: 'monospace',
   },
   stackTraceContainer: {
     maxHeight: 120,
@@ -448,12 +457,12 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.small,
     padding: 8,
     borderWidth: 1,
-    borderColor: COLORS.border
+    borderColor: COLORS.border,
   },
   stackTraceText: {
     fontSize: FONT_SIZES.small,
     color: COLORS.textLight,
     fontFamily: 'monospace',
-    lineHeight: 16
-  }
+    lineHeight: 16,
+  },
 });

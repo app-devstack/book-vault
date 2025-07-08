@@ -1,6 +1,6 @@
-import { BookSearchResult } from "@/types/book";
-import { BookSearchItemType } from "@/utils/googleBooks/types";
-import { Linking } from "react-native";
+import { BookSearchResult } from '@/types/book';
+import { BookSearchItemType } from '@/utils/googleBooks/types';
+import { Linking } from 'react-native';
 
 /**
  * Google Books APIのレスポンスを内部形式に変換する関数
@@ -25,8 +25,7 @@ export const transformBookSearchItem = async (
 
   // 巻数の取得と正規化
   const extractVolumeNumber = (): number | undefined => {
-    const candidate =
-      seriesInfo?.bookDisplayNumber || seriesInfo?.volumeSeries[0].orderNumber;
+    const candidate = seriesInfo?.bookDisplayNumber || seriesInfo?.volumeSeries[0].orderNumber;
     const parsed = Number(candidate);
     return isNaN(parsed) ? undefined : parsed;
   };
@@ -40,26 +39,25 @@ export const transformBookSearchItem = async (
   //   return imageLinks?.thumbnail || imageLinks?.smallThumbnail;
   // };
 
-  const imageUrl = await getSafeImageUrl({imageLinks}) || undefined
+  const imageUrl = (await getSafeImageUrl({ imageLinks })) || undefined;
 
   return {
     googleBooksId: item.id,
-    title: title || "不明なタイトル",
-    author: authors?.join(", ") || "不明な著者",
+    title: title || '不明なタイトル',
+    author: authors?.join(', ') || '不明な著者',
     volume: extractVolumeNumber(),
-    publisher: publisher || "不明な出版社",
-    description: description || "説明がありません",
+    publisher: publisher || '不明な出版社',
+    description: description || '説明がありません',
     isbn: getIsbn(),
     imageUrl: imageUrl,
-    targetUrl: canonicalVolumeLink || "",
+    targetUrl: canonicalVolumeLink || '',
 
-    seriesId: seriesInfo?.volumeSeries[0].seriesId || "",
+    seriesId: seriesInfo?.volumeSeries[0].seriesId || '',
   };
 };
 
-
-type GoogleThumbnailType = Pick<BookSearchItemType["volumeInfo"], "imageLinks">
-type ImageLinksType = GoogleThumbnailType["imageLinks"]
+type GoogleThumbnailType = Pick<BookSearchItemType['volumeInfo'], 'imageLinks'>;
+type ImageLinksType = GoogleThumbnailType['imageLinks'];
 
 /**
  * 画像URLを安全に取得する（フォールバック付き）
@@ -79,7 +77,7 @@ export const getSafeImageUrl = async ({ imageLinks }: GoogleThumbnailType) => {
  * @returns {Promise<{validImages: Object, errors: string[]}>}
  */
 export const validateBookImages = async (imageLinks: ImageLinksType) => {
-  const errors:string[] = [];
+  const errors: string[] = [];
   const validImages = {} as Record<string, string>;
 
   if (!imageLinks) {
@@ -87,10 +85,10 @@ export const validateBookImages = async (imageLinks: ImageLinksType) => {
   }
 
   // thumbnailとsmallThumbnailの両方をチェック
-  const imagesToCheck: {key: string,url: string }[]  = [
-    { key: 'thumbnail', url: imageLinks.thumbnail ||"" },
-    { key: 'smallThumbnail', url: imageLinks.smallThumbnail ||"" }
-  ].filter((item) => item.url !== "");
+  const imagesToCheck: { key: string; url: string }[] = [
+    { key: 'thumbnail', url: imageLinks.thumbnail || '' },
+    { key: 'smallThumbnail', url: imageLinks.smallThumbnail || '' },
+  ].filter((item) => item.url !== '');
 
   const results = await Promise.all(
     imagesToCheck.map(async ({ key, url }) => {
@@ -110,13 +108,12 @@ export const validateBookImages = async (imageLinks: ImageLinksType) => {
   return { validImages, errors };
 };
 
-
 /**
  * HTTPからHTTPSに変換し、URLが開けるかどうかを確認する
  * @param {string} url - 確認するURL
  * @returns {Promise<{isValid: boolean, url: string, error?: string}>}
  */
-export const validateAndConvertUrl = async (url:string) => {
+export const validateAndConvertUrl = async (url: string) => {
   if (!url || typeof url !== 'string') {
     return { isValid: false, url: '', error: 'Invalid URL provided' };
   }
@@ -133,18 +130,17 @@ export const validateAndConvertUrl = async (url:string) => {
       return {
         isValid: false,
         url: secureUrl,
-        error: 'URL cannot be opened'
+        error: 'URL cannot be opened',
       };
     }
   } catch (error) {
-
-    console.error(error)
+    console.error(error);
 
     return {
       isValid: false,
       url: secureUrl,
       // error: error.message || 'Unknown error occurred'
-      error: 'Unknown error occurred'
+      error: 'Unknown error occurred',
     };
   }
 };

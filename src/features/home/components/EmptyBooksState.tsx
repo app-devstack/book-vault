@@ -1,21 +1,18 @@
-import { COLORS, GRADIENTS, SHADOWS } from "@/utils/colors";
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from "@/utils/constants";
-import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
+import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import { Image } from "expo-image";
-import { router } from "expo-router";
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
 export default function EmptyBooksState() {
   const onTabPress = () => {
-    router.push("/register");
+    router.push('/register');
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.emptyContainer}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.emptyContainer}>
       {/* <Text style={styles.emptyIcon}>📚</Text> */}
       <Image
         source={require('@/assets/images/chi-book.png')}
@@ -26,11 +23,7 @@ export default function EmptyBooksState() {
       <Text style={styles.emptyDescription}>
         「登録」タブからお気に入りの本を追加してみましょう！
       </Text>
-      <TouchableOpacity
-        style={styles.emptyButton}
-        onPress={onTabPress}
-        activeOpacity={0.8}
-      >
+      <TouchableOpacity style={styles.emptyButton} onPress={onTabPress} activeOpacity={0.8}>
         <LinearGradient
           colors={GRADIENTS.primary}
           style={styles.emptyButtonGradient}
@@ -55,8 +48,8 @@ const styles = StyleSheet.create({
   // },
   emptyContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: SCREEN_PADDING,
     paddingVertical: 60,
   },
@@ -67,21 +60,21 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: FONT_SIZES.xxlarge,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: COLORS.text,
     marginBottom: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   emptyDescription: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.textLight,
     marginBottom: 24,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 20,
   },
   emptyButton: {
     borderRadius: BORDER_RADIUS.xlarge,
-    overflow: "hidden",
+    overflow: 'hidden',
     ...SHADOWS.medium,
   },
   emptyButtonGradient: {
@@ -89,9 +82,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   emptyButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

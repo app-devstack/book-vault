@@ -10,8 +10,8 @@
     "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
-      "newArchEnabled": false
-
+      "newArchEnabled": false,
+      "bundleIdentifier": "com.r.t7maru.bookvault"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,28 +24,39 @@
       "intentFilters": [
         {
           "action": "SEND",
-          "category": ["DEFAULT"],
+          "category": [
+            "DEFAULT"
+          ],
           "data": {
-              "mimeType": "text/plain"
-            }
+            "mimeType": "text/plain"
+          }
         },
         {
           "action": "VIEW",
-          "category": ["DEFAULT", "BROWSABLE"],
+          "category": [
+            "DEFAULT",
+            "BROWSABLE"
+          ],
           "data": {
             "scheme": "https"
           }
         },
         {
           "action": "VIEW",
-          "category": ["DEFAULT", "BROWSABLE"],
+          "category": [
+            "DEFAULT",
+            "BROWSABLE"
+          ],
           "data": {
             "scheme": "http"
           }
         },
         {
           "action": "VIEW",
-          "category": ["DEFAULT", "BROWSABLE"],
+          "category": [
+            "DEFAULT",
+            "BROWSABLE"
+          ],
           "data": {
             "scheme": "bookvault"
           }
@@ -67,7 +78,14 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-font",
+      [
+        "expo-share-intent",
+        {
+          "androidIntentFilters": ["text/*", "image/*"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
