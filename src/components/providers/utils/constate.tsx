@@ -21,11 +21,11 @@ import React from 'react';
  *
  * export const useCountContext = constate.useContextValue;
  */
-export function createConstate<T>(useValue: () => T) {
-  const Context = React.createContext<T | null>(null);
+export function createConstate<Props, Value>(useValue: (props: Props) => Value) {
+  const Context = React.createContext<Value | null>(null);
 
-  const Provider = ({ children }: { children: React.ReactNode }) => {
-    const value = useValue();
+  const Provider = ({ children, ...props }: React.PropsWithChildren<Props>) => {
+    const value = useValue(props as Props);
     return <Context.Provider value={value}>{children}</Context.Provider>;
   };
 
