@@ -1,27 +1,16 @@
-import { RegisterScreen } from '@/features/register/RegisterScreen';
-import { RegisterTab } from '@/features/register/_types';
-import { useBookRegistration } from '@/hooks/screens/useBookRegistration';
+import RegisterScreenProvider from '@/features/register/providers/registerProvider';
+import RegisterScreen from '@/features/register/RegisterScreen';
 import { COLORS } from '@/utils/colors';
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 export default function RegisterPage() {
-  const [registerTab, setRegisterTab] = useState<RegisterTab>('api');
-
-  const { formData, searchResults, isSearching, searchBooks } = useBookRegistration();
-
   return (
-    <View style={styles.container}>
-      <RegisterScreen
-        registerTab={registerTab}
-        setRegisterTab={setRegisterTab}
-        searchQuery={formData.searchQuery}
-        setSearchQuery={searchBooks}
-        searchResults={searchResults}
-        isSearching={isSearching}
-        onSearch={searchBooks}
-      />
-    </View>
+    <RegisterScreenProvider>
+      <View style={styles.container}>
+        <RegisterScreen />
+      </View>
+    </RegisterScreenProvider>
   );
 }
 

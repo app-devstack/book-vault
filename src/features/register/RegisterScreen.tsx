@@ -1,10 +1,10 @@
 import { Icon } from '@/components/icons/Icons';
+import { TabsTrigger } from '@/components/ui/tabs';
 import { RegisterTab } from '@/features/register/_types';
 import { SearchResults } from '@/features/register/components/SearchResults';
-import { BookSearchResult } from '@/types/book';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -14,125 +14,101 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useRegisterContext } from './providers/registerProvider';
 
-interface RegisterScreenProps {
-  registerTab: RegisterTab;
-  setRegisterTab: (tab: RegisterTab) => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  searchResults: BookSearchResult[];
-  isSearching: boolean;
-  onSearch: (query: string) => void;
-}
+export default function RegisterScreen() {
+  const {
+    formData,
+    searchResults,
+    isSearching,
+    searchBooks: setSearchQuery,
+  } = useRegisterContext();
 
-const TabsTrigger = ({
-  onPress,
-  isActive,
-  text,
-}: {
-  onPress: () => void;
-  isActive: boolean;
-  text: string;
-}) => {
-  return (
-    <TouchableOpacity
-      style={[styles.tabButton, isActive && styles.tabButtonActive]}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
-      <Text style={[styles.tabButtonText, isActive && styles.tabButtonTextActive]}>{text}</Text>
-    </TouchableOpacity>
-  );
-};
+  const searchQuery = formData.searchQuery;
 
-export const RegisterScreen = ({
-  registerTab,
-  setRegisterTab,
-  searchQuery,
-  setSearchQuery,
-  searchResults,
-  isSearching,
-  onSearch,
-}: RegisterScreenProps) => {
+  const [registerTab, setRegisterTab] = useState<RegisterTab>('api');
+
   const isSearchValueEmpty = searchQuery.trim() === '';
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      onSearch(searchQuery);
+      setSearchQuery(searchQuery);
     }
   };
 
   return (
-    <View style={styles.container}>
-      {/* タブセレクター */}
-      <View style={styles.tabSelector}>
-        <TabsTrigger
-          text="📧 Gmail連携"
-          onPress={() => setRegisterTab('gmail')}
-          isActive={registerTab === 'gmail'}
-        />
-        <TabsTrigger
-          text="🔍 タイトル検索"
-          onPress={() => setRegisterTab('api')}
-          isActive={registerTab === 'api'}
-        />
-      </View>
+    <>
+      <View style={styles.container}>
+        {/* タブセレクター */}
+        <View style={styles.tabSelector}>
+          <TabsTrigger
+            text="📧 Gmail連携"
+            onPress={() => setRegisterTab('gmail')}
+            isActive={registerTab === 'gmail'}
+          />
+          <TabsTrigger
+            text="🔍 タイトル検索"
+            onPress={() => setRegisterTab('api')}
+            isActive={registerTab === 'api'}
+          />
+        </View>
 
-      <ScrollView
-        style={styles.content}
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {registerTab === 'gmail' ? (
-          /* Gmail連携タブ（準備中） */
-          <View style={styles.comingSoonContainer}>
-            <Text style={styles.comingSoonIcon}>🚧</Text>
-            <Text style={styles.comingSoonTitle}>準備中です</Text>
-            <Text style={styles.comingSoonDescription}>
-              Gmail連携機能は現在開発中です。{'\n'}
-              しばらくお待ちください。
-            </Text>
-          </View>
-        ) : (
-          /* タイトル検索タブ */
-          <View style={styles.searchContainer}>
-            {/* 検索バー */}
-            <View style={styles.searchBar}>
-              <TextInput
-                style={styles.searchInput}
-                placeholder="本タイトルを検索..."
-                placeholderTextColor={COLORS.textLight}
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                onSubmitEditing={handleSearch}
-                returnKeyType="search"
-              />
-              <TouchableOpacity
-                style={styles.searchButton}
-                onPress={handleSearch}
-                disabled={isSearching}
-                activeOpacity={0.8}
-              >
-                {isSearching ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  <Icon name="search" size="medium" color="white" />
-                )}
-              </TouchableOpacity>
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {registerTab === 'gmail' ? (
+            /* Gmail連携タブ（準備中） */
+            <View style={styles.comingSoonContainer}>
+              <Text style={styles.comingSoonIcon}>🚧</Text>
+              <Text style={styles.comingSoonTitle}>準備中です</Text>
+              <Text style={styles.comingSoonDescription}>
+                Gmail連携機能は現在開発中です。{'\n'}
+                しばらくお待ちください。
+              </Text>
             </View>
+          ) : (
+            /* タイトル検索タブ */
+            <View style={styles.searchContainer}>
+              {/* 検索バー */}
+              <View style={styles.searchBar}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="本タイトルを検索..."
+                  placeholderTextColor={COLORS.textLight}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  onSubmitEditing={handleSearch}
+                  returnKeyType="search"
+                />
+                <TouchableOpacity
+                  style={styles.searchButton}
+                  onPress={handleSearch}
+                  disabled={isSearching}
+                  activeOpacity={0.8}
+                >
+                  {isSearching ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Icon name="search" size="medium" color="white" />
+                  )}
+                </TouchableOpacity>
+              </View>
 
-            {/* 検索結果 */}
-            <SearchResults
-              results={searchResults}
-              isSearching={isSearching}
-              isSearchValueEmpty={isSearchValueEmpty}
-            />
-          </View>
-        )}
-      </ScrollView>
-    </View>
+              {/* 検索結果 */}
+              <SearchResults
+                results={searchResults}
+                isSearching={isSearching}
+                isSearchValueEmpty={isSearchValueEmpty}
+              />
+            </View>
+          )}
+        </ScrollView>
+      </View>
+    </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -148,24 +124,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     ...SHADOWS.small,
-  },
-  tabButton: {
-    flex: 1,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: BORDER_RADIUS.medium,
-    alignItems: 'center',
-  },
-  tabButtonActive: {
-    backgroundColor: COLORS.primary,
-  },
-  tabButtonText: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: 'bold',
-    color: COLORS.textLight,
-  },
-  tabButtonTextActive: {
-    color: 'white',
   },
   content: {
     flex: 1,
