@@ -10,10 +10,10 @@ import { BORDER_RADIUS, EMPTY_SERIES_ID, EMPTY_SHOP_ID, FONT_SIZES } from '@/uti
 import { bookService } from '@/utils/service/book-service';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRegisterContext } from '../providers/registerProvider';
 
 type SearchResultsProps = {
   results: BookSearchResult[];
-  isSearching?: boolean;
   isSearchValueEmpty?: boolean;
 };
 
@@ -46,6 +46,9 @@ const SearchResultItem = ({
           )}
         </View>
         <Text style={styles.resultAuthor}>{item.author}</Text>
+
+        {item.volume && <Text style={styles.resultAuthor}>{item.volume}巻</Text>}
+
         <Text style={styles.resultDescription} numberOfLines={3}>
           {item.description}
         </Text>
@@ -66,12 +69,17 @@ const SearchResultItem = ({
   );
 };
 
-export const SearchResults = ({ results, isSearching, isSearchValueEmpty }: SearchResultsProps) => {
+export const SearchResults = () => {
+  const { formData, searchResults: results, isSearching } = useRegisterContext();
+
   const addBookMutation = useAddBook();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState<Record<string, boolean>>({});
   const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
   const { safeSetState } = useSafeState();
+
+  const searchQuery = formData.searchQuery;
+  const isSearchValueEmpty = searchQuery.trim() === '';
 
   // 検索結果が変更されたら登録状況をチェック
   useEffect(() => {
