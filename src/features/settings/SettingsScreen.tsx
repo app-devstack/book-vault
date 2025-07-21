@@ -1,3 +1,4 @@
+import { BuckupButton } from '@/components/BuckupButton';
 import { ImageDownloadButton } from '@/components/ImageDownloadButton';
 import { useSharedUrl } from '@/hooks/useSharedUrl';
 // import { ErrorLogScreen } from '@/components/ui/ErrorLogScreen';
@@ -23,27 +24,31 @@ export const SettingsScreen: React.FC = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.icon}>⚙️</Text>
-      <Text style={styles.title}>設定画面</Text>
-      <Text style={styles.description}>
-        設定画面は現在開発中です。{'\n'}
-        しばらくお待ちください。
-      </Text>
+      <View style={{ alignItems: 'center', marginBottom: 40 }}>
+        <Text style={styles.icon}>⚙️</Text>
+        <Text style={styles.title}>設定画面</Text>
+      </View>
 
       {/* エラーログ表示ボタン */}
       {/* <TouchableOpacity style={styles.errorLogButton} onPress={() => setShowErrorLogs(true)}>
         <Text style={styles.errorLogButtonText}>エラーログを表示</Text>
       </TouchableOpacity> */}
 
-      {/* アセットダウンロードボタン */}
-      <ImageDownloadButton
-        imageSource={require('@/assets/images/icon.png')}
-        buttonText="アセット画像をダウンロード"
-        downloadFileName="book_vault_asset"
-      />
+      {/* コンテンツ */}
+      <View style={{ gap: 20 }}>
+        {/* アセットダウンロード */}
+        <ImageDownloadButton
+          imageSource={require('@/assets/images/icon.png')}
+          buttonText="アセット画像をダウンロード"
+          downloadFileName="book_vault_asset"
+        />
 
-      <Text>ver:{process.env.EXPO_PUBLIC_VERSION}</Text>
+        {/* バックアップボタン仮 */}
+        <BuckupButton />
 
+        {/* バージョン表示 */}
+        <Text>ver:{process.env.EXPO_PUBLIC_VERSION}</Text>
+      </View>
       {sharedUrl && (
         <View style={{ marginTop: 20 }}>
           <Text style={styles.description}>{sharedUrl?.url}</Text>

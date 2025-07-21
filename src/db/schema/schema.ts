@@ -21,6 +21,17 @@ const _schemaBase = {
     .$defaultFn(() => new Date()),
 };
 
+// ユーザーマスタ
+// export const users = sqliteTable('users', {
+//   ..._schemaBase,
+//   name: text('name').notNull(),
+//   email: text('email').notNull().unique(),
+//   emailVerified: integer('email_verified', { mode: 'boolean' })
+//     .$defaultFn(() => false)
+//     .notNull(),
+//   image: text('image'),
+// });
+
 // シリーズマスタ
 export const series = sqliteTable('series', {
   ..._schemaBase,
@@ -65,6 +76,12 @@ export const books = sqliteTable('books', {
 });
 
 // リレーション定義
+// export const usersRelations = relations(users, ({ many }) => ({
+//   books: many(books),
+//   series: many(series),
+//   shops: many(shops),
+// }));
+
 export const seriesRelations = relations(series, ({ many }) => ({
   books: many(books),
 }));

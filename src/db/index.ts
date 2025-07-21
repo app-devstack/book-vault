@@ -9,7 +9,7 @@ export const DATABASE_NAME = 'db.db';
 const options = {
   casing: 'snake_case' as const,
   schema: { ...schema },
-  logger: true,
+  // logger: true,
 } satisfies DrizzleConfig<typeof schema>;
 
 const expo = openDatabaseSync(DATABASE_NAME, { enableChangeListener: true });
