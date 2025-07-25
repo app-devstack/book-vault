@@ -1,0 +1,43 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "bv-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-07-16",
+  "assets": {
+    "directory": "public",
+    // "binding": "ASSETS"
+  },
+  // "compatibility_flags": [
+  //   "nodejs_compat"
+  // ],
+  // "vars": {
+  //   "MY_VAR": "my-variable"
+  // },
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "MY_KV_NAMESPACE",
+  //     "id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  //   }
+  // ],
+  // "r2_buckets": [
+  //   {
+  //     "binding": "MY_BUCKET",
+  //     "bucket_name": "my-bucket"
+  //   }
+  // ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bv-database",
+      "database_id": "2c8dd349-9dc9-4974-baed-bc5a6bf30d16",
+      "migrations_dir": "./packages/drizzle",
+    },
+  ],
+  // "ai": {
+  //   "binding": "AI"
+  // },
+  // "observability": {
+  //   "enabled": true,
+  //   "head_sampling_rate": 1
+  // }
+}

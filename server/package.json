@@ -1,0 +1,43 @@
+{
+  "name": "book-vault-server",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:generate": "drizzle-kit generate",
+    "db:generate:custom": "drizzle-kit generate --custom",
+    "db:migrate": "dotenv -e .env.local drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:reset": "drizzle-kit drop",
+    "local:migration": "wrangler d1 migrations apply bv-database --local",
+    "remote:migration": "wrangler d1 migrations apply bv-database --remote",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write --cache --cache-strategy metadata src/",
+    "knip": "bunx knip",
+    "dev:script": "tsx src/script/generateSeed.ts"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.7.1",
+    "drizzle-orm": "^0.44.3",
+    "drizzle-zod": "^0.8.2",
+    "eslint": "^9.31.0",
+    "hono": "^4.8.5",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+		"@types/minimatch": "^6.0.0",
+    "@eslint/js": "^9.31.0",
+    "@types/node": "^24.0.14",
+    "dotenv-cli": "^8.0.0",
+    "drizzle-kit": "^0.31.4",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.3",
+    "typescript-eslint": "^8.37.0",
+    "uuid": "^11.1.0",
+    "wrangler": "^4.4.0"
+  }
+}
