@@ -1,95 +1,28 @@
 {
   "name": "book-vault",
-  "expo": {
-    "doctor": {
-      "reactNativeDirectoryCheck": {
-        "exclude": [
-          "drizzle-orm",
-          "uuid",
-          "@uidotdev/usehooks"
-        ]
-      }
-    }
-  },
-  "main": "expo-router/entry",
-  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
   "scripts": {
-    "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "lint": "expo lint",
-    "db:generate": "npx drizzle-kit generate",
-    "db:generate:custom": "npx drizzle-kit generate --custom",
-    "db:reset": "drizzle-kit drop",
-    "prebuild": "expo prebuild --platform android",
-    "deploy": "eas build --platform android --profile development",
-    "preview": "eas build --platform android --profile preview",
-    "preview:local": "eas build --platform android --profile preview --local",
-    "preview:nocache": "bun run preview --clear-cache",
-    "typecheck": "tsc --noEmit",
-    "format": "prettier --write --cache --cache-strategy metadata src/",
-    "format:check": "prettier --check --cache --cache-strategy metadata src/ #CI/CDでのフォーマット検証用",
-    "expo:check": "npx expo install --check",
-    "knip": "bunx knip",
-    "postinstall": "patch-package",
-    "preview:deploy": "bash src/script/preview-local-build.sh"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
   },
   "dependencies": {
-    "@expo/config-plugins": "~9.0.0",
-    "@expo/vector-icons": "~14.0.4",
-    "@react-navigation/bottom-tabs": "^7.2.0",
-    "@react-navigation/elements": "^2.3.8",
-    "@react-navigation/native": "^7.0.14",
-    "@tanstack/react-query": "^5.77.2",
-    "@uidotdev/usehooks": "^2.4.1",
-    "babel-plugin-inline-import": "^3.0.0",
-    "drizzle-orm": "^0.43.1",
-    "expo": "52",
-    "expo-blur": "~14.0.3",
-    "expo-clipboard": "~7.0.1",
-    "expo-constants": "~17.0.8",
-    "expo-crypto": "~14.0.2",
-    "expo-dev-client": "~5.0.20",
-    "expo-font": "~13.0.4",
-    "expo-haptics": "~14.0.1",
-    "expo-image": "~2.0.7",
-    "expo-linear-gradient": "~14.0.2",
-    "expo-linking": "~7.0.5",
-    "expo-media-library": "~17.0.6",
-    "expo-router": "~4.0.21",
-    "expo-share-intent": "^3.2.3",
-    "expo-splash-screen": "~0.29.24",
-    "expo-sqlite": "~15.1.4",
-    "expo-status-bar": "~2.0.1",
-    "expo-symbols": "~0.2.2",
-    "expo-system-ui": "~4.0.9",
-    "expo-web-browser": "~14.0.2",
-    "patch-package": "^8.0.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "react-native": "0.76.9",
-    "react-native-gesture-handler": "~2.20.2",
-    "react-native-reanimated": "~3.16.1",
-    "react-native-safe-area-context": "4.12.0",
-    "react-native-screens": "~4.4.0",
-    "react-native-toast-message": "^2.3.0",
-    "react-native-web": "~0.19.13",
-    "react-native-webview": "13.12.5",
-    "uuid": "^11.1.0",
-    "zod": "^3.25.64"
-  },
+		"@bv/shared": "workspace:*"
+	},
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@types/react": "~18.3.12",
-    "@typescript-eslint/eslint-plugin": "^8.34.0",
-    "@typescript-eslint/parser": "^8.34.0",
-    "drizzle-kit": "^0.31.1",
-    "eslint": "^9.25.0",
-    "eslint-config-expo": "~8.0.1",
-    "prettier": "^3.6.2",
-    "typescript": "~5.8.3"
+    "@types/minimatch": "^6.0.0",
+    "@types/node": "^24.1.0",
+    "prettier": "^3.1.1",
+    "turbo": "^2.5.5"
   },
-  "private": true
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.14"
 }
