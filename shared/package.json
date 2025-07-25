@@ -1,0 +1,20 @@
+{
+  "name": "@bv/shared",
+	"type": "module",
+	"version": "0.0.0",
+  "private": true,
+  "types": "./src",
+	"main": "src/index.ts",
+	"exports": {
+    "./constants": "./src/constants.ts",
+    "./lib": "./src/lib.ts",
+    "./schema": "./src/schema.ts",
+    "./utils": "./src/utils.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
