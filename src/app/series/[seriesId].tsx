@@ -3,7 +3,8 @@ import { useSeriesDetail } from '@/hooks/screens/useSeriesDetail';
 import { COLORS } from '@/utils/colors';
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
-import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 export default function SeriesDetailPage() {
   const { seriesId } = useLocalSearchParams<{ seriesId: string }>();
@@ -35,6 +36,12 @@ export default function SeriesDetailPage() {
   // シリーズが見つからない場合はホームに戻る
   if (!series || !books || books.length === 0) {
     router.push('/');
+    Toast.show({
+      type: 'error',
+      text1: 'シリーズが見つかりません',
+      text2: 'ホーム画面に戻ります',
+    });
+
     return null;
   }
 

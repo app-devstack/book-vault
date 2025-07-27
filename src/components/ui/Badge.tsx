@@ -8,6 +8,8 @@ export type BadgeSize = 'small' | 'medium' | 'large';
 
 interface BadgeProps {
   children: string | ReactNode;
+
+  asChild?: boolean; // If true, children will be rendered as is without Text wrapper
   variant?: BadgeVariant;
   size?: BadgeSize;
   style?: ViewStyle;
@@ -16,6 +18,7 @@ interface BadgeProps {
 
 const Badge: React.FC<BadgeProps> = ({
   children,
+  asChild,
   variant = 'primary',
   size = 'medium',
   style,
@@ -59,10 +62,11 @@ const Badge: React.FC<BadgeProps> = ({
   };
 
   const renderContent = () => {
-    if (typeof children === 'string') {
-      return <Text style={[styles.text, getTextSizeStyle(), textStyle]}>{children}</Text>;
+    if (asChild) {
+      return children;
     }
-    return children;
+
+    return <Text style={[styles.text, getTextSizeStyle(), textStyle]}>{children}</Text>;
   };
 
   return (

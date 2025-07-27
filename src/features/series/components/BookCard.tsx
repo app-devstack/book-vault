@@ -15,6 +15,8 @@ type BookCardProps = {
 export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookCardProps) => {
   const [showModal, setShowModal] = useState(false);
 
+  const LONG_PRESS_DELAY = 250; // 長押しまでの遅延時間
+
   const handleLinkPress = async () => {
     try {
       await Linking.openURL(book.targetUrl);
@@ -44,7 +46,9 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
           styles.container,
           // { borderColor: STORES[book.store].color + "20" },
         ]}
-        onPress={handleCardPress} // カードタップでモーダル表示
+        onPress={handleLinkPress} // カードタップでリンクを開く
+        onLongPress={handleCardPress} // 長押しでモーダル表示
+        delayLongPress={LONG_PRESS_DELAY} // 長押しまでの遅延
         activeOpacity={0.8}
       >
         <View style={styles.content}>
@@ -54,7 +58,6 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
             style={styles.thumbnail}
             resizeMode="cover"
           />
-
           <View style={styles.details}>
             {showSeriesTitle && (
               <Text style={styles.seriesTitle} numberOfLines={1}>
@@ -74,15 +77,6 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
                 {book.author}
               </Text>
             )}
-
-            {/* <Text style={[styles.storeName, { color: STORES[book.store].color }]}>
-              {STORES[book.store].name}
-            </Text> */}
-
-            {/* <Text style={styles.purchaseInfo}>
-              {new Date(book.purchaseDate).toLocaleDateString("ja-JP")} • ¥
-              {book.price}
-            </Text> */}
           </View>
 
           {/* リンクボタン - イベントバブリング防止 */}

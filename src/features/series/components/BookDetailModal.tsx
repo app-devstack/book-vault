@@ -1,6 +1,8 @@
 import { Icon } from '@/components/icons/Icons';
-import { useDeleteBook } from '@/hooks/mutations/useDeleteBook';
+import { Text } from '@/components/Text';
+import Badge from '@/components/ui/Badge';
 import { Book } from '@/db/types';
+import { useDeleteBook } from '@/hooks/mutations/useDeleteBook';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
 import React from 'react';
@@ -8,9 +10,9 @@ import {
   Alert,
   Dimensions,
   Image,
+  ImageSourcePropType,
   Modal,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -71,6 +73,8 @@ export const BookDetailModal = ({
     }
   };
 
+  const handleEditPress = () => {};
+
   // react-native-reanimated移行時に置き換えるコンテナ
   const AnimatedContainer = ({ children }: { children: React.ReactNode }) => (
     <View style={styles.container}>{children}</View>
@@ -93,100 +97,227 @@ export const BookDetailModal = ({
         <AnimatedContainer>
           <View style={styles.modal}>
             {/* ヘッダー */}
-            <View style={styles.header}>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={onClose}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <Icon name="close" size="medium" color={COLORS.textLight} />
-              </TouchableOpacity>
-            </View>
-
+            <ModalHeader onClose={onClose} />
             <View
               style={styles.content}
               // showsVerticalScrollIndicator={false}
             >
               {/* サムネイル */}
-              <View style={styles.thumbnailContainer}>
-                <Image
-                  source={{ uri: book.imageUrl || '' }}
-                  style={styles.thumbnail}
-                  resizeMode="cover"
-                />
-              </View>
+              <Thumbnail source={{ uri: book.imageUrl || '' }} />
 
               {/* 基本情報 */}
-              <View style={styles.infoSection}>
-                <Text style={styles.title}>
-                  {book.title}
-                  {book.volume && <Text style={styles.volume}> {book.volume}巻</Text>}
-                </Text>
-
-                {book.author && <Text style={styles.author}>{book.author}</Text>}
-
-                {/* {book.shop && (
-                  <View style={styles.shopContainer}>
-                    <Icon name="storefront" size="small" color={COLORS.primary} />
-                    <Text style={styles.shopName}>{book.shop.displayName}</Text>
-                  </View>
-                )} */}
-
-                {/* 購入日（コメントアウト） */}
-                {/* {book.purchaseDate && (
-                  <View style={styles.dateContainer}>
-                    <Icon name="calendar" size="small" color={COLORS.textLight} />
-                    <Text style={styles.purchaseDate}>
-                      {new Date(book.purchaseDate).toLocaleDateString("ja-JP")}
-                    </Text>
-                  </View>
-                )} */}
-
-                {book.isbn && (
-                  <View style={styles.isbnContainer}>
-                    <Text style={styles.isbnLabel}>ISBN:</Text>
-                    <Text style={styles.isbn}>{book.isbn}</Text>
-                  </View>
-                )}
-              </View>
-
-              {/* 説明文 */}
-              {book.description && (
-                <View style={styles.descriptionSection}>
-                  {/* <Text style={styles.sectionTitle}>あらすじ</Text> */}
-                  <Text style={styles.description} numberOfLines={3}>
-                    {book.description}
-                  </Text>
-                </View>
-              )}
+              <BookInfo {...book} />
             </View>
 
             {/* アクションボタン */}
-            <View style={styles.actions}>
-              <TouchableOpacity
-                style={[styles.actionButton, styles.deleteButton]}
-                onPress={handleDeletePress}
-                disabled={deleteBookMutation.isPending}
-              >
-                <Icon name="trash" size="small" color="white" />
-                <Text style={styles.deleteButtonText}>
-                  {deleteBookMutation.isPending ? '削除中...' : '削除'}
-                </Text>
-              </TouchableOpacity>
-
-              {/* 将来の編集ボタン用（コメントアウト） */}
-              {/* <TouchableOpacity
-                style={[styles.actionButton, styles.editButton]}
-                onPress={() => {}}
-              >
-                <Icon name="create" size="small" color={COLORS.primary} />
-                <Text style={styles.editButtonText}>編集</Text>
-              </TouchableOpacity> */}
-            </View>
+            <ActionButton
+              handleDeletePress={handleDeletePress}
+              handleEditPress={handleEditPress}
+              isPending={deleteBookMutation.isPending}
+            />
           </View>
         </AnimatedContainer>
       </AnimatedBackdrop>
     </Modal>
+  );
+};
+
+/** モーダルヘッダー */
+const ModalHeader = ({ onClose }: { onClose: () => void }) => {
+  const styles = StyleSheet.create({
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      padding: 16,
+      paddingTop: 8,
+      paddingBottom: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: COLORS.border,
+    },
+    closeButton: {
+      width: 32,
+      height: 32,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: BORDER_RADIUS.small,
+    },
+  });
+
+  return (
+    <View style={styles.header}>
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={onClose}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        <Icon name="close" size="medium" color={COLORS.textLight} />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+/** サムネイル */
+const Thumbnail = ({ source }: { source?: ImageSourcePropType }) => {
+  const styles = StyleSheet.create({
+    thumbnailContainer: {
+      alignItems: 'center',
+    },
+    thumbnail: {
+      width: 60,
+      height: 80,
+      borderRadius: BORDER_RADIUS.medium,
+      ...SHADOWS.medium,
+    },
+  });
+
+  return (
+    <View style={styles.thumbnailContainer}>
+      <Image source={source} style={styles.thumbnail} resizeMode="cover" />
+    </View>
+  );
+};
+
+/** 本の基本情報 */
+const BookInfo = (book: Book) => {
+  const styles = StyleSheet.create({
+    title: {
+      fontSize: FONT_SIZES.xlarge,
+      fontWeight: 'bold',
+      color: COLORS.text,
+      marginBottom: 8,
+      lineHeight: FONT_SIZES.xlarge * 1.3,
+    },
+    volume: {
+      color: COLORS.primaryForeground,
+    },
+
+    author: {
+      fontSize: FONT_SIZES.large,
+      color: COLORS.textLight,
+      marginBottom: 12,
+    },
+    isbnContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      marginTop: 8,
+    },
+    isbnLabel: {
+      fontSize: FONT_SIZES.small,
+      color: COLORS.textLight,
+      fontWeight: '600',
+    },
+    isbn: {
+      fontSize: FONT_SIZES.small,
+      color: COLORS.text,
+      fontFamily: 'monospace',
+    },
+  });
+
+  return (
+    <View style={{ gap: 8 }}>
+      {/* タイトル */}
+      <Text style={styles.title}>{book.title}</Text>
+
+      {/* 巻数 */}
+      {book.volume && <Badge style={{ maxWidth: 40 }}>{book.volume}巻</Badge>}
+
+      {/* 著者名 */}
+      {book.author && <Text style={styles.author}>{book.author}</Text>}
+
+      {/* ISBN情報 */}
+      {book.isbn && (
+        <View style={styles.isbnContainer}>
+          <Text style={styles.isbnLabel}>ISBN:</Text>
+          <Text style={styles.isbn}>{book.isbn}</Text>
+        </View>
+      )}
+
+      {/* 説明文 */}
+      {book.description && (
+        <View>
+          {/* <Text style={styles.sectionTitle}>あらすじ</Text> */}
+          <Text
+            style={{
+              fontSize: FONT_SIZES.medium,
+              color: COLORS.text,
+              lineHeight: FONT_SIZES.medium * 1.5,
+            }}
+            numberOfLines={3}
+          >
+            {book.description}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
+const ActionButton = ({
+  handleDeletePress,
+  handleEditPress,
+  isPending,
+}: {
+  handleDeletePress: () => void;
+  handleEditPress: () => void;
+  isPending: boolean;
+}) => {
+  const styles = StyleSheet.create({
+    actions: {
+      flexDirection: 'row',
+      paddingVertical: 12,
+      paddingHorizontal: 20,
+      borderTopWidth: 1,
+      borderTopColor: COLORS.border,
+      gap: 12,
+    },
+    actionButton: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: BORDER_RADIUS.medium,
+      gap: 8,
+    },
+    deleteButton: {
+      backgroundColor: COLORS.error,
+    },
+    deleteButtonText: {
+      color: 'white',
+      fontSize: FONT_SIZES.medium,
+      fontWeight: '600',
+    },
+    editButton: {
+      backgroundColor: COLORS.card,
+      borderWidth: 2,
+      borderColor: COLORS.primary,
+    },
+    editButtonText: {
+      color: COLORS.primary,
+      fontSize: FONT_SIZES.medium,
+      fontWeight: '600',
+    },
+  });
+
+  return (
+    <View style={styles.actions}>
+      {/* 将来の編集ボタン用（コメントアウト） */}
+      <TouchableOpacity style={[styles.actionButton, styles.editButton]} onPress={() => {}}>
+        <Icon name="pencil" size="small" color={COLORS.primary} />
+        <Text style={styles.editButtonText}>編集</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.actionButton, styles.deleteButton]}
+        onPress={handleDeletePress}
+        disabled={isPending}
+      >
+        <Icon name="trash" size="small" color={COLORS.primaryForeground} />
+        <Text style={styles.deleteButtonText}>{isPending ? '削除中...' : '削除'}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -210,139 +341,10 @@ const styles = StyleSheet.create({
     minHeight: screenHeight * 0.8,
     ...SHADOWS.large,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
-  closeButton: {
-    width: 32,
-    height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: BORDER_RADIUS.small,
-  },
+
   content: {
     flex: 1,
     padding: 20,
-  },
-  thumbnailContainer: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  thumbnail: {
-    width: 120,
-    height: 160,
-    borderRadius: BORDER_RADIUS.medium,
-    ...SHADOWS.medium,
-  },
-  infoSection: {
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: FONT_SIZES.xlarge,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginBottom: 8,
-    lineHeight: FONT_SIZES.xlarge * 1.3,
-  },
-  volume: {
-    color: COLORS.primary,
-  },
-  author: {
-    fontSize: FONT_SIZES.large,
-    color: COLORS.textLight,
-    marginBottom: 12,
-  },
-  shopContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-    gap: 8,
-  },
-  shopName: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.primary,
-    fontWeight: '600',
-  },
-  dateContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-    gap: 8,
-  },
-  purchaseDate: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.textLight,
-  },
-  isbnContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 8,
-  },
-  isbnLabel: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textLight,
-    fontWeight: '600',
-  },
-  isbn: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.text,
-    fontFamily: 'monospace',
-  },
-  descriptionSection: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: FONT_SIZES.large,
-    fontWeight: 'bold',
-    color: COLORS.text,
-    marginBottom: 12,
-  },
-  description: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.text,
-    lineHeight: FONT_SIZES.medium * 1.5,
-  },
-  actions: {
-    flexDirection: 'row',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
-    gap: 12,
-  },
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: BORDER_RADIUS.medium,
-    gap: 8,
-  },
-  deleteButton: {
-    backgroundColor: COLORS.error,
-  },
-  deleteButtonText: {
-    color: 'white',
-    fontSize: FONT_SIZES.medium,
-    fontWeight: '600',
-  },
-  editButton: {
-    backgroundColor: COLORS.card,
-    borderWidth: 2,
-    borderColor: COLORS.primary,
-  },
-  editButtonText: {
-    color: COLORS.primary,
-    fontSize: FONT_SIZES.medium,
-    fontWeight: '600',
+    rowGap: 24,
   },
 });

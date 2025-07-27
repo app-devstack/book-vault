@@ -1,5 +1,6 @@
 export const COLORS = {
   primary: '#4A90E2', // ブルー
+  primaryForeground: '#F0F8FF',
   primaryDark: '#357ABD',
   primaryLight: '#7BB3F0',
   accent: '#88C999', // 薄緑のアクセント

@@ -29,9 +29,10 @@ export type IconName =
   | 'person'
   | 'document-text'
   | 'link'
-  | 'information-circle';
+  | 'information-circle'
+  | 'pencil';
 
-interface IconProps {
+export interface IconProps {
   name: IconName;
   size?: keyof typeof ICON_SIZES | number;
   color?: string;
