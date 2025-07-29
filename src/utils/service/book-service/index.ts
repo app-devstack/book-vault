@@ -93,6 +93,23 @@ class BookService {
     }
   }
 
+  async updataBook(bookId: string, data: Partial<NewBook>) {
+    try {
+      const [updatedItem] = await db
+        .update(schema.books)
+        .set(data)
+        .where(eq(schema.books.id, bookId))
+        .returning();
+
+      // 書籍が更新されたらキャッシュを無効化
+      this.invalidateCache();
+
+      return updatedItem;
+    } catch (error) {
+      throw createDatabaseError(`Failed to update book: ${error}`, '書籍の更新に失敗しました');
+    }
+  }
+
   async deleteBook(bookId: string) {
     try {
       const [deletedItem] = await db

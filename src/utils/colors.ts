@@ -15,6 +15,7 @@ export const COLORS = {
   shadow: 'rgba(0,0,0,0.1)',
   shadowDark: 'rgba(0,0,0,0.15)',
   error: '#EF4444',
+  muted: '#E8F0F2', // 薄いグレー
 } as const;
 
 export const GRADIENTS = {

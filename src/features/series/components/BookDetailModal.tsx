@@ -5,6 +5,7 @@ import { Book } from '@/db/types';
 import { useDeleteBook } from '@/hooks/mutations/useDeleteBook';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import {
   Alert,
@@ -35,6 +36,7 @@ export const BookDetailModal = ({
   onClose,
   onBookDeleted,
 }: BookDetailModalProps) => {
+  const router = useRouter();
   const deleteBookMutation = useDeleteBook();
 
   if (!book) return null;
@@ -73,7 +75,9 @@ export const BookDetailModal = ({
     }
   };
 
-  const handleEditPress = () => {};
+  const handleEditPress = () => {
+    router.push(`/book/edit/${book.id}`);
+  };
 
   // react-native-reanimated移行時に置き換えるコンテナ
   const AnimatedContainer = ({ children }: { children: React.ReactNode }) => (
@@ -304,7 +308,7 @@ const ActionButton = ({
   return (
     <View style={styles.actions}>
       {/* 将来の編集ボタン用（コメントアウト） */}
-      <TouchableOpacity style={[styles.actionButton, styles.editButton]} onPress={() => {}}>
+      <TouchableOpacity style={[styles.actionButton, styles.editButton]} onPress={handleEditPress}>
         <Icon name="pencil" size="small" color={COLORS.primary} />
         <Text style={styles.editButtonText}>編集</Text>
       </TouchableOpacity>
