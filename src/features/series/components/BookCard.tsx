@@ -25,7 +25,7 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
     }
   };
 
-  const handleCardPress = () => {
+  const handleEdit = () => {
     setShowModal(true);
   };
 
@@ -47,7 +47,6 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
           // { borderColor: STORES[book.store].color + "20" },
         ]}
         onPress={handleLinkPress} // カードタップでリンクを開く
-        onLongPress={handleCardPress} // 長押しでモーダル表示
         delayLongPress={LONG_PRESS_DELAY} // 長押しまでの遅延
         activeOpacity={0.8}
       >
@@ -82,12 +81,12 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
           {/* リンクボタン - イベントバブリング防止 */}
           <TouchableOpacity
             style={styles.linkContainer}
-            onPress={handleLinkPress}
+            onPress={handleEdit}
             activeOpacity={0.7}
             // カードタップを防ぐ
             onPressIn={(e) => e.stopPropagation()}
           >
-            <Icon name="open-outline" size="medium" color="white" />
+            <Icon name="pencil" size="medium" color="white" />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
