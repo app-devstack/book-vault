@@ -1,8 +1,8 @@
-import { Icon } from '@/components/icons/Icons';
 import { Book } from '@/db/types';
 import { BookDetailModal } from '@/features/series/components/BookDetailModal'; // パスは適宜調整
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import { Edit3 } from '@tamagui/lucide-icons';
 import React, { useState } from 'react';
 import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -86,7 +86,9 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
             // カードタップを防ぐ
             onPressIn={(e) => e.stopPropagation()}
           >
-            <Icon name="pencil" size="medium" color="white" />
+            {/* <Icon name="pencil" size="medium" color="white" /> */}
+
+            <Edit3 size="$3" outlineColor={'white'} />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>

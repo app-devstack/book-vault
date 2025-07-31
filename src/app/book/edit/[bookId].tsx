@@ -18,10 +18,10 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Input } from 'tamagui';
 import { z } from 'zod';
 
 export default function EditBookPage() {
@@ -178,13 +178,12 @@ const EditBookForm = ({ book }: { book: BookWithRelations | null | undefined }) 
           control={control}
           name="title"
           render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={[styles.input, errors.title && styles.inputError]}
+            <Input
               value={value || ''}
               onChangeText={onChange}
-              placeholder="書籍のタイトルを入力"
-              multiline
-              textAlignVertical="top"
+              f={1}
+              size={'$4'}
+              placeholder={`書籍のタイトルを入力`}
             />
           )}
         />
@@ -198,11 +197,12 @@ const EditBookForm = ({ book }: { book: BookWithRelations | null | undefined }) 
           control={control}
           name="volume"
           render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={[styles.input, styles.volumeInput, errors.volume && styles.inputError]}
+            <Input
               value={value || ''}
               onChangeText={onChange}
-              placeholder="巻数を入力（例: 1）"
+              f={1}
+              size={'$4'}
+              placeholder={'巻数を入力（例: 1）'}
               keyboardType="numeric"
             />
           )}
@@ -217,11 +217,13 @@ const EditBookForm = ({ book }: { book: BookWithRelations | null | undefined }) 
           control={control}
           name="author"
           render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
+            <Input
+              theme="light" // 試しにTamaguiのテーマを指定
               value={value || ''}
               onChangeText={onChange}
-              placeholder="著者名を入力"
+              f={1}
+              size={'$4'}
+              placeholder={'著者名を入力'}
             />
           )}
         />

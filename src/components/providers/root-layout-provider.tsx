@@ -2,7 +2,9 @@ import DBProvider from '@/components/providers/db-provider';
 import { ProviderErrorBoundary } from '@/components/providers/ErrorBoundary';
 import { ShareIntentProvider } from 'expo-share-intent';
 // import ResetButton from "@/db/utils/resetButton";
+import { config } from '@/packages/tamagui/tamagui.config';
 import { QUERY_CACHE_TIME } from '@/utils/constants/query';
+import { TamaguiProvider } from '@tamagui/core';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -38,17 +40,19 @@ export default function RootLayoutProvider({ children }: { children: ReactNode }
         style={{ flex: 1 }}
         // edges={["top", "left", "right"]}
       >
-        {/* <ResetButton /> */}
-        <QueryClientProvider client={queryClient}>
-          <DBProvider>
-            <ProviderErrorBoundary>
-              <ShareIntentProvider>
-                {children}
-                <Toast />
-              </ShareIntentProvider>
-            </ProviderErrorBoundary>
-          </DBProvider>
-        </QueryClientProvider>
+        <TamaguiProvider config={config}>
+          {/* <ResetButton /> */}
+          <QueryClientProvider client={queryClient}>
+            <DBProvider>
+              <ProviderErrorBoundary>
+                <ShareIntentProvider>
+                  {children}
+                  <Toast />
+                </ShareIntentProvider>
+              </ProviderErrorBoundary>
+            </DBProvider>
+          </QueryClientProvider>
+        </TamaguiProvider>
       </SafeAreaView>
     </SafeAreaProvider>
   );
