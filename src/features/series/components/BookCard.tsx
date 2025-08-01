@@ -88,7 +88,7 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
           >
             {/* <Icon name="pencil" size="medium" color="white" /> */}
 
-            <Edit3 size="$3" outlineColor={'white'} />
+            <Edit3 size="$3" outlineColor={'white'} st />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
