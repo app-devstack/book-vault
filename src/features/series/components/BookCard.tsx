@@ -1,8 +1,10 @@
-import { Icon } from '@/components/icons/Icons';
+import { Button } from 'tamagui';
+
 import { Book } from '@/db/types';
 import { BookDetailModal } from '@/features/series/components/BookDetailModal'; // パスは適宜調整
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
+import { Edit3 } from '@tamagui/lucide-icons';
 import React, { useState } from 'react';
 import { Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -77,17 +79,16 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
               </Text>
             )}
           </View>
-
           {/* リンクボタン - イベントバブリング防止 */}
-          <TouchableOpacity
-            style={styles.linkContainer}
+          <Button
+            theme="accent"
             onPress={handleEdit}
-            activeOpacity={0.7}
-            // カードタップを防ぐ
             onPressIn={(e) => e.stopPropagation()}
-          >
-            <Icon name="pencil" size="medium" color="white" />
-          </TouchableOpacity>
+            aria-label="Edit3"
+            ac={'center'}
+            icon={<Edit3 size={'$1'} />}
+            style={styles.linkContainer}
+          />
         </View>
       </TouchableOpacity>
 
@@ -153,11 +154,9 @@ const styles = StyleSheet.create({
     color: COLORS.textLight,
   },
   linkContainer: {
-    backgroundColor: COLORS.primary,
-    borderRadius: BORDER_RADIUS.medium,
+    // backgroundColor: COLORS.primary,
+    borderRadius: BORDER_RADIUS.full,
     width: 40,
     height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
