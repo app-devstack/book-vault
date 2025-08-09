@@ -4,8 +4,10 @@ import { useSharedUrl } from '@/hooks/useSharedUrl';
 // import { ErrorLogScreen } from '@/components/ui/ErrorLogScreen';
 import { COLORS } from '@/utils/colors';
 import { FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { Activity, Airplay } from '@tamagui/lucide-icons';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, XGroup, XStack, YStack } from 'tamagui';
 
 export const SettingsScreen: React.FC = () => {
   const { sharedUrl } = useSharedUrl();
@@ -45,6 +47,42 @@ export const SettingsScreen: React.FC = () => {
 
         {/* バックアップボタン仮 */}
         <BuckupButton />
+
+        <YStack p="$2" gap="$3">
+          <Button>Plain</Button>
+          <Button icon={Airplay} size="$6">
+            Large
+          </Button>
+          <XStack gap="$2">
+            <Button size="$3" theme="accent">
+              Active
+            </Button>
+            <Button size="$3" variant="outlined">
+              Outlined
+            </Button>
+          </XStack>
+          <XStack gap="$2">
+            <Button themeInverse size="$3">
+              Inverse
+            </Button>
+            <Button iconAfter={Activity} size="$3">
+              iconAfter
+            </Button>
+          </XStack>
+          <XGroup>
+            <XGroup.Item>
+              <Button w="50%" size="$2" disabled o={0.5}>
+                disabled
+              </Button>
+            </XGroup.Item>
+
+            <XGroup.Item>
+              <Button w="50%" size="$2" chromeless>
+                chromeless
+              </Button>
+            </XGroup.Item>
+          </XGroup>
+        </YStack>
 
         {/* バージョン表示 */}
         <Text>ver:{process.env.EXPO_PUBLIC_VERSION}</Text>
