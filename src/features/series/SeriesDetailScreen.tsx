@@ -3,7 +3,6 @@ import React from 'react';
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
 
 import { Book } from '@/db/types';
-import { SeriesDetailStats } from '@/hooks/screens/useSeriesDetail';
 import { COLORS } from '@/utils/colors';
 import { SCREEN_PADDING } from '@/utils/constants';
 import { SeriesDetailHeader } from './components/SeriesDetailHeader';
@@ -11,7 +10,6 @@ import { SeriesDetailHeader } from './components/SeriesDetailHeader';
 interface SeriesDetailScreenProps {
   seriesTitle: string;
   seriesBooks: Book[];
-  stats: SeriesDetailStats;
   onBack: () => void;
 }
 

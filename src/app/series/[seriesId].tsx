@@ -8,7 +8,7 @@ import Toast from 'react-native-toast-message';
 
 export default function SeriesDetailPage() {
   const { seriesId } = useLocalSearchParams<{ seriesId: string }>();
-  const { series, books, stats, isLoading, error } = useSeriesDetail(seriesId!);
+  const { series, books, isLoading, error } = useSeriesDetail(seriesId!);
 
   const handleBack = () => {
     router.back();
@@ -47,12 +47,7 @@ export default function SeriesDetailPage() {
 
   return (
     <View style={styles.container}>
-      <SeriesDetailScreen
-        seriesTitle={series.title}
-        seriesBooks={books}
-        stats={stats}
-        onBack={handleBack}
-      />
+      <SeriesDetailScreen seriesTitle={series.title} seriesBooks={books} onBack={handleBack} />
     </View>
   );
 }

@@ -1,12 +1,11 @@
-import { useSeriesDetail as useSeriesDetailQuery } from '@/hooks/queries/useSeriesDetail';
-import { useDeleteBook } from '@/hooks/mutations/useDeleteBook';
 import { Book } from '@/db/types';
+import { useDeleteBook } from '@/hooks/mutations/useDeleteBook';
+import { useSeriesDetail as useSeriesDetailQuery } from '@/hooks/queries/useSeriesDetail';
 import { useMemo } from 'react';
 
 export interface SeriesDetailStats {
   volumeCount: number;
   latestVolume?: Book;
-  totalPages: number;
 }
 
 /**
@@ -20,17 +19,6 @@ export const useSeriesDetail = (seriesId: string) => {
 
   const books = useMemo(() => series?.books || [], [series?.books]);
 
-  const stats = useMemo(
-    (): SeriesDetailStats => ({
-      volumeCount: books.length,
-      latestVolume: books.reduce((latest, book) => {
-        return book.volume && book.volume > (latest?.volume || 0) ? book : latest;
-      }, books[0]),
-      totalPages: books.reduce((sum, book) => sum + 0, 0), // pageCountフィールドがない場合は0
-    }),
-    [books]
-  );
-
   const deleteBook = async (bookId: string) => {
     await deleteBookMutation.mutateAsync(bookId);
   };
@@ -39,7 +27,6 @@ export const useSeriesDetail = (seriesId: string) => {
     // データ
     series,
     books,
-    stats,
 
     // 状態
     isLoading: seriesDetailQuery.isLoading,
