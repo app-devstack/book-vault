@@ -12,7 +12,7 @@ interface CustomButtonProps extends TouchableOpacityProps {
   textStyle?: StyleProp<TextStyle>;
 }
 
-export default function Button({ children, textStyle, ...props }: CustomButtonProps) {
+export default function CustomButton({ children, textStyle, ...props }: CustomButtonProps) {
   return (
     <TouchableOpacity
       style={styles.button}
