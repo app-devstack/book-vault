@@ -4,13 +4,13 @@ import * as Clipboard from 'expo-clipboard';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export interface ErrorBoundaryState {
+interface ErrorBoundaryState {
   hasError: boolean;
   error: Error | null;
   errorInfo: React.ErrorInfo | null;
 }
 
-export interface ErrorBoundaryProps {
+interface ErrorBoundaryProps {
   children: React.ReactNode;
   fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;

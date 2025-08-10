@@ -1,9 +1,9 @@
+import { QUERY_KEYS, QUERY_OPTIONS } from '@/utils/constants/query';
 import { bookService } from '@/utils/service/book-service';
 import { seriesService } from '@/utils/service/series-service';
-import { QUERY_KEYS, QUERY_OPTIONS } from '@/utils/constants/query';
 import { useQuery } from '@tanstack/react-query';
 
-export interface AppStats {
+interface AppStats {
   totalBooks: number;
   totalSeries: number;
   averageBooksPerSeries: number;

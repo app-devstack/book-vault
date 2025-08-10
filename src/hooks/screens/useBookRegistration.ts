@@ -8,7 +8,7 @@ import { useDebounce } from '@uidotdev/usehooks';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 
-export interface BookRegistrationForm {
+interface BookRegistrationForm {
   searchQuery: string;
   selectedBook: BookSearchResult | null;
   selectedSeriesId: string | null;

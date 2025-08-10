@@ -1,12 +1,6 @@
-import { Book } from '@/db/types';
 import { useDeleteBook } from '@/hooks/mutations/useDeleteBook';
 import { useSeriesDetail as useSeriesDetailQuery } from '@/hooks/queries/useSeriesDetail';
 import { useMemo } from 'react';
-
-export interface SeriesDetailStats {
-  volumeCount: number;
-  latestVolume?: Book;
-}
 
 /**
  * シリーズ詳細画面で使用するシリーズ情報と書籍操作を管理するフック
