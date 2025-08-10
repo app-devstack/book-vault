@@ -8,7 +8,7 @@ import Toast from 'react-native-toast-message';
 
 export default function SeriesDetailPage() {
   const { seriesId } = useLocalSearchParams<{ seriesId: string }>();
-  const { series, books, isLoading, error } = useSeriesDetail(seriesId!);
+  const { series, books, isLoading, error } = useSeriesDetail(seriesId);
 
   const handleBack = () => {
     router.back();
@@ -34,7 +34,7 @@ export default function SeriesDetailPage() {
   }
 
   // シリーズが見つからない場合はホームに戻る
-  if (!series || !books || books.length === 0) {
+  if (!series) {
     router.push('/');
     Toast.show({
       type: 'error',
