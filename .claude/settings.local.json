@@ -9,5 +9,9 @@
       "Bash(bun install:*)"
     ],
     "deny": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "serena"
+  ],
+  "enableAllProjectMcpServers": true
 }
