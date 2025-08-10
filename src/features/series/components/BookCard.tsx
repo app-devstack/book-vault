@@ -66,7 +66,7 @@ export const BookCard = ({ book, showSeriesTitle = false, onBookDeleted }: BookC
               </Text>
             )}
 
-            {book.volume && <Text style={styles.volumeTitle}>{book.volume}巻</Text>}
+            {book.volume !== null && <Text style={styles.volumeTitle}>{book.volume}巻</Text>}
 
             <Text style={styles.volumeTitle} numberOfLines={3}>
               {book.title}
