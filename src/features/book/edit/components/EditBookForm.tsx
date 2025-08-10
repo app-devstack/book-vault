@@ -1,254 +1,101 @@
 import { Text } from '@/components/Text';
-import { BookWithRelations, NewBook } from '@/db/types';
-import { useUpdataBook } from '@/hooks/mutations/useUpdataBook';
+import { CustomSelect } from '@/components/ui/CustomSelect';
+import { BookWithRelations } from '@/db/types';
 import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
-import { useSafeState } from '@/hooks/useSafeState';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronDown } from '@tamagui/lucide-icons';
-import { useRouter } from 'expo-router';
-import React, { useEffect, useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useCallback, useMemo } from 'react';
+import { Controller } from 'react-hook-form';
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Select } from 'tamagui';
-import { z } from 'zod';
+import { EditBookFormData } from '../hooks/useBookFormData';
+import { useEditBookActions } from '../hooks/useEditBookActions';
+import { useEditBookForm } from '../hooks/useEditBookForm';
+import { FormFieldConfig, useFormFieldConfigs } from '../hooks/useFormFieldConfigs';
 
 export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefined }) => {
-  const router = useRouter();
-  const updataBookMutation = useUpdataBook();
-  const { safeSetState } = useSafeState();
   const { data: seriesOptions } = useSeriesOptions();
 
-  // 編集用フォームスキーマ（フォーム入力用）
-  const editBookFormSchema = z.object({
-    title: z.string().optional(),
-    volume: z.string().optional(),
-    author: z.string().optional(),
-    seriesId: z.string().optional(),
-    isbn: z.string().optional(),
-    description: z.string().optional(),
-  });
-
-  type EditBookFormData = z.infer<typeof editBookFormSchema>;
-
-  // 更新データ変換用
-  const transformFormData = (data: EditBookFormData) => {
-    const updateData: Partial<NewBook> = {};
-
-    if (data.title !== undefined) {
-      updateData.title = data.title.trim();
-    }
-
-    if (data.volume !== undefined) {
-      const volume = data.volume.trim();
-      updateData.volume = volume === '' ? null : Number(volume) || null;
-    }
-
-    if (data.author !== undefined) {
-      updateData.author = data.author.trim() || null;
-    }
-
-    if (data.seriesId) {
-      updateData.seriesId = data.seriesId;
-    }
-
-    if (data.isbn !== undefined) {
-      updateData.isbn = data.isbn.trim() || null;
-    }
-
-    if (data.description !== undefined) {
-      updateData.description = data.description.trim() || null;
-    }
-
-    return updateData;
-  };
+  // カスタムフックの利用
+  const form = useEditBookForm(book);
+  const { onSubmit, handleCancel, isPending } = useEditBookActions(book);
+  const { formFieldConfigs } = useFormFieldConfigs();
 
   const {
     control,
     handleSubmit,
-    setValue,
     formState: { errors },
-  } = useForm<EditBookFormData>({
-    resolver: zodResolver(editBookFormSchema),
-    defaultValues: {
-      title: '',
-      volume: '',
-      author: '',
-      seriesId: '',
-      isbn: '',
-      description: '',
-    },
-  });
+  } = form;
 
-  useEffect(() => {
-    if (book) {
-      setValue('title', book.title || '');
-      setValue('volume', book.volume?.toString() || '');
-      setValue('author', book.author || '');
-      setValue('seriesId', book.seriesId || '');
-      setValue('isbn', book.isbn || '');
-      setValue('description', book.description || '');
-    }
-  }, [book, setValue]);
-
-  const onSubmit = async (data: EditBookFormData) => {
-    if (updataBookMutation.isPending) return;
-
-    try {
-      const updateData = transformFormData(data);
-
-      await updataBookMutation.mutateAsync({
-        bookId: book?.id || '',
-        data: updateData,
-      });
-
-      safeSetState(() => {
-        router.back();
-      });
-    } catch (error) {
-      console.error('Update error:', error);
-    }
-  };
-
-  const handleCancel = () => {
-    Alert.alert('変更を破棄', '編集内容が失われますがよろしいですか？', [
-      { text: 'キャンセル', style: 'cancel' },
-      { text: '破棄', style: 'destructive', onPress: () => router.back() },
-    ]);
-  };
-
+  // メモ化された値
   const selectItems = useMemo(() => {
-    if (!seriesOptions) return [];
-    return seriesOptions.map((series) => ({
-      value: series.id,
-      label: series.title,
-    }));
+    return (
+      seriesOptions?.map((series) => ({
+        value: series.id,
+        label: series.title,
+      })) ?? []
+    );
   }, [seriesOptions]);
+
+  // レンダリングヘルパー
+  const renderTextInputField = useCallback(
+    (name: keyof Omit<EditBookFormData, 'seriesId'>, config: FormFieldConfig) => (
+      <View key={name} style={styles.fieldContainer}>
+        <Text style={styles.label}>
+          {config.label}
+          {config.required && ' *'}
+        </Text>
+        <Controller
+          control={control}
+          name={name}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={[
+                styles.input,
+                ...(config.maxWidth ? [{ maxWidth: config.maxWidth }] : []),
+                ...(config.height ? [{ height: config.height }] : []),
+                ...(errors[name] ? [styles.inputError] : []),
+              ]}
+              value={value || ''}
+              onChangeText={onChange}
+              placeholder={config.placeholder}
+              keyboardType={config.keyboardType}
+              multiline={config.multiline}
+              textAlignVertical={config.multiline ? 'top' : 'center'}
+            />
+          )}
+        />
+        {errors[name] && <Text style={styles.errorText}>{errors[name]?.message}</Text>}
+      </View>
+    ),
+    [control, errors]
+  );
 
   return (
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-      {/* タイトル */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>タイトル *</Text>
-        <Controller
-          control={control}
-          name="title"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={[styles.input, errors.title && styles.inputError]}
-              value={value || ''}
-              onChangeText={onChange}
-              placeholder="書籍のタイトルを入力"
-              multiline
-              textAlignVertical="top"
-            />
-          )}
-        />
-        {errors.title && <Text style={styles.errorText}>{errors.title.message}</Text>}
-      </View>
+      {/* テキスト入力フィールド */}
+      {Object.entries(formFieldConfigs).map(([fieldName, config]) =>
+        renderTextInputField(fieldName as keyof Omit<EditBookFormData, 'seriesId'>, config)
+      )}
 
-      {/* 巻数 */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>巻数</Text>
-        <Controller
-          control={control}
-          name="volume"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={[styles.input, styles.volumeInput, errors.volume && styles.inputError]}
-              value={value || ''}
-              onChangeText={onChange}
-              placeholder="巻数を入力（例: 1）"
-              keyboardType="numeric"
-            />
-          )}
-        />
-        {errors.volume && <Text style={styles.errorText}>{errors.volume.message}</Text>}
-      </View>
-
-      {/* 著者 */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>著者</Text>
-        <Controller
-          control={control}
-          name="author"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              value={value || ''}
-              onChangeText={onChange}
-              placeholder="著者名を入力"
-            />
-          )}
-        />
-      </View>
-
-      {/* Series */}
+      {/* シリーズ選択 */}
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>シリーズ</Text>
         <Controller
           control={control}
           name="seriesId"
           render={({ field: { onChange, value } }) => (
-            <Select value={value} onValueChange={onChange}>
-              <Select.Trigger iconAfter={<ChevronDown />}>
-                <Select.Value placeholder="シリーズを選択" />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.Viewport>
-                  {selectItems.map((item, index) => (
-                    <Select.Item index={index} key={item.value} value={item.value}>
-                      <Select.ItemText>{item.label}</Select.ItemText>
-                    </Select.Item>
-                  ))}
-                </Select.Viewport>
-              </Select.Content>
-            </Select>
-          )}
-        />
-      </View>
-
-      {/* ISBN */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>ISBN</Text>
-        <Controller
-          control={control}
-          name="isbn"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              value={value || ''}
-              onChangeText={onChange}
-              placeholder="ISBNを入力"
-              keyboardType="numeric"
-            />
-          )}
-        />
-      </View>
-
-      {/* Description */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>概要</Text>
-        <Controller
-          control={control}
-          name="description"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={[styles.input, { height: 100 }]}
-              value={value || ''}
-              onChangeText={onChange}
-              placeholder="概要を入力"
-              multiline
-              textAlignVertical="top"
+            <CustomSelect
+              items={selectItems}
+              value={value}
+              onValueChange={onChange}
+              placeholder="シリーズを選択"
             />
           )}
         />
@@ -261,11 +108,11 @@ export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefi
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.saveButton, updataBookMutation.isPending && styles.saveButtonDisabled]}
+          style={[styles.saveButton, isPending && styles.saveButtonDisabled]}
           onPress={handleSubmit(onSubmit)}
-          disabled={updataBookMutation.isPending}
+          disabled={isPending}
         >
-          {updataBookMutation.isPending ? (
+          {isPending ? (
             <ActivityIndicator size="small" color={COLORS.primaryForeground} />
           ) : (
             <Text style={styles.saveButtonText}>保存</Text>
@@ -342,9 +189,6 @@ const styles = StyleSheet.create({
   },
   inputError: {
     borderColor: COLORS.error,
-  },
-  volumeInput: {
-    maxWidth: 120,
   },
   errorText: {
     fontSize: FONT_SIZES.small,
