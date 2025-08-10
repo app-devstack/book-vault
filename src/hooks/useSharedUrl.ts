@@ -1,6 +1,7 @@
 import { useShareIntentContext } from 'expo-share-intent';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
+import { useAsyncStorage } from './useAsyncStorage';
 
 /*
 interface BaseShareIntent {
@@ -23,15 +24,23 @@ interface SharedUrlData {
 
 export const useSharedUrl = () => {
   const { hasShareIntent, shareIntent, resetShareIntent, error } = useShareIntentContext();
-  const [sharedUrl, setSharedUrl] = useState<SharedUrlData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // AsyncStorageを使用した永続化
+  const {
+    storedValue: sharedUrl,
+    setValue: setSharedUrl,
+    removeValue: removeSharedUrl,
+    isLoading,
+  } = useAsyncStorage<SharedUrlData>('sharedUrlData');
 
   useEffect(() => {
     if (hasShareIntent) {
-      setSharedUrl({
+      const newSharedUrlData = {
         url: shareIntent.webUrl || shareIntent.text || '',
         timestamp: Date.now(),
-      });
+      };
+      setSharedUrl(newSharedUrlData);
 
       Toast.show({
         type: 'success',
@@ -52,8 +61,8 @@ export const useSharedUrl = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasShareIntent]);
 
-  const clearSharedUrl = () => {
-    setSharedUrl(null);
+  const clearSharedUrl = async () => {
+    await removeSharedUrl();
   };
 
   const acceptSharedUrl = async (callback?: (url: string) => void | Promise<void>) => {
@@ -64,7 +73,7 @@ export const useSharedUrl = () => {
       if (callback) {
         await callback(sharedUrl.url);
       }
-      clearSharedUrl();
+      await clearSharedUrl();
     } catch (error) {
       console.error('Failed to process shared URL:', error);
       throw error;
@@ -76,6 +85,7 @@ export const useSharedUrl = () => {
   return {
     sharedUrl,
     isProcessing,
+    isLoading,
     clearSharedUrl,
     acceptSharedUrl,
   };

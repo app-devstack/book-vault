@@ -84,16 +84,11 @@ export const useBookRegistration = () => {
     }
 
     const bookData: NewBook = {
-      title: formData.selectedBook.title,
-      author: formData.selectedBook.author,
-      description: formData.selectedBook.description,
-      imageUrl: formData.selectedBook.imageUrl,
-      isbn: formData.selectedBook.isbn,
-      googleBooksId: formData.selectedBook.googleBooksId,
+      ...formData.selectedBook,
       seriesId: formData.selectedSeriesId || '',
       targetUrl: formData.targetURL,
       shopId: '', // 空文字列または適切なデフォルト値
-    };
+    } satisfies NewBook;
 
     await addBookMutation.mutateAsync(bookData);
 

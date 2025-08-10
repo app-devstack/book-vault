@@ -69,7 +69,7 @@ export default function RegisterDetailModal({
   const seriesOptionsQuery = useSeriesOptions();
   const createSeriesMutation = useCreateSeries();
 
-  const { sharedUrl } = useSharedUrl();
+  const { sharedUrl, isLoading: isSharedUrlLoading, clearSharedUrl } = useSharedUrl();
 
   // Convert SeriesOption[] to Series[] for SeriesSelector
   const seriesedBooks = (seriesOptionsQuery.data || []).map((option) => ({
@@ -162,9 +162,10 @@ export default function RegisterDetailModal({
     onClose();
   };
 
-  const handleUseSharedUrl = () => {
-    if (sharedUrl) {
+  const handleUseSharedUrl = async () => {
+    if (!isSharedUrlLoading && sharedUrl) {
       setTargetURL(sharedUrl.url);
+      await clearSharedUrl();
       fadeOut();
     }
   };
@@ -265,7 +266,7 @@ export default function RegisterDetailModal({
               <Text style={styles.sectionTitle}>リンクURL</Text>
 
               {/* 共有URL検出インジケーター */}
-              {sharedUrl && (
+              {!isSharedUrlLoading && sharedUrl && (
                 <TouchableOpacity
                   onPress={handleBadgePress}
                   activeOpacity={0.7}
@@ -282,7 +283,7 @@ export default function RegisterDetailModal({
             </View>
 
             {/* 共有URL表示 */}
-            {sharedUrl && isSharedUrlVisible && (
+            {!isSharedUrlLoading && sharedUrl && isSharedUrlVisible && (
               <Animated.View style={[styles.premiumSharedUrlContainer, { opacity: fadeAnim }]}>
                 <LinearGradient
                   colors={[COLORS.accent + '15', COLORS.accent + '08']}

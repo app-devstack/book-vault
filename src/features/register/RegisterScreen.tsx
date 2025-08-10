@@ -31,6 +31,7 @@ export default function RegisterScreen() {
               <RegisterGmailContents />
             </TabsContent>
 
+            {/* google本検索 */}
             <TabsContent value={SEARCH_TAB}>
               <RegisterSearchContents />
             </TabsContent>
