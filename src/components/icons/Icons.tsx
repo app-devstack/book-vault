@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ICON_SIZES } from '../../utils/constants';
 
-export type IconName =
+type IconName =
   | 'home'
   | 'home-outline'
   | 'search'
@@ -32,7 +32,7 @@ export type IconName =
   | 'information-circle'
   | 'pencil';
 
-export interface IconProps {
+interface IconProps {
   name: IconName;
   size?: keyof typeof ICON_SIZES | number;
   color?: string;

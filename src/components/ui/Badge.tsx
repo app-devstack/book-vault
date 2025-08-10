@@ -3,8 +3,8 @@ import { FONT_SIZES } from '@/utils/constants';
 import React, { ReactNode } from 'react';
 import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 
-export type BadgeVariant = 'success' | 'warning' | 'error' | 'primary' | 'secondary';
-export type BadgeSize = 'small' | 'medium' | 'large';
+type BadgeVariant = 'success' | 'warning' | 'error' | 'primary' | 'secondary';
+type BadgeSize = 'small' | 'medium' | 'large';
 
 interface BadgeProps {
   children: string | ReactNode;

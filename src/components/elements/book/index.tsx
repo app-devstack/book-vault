@@ -1,6 +1,6 @@
-import { IconSymbol } from '@/components/IconSymbol';
 import { Text } from '@/components/Text';
 import type { Book } from '@/db/types';
+import { ChevronRight } from '@tamagui/lucide-icons';
 import { Image as ExpoImage } from 'expo-image';
 
 import { Alert, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -24,7 +24,7 @@ export default function BookItem(item: Book) {
 
         <ItemTitleAndDescription title={item.title} description={item.description} />
       </View>
-      <IconSymbol name="chevron.right" size={20} color="#666666" />
+      <ChevronRight size="$1" col="#666666" />
     </TouchableOpacity>
   );
 }
