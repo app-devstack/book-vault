@@ -10,10 +10,6 @@ export default function SeriesDetailPage() {
   const { seriesId } = useLocalSearchParams<{ seriesId: string }>();
   const { series, books, isLoading, error } = useSeriesDetail(seriesId);
 
-  const handleBack = () => {
-    router.back();
-  };
-
   // ローディング状態
   if (isLoading) {
     return (
@@ -47,7 +43,7 @@ export default function SeriesDetailPage() {
 
   return (
     <View style={styles.container}>
-      <SeriesDetailScreen seriesTitle={series.title} seriesBooks={books} onBack={handleBack} />
+      <SeriesDetailScreen seriesTitle={series.title} seriesBooks={books} />
     </View>
   );
 }

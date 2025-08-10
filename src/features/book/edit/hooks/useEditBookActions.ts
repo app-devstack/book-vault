@@ -4,27 +4,25 @@ import { useSafeState } from '@/hooks/useSafeState';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { Alert } from 'react-native';
-import { EditBookFormData, useBookFormData } from './useBookFormData';
+import { EditBookFormSchema } from './useEditBookForm';
 
 export const useEditBookActions = (book: BookWithRelations | null | undefined) => {
   const router = useRouter();
   const updataBookMutation = useUpdataBook();
   const { safeSetState } = useSafeState();
-  const { transformFormData } = useBookFormData();
 
   // フォーム送信処理
   const onSubmit = useCallback(
-    async (data: EditBookFormData) => {
+    async (data: EditBookFormSchema) => {
       if (updataBookMutation.isPending || !book?.id) return;
 
       try {
-        const updateData = transformFormData(data);
         const originalSeriesId = book.seriesId;
         const newSeriesId = data.seriesId;
 
         await updataBookMutation.mutateAsync({
           bookId: book.id,
-          data: updateData,
+          data: data,
         });
 
         safeSetState(() => {
@@ -40,7 +38,7 @@ export const useEditBookActions = (book: BookWithRelations | null | undefined) =
         Alert.alert('エラー', '書籍の更新に失敗しました。もう一度お試しください。');
       }
     },
-    [updataBookMutation, book?.id, book?.seriesId, transformFormData, safeSetState, router]
+    [updataBookMutation, book?.id, book?.seriesId, safeSetState, router]
   );
 
   // キャンセル処理

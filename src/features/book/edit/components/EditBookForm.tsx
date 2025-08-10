@@ -8,16 +8,55 @@ import React, { useCallback, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import {
   ActivityIndicator,
+  KeyboardTypeOptions,
   ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { EditBookFormData } from '../hooks/useBookFormData';
 import { useEditBookActions } from '../hooks/useEditBookActions';
-import { useEditBookForm } from '../hooks/useEditBookForm';
-import { FormFieldConfig, useFormFieldConfigs } from '../hooks/useFormFieldConfigs';
+import { EditBookFormSchema, useEditBookForm } from '../hooks/useEditBookForm';
+
+// フォームフィールド設定型定義
+type FormFieldConfig = {
+  label: string;
+  placeholder: string;
+  keyboardType?: KeyboardTypeOptions;
+  multiline?: boolean;
+  style?: {
+    maxWidth?: number;
+    height?: number;
+  };
+  required?: boolean;
+};
+
+// フォームフィールド設定
+const formFieldConfigs: Record<keyof Omit<EditBookFormSchema, 'seriesId'>, FormFieldConfig> = {
+  title: {
+    label: 'タイトル',
+    placeholder: '書籍のタイトルを入力',
+    multiline: true,
+    required: true,
+  },
+  description: {
+    label: '概要',
+    placeholder: '概要を入力',
+    multiline: true,
+    style: { height: 100 },
+  },
+  volume: {
+    label: '巻数',
+    placeholder: '巻数を入力（例: 1）',
+    keyboardType: 'numeric',
+    style: { maxWidth: 120 },
+  },
+  targetUrl: {
+    label: '購入URL',
+    placeholder: '書籍の購入URLを入力',
+    required: true,
+  },
+};
 
 export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefined }) => {
   const { data: seriesOptions } = useSeriesOptions();
@@ -25,7 +64,6 @@ export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefi
   // カスタムフックの利用
   const form = useEditBookForm(book);
   const { onSubmit, handleCancel, isPending } = useEditBookActions(book);
-  const { formFieldConfigs } = useFormFieldConfigs();
 
   const {
     control,
@@ -45,8 +83,8 @@ export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefi
 
   // レンダリングヘルパー
   const renderTextInputField = useCallback(
-    (name: keyof Omit<EditBookFormData, 'seriesId'>, config: FormFieldConfig) => (
-      <View key={name} style={styles.fieldContainer}>
+    (name: keyof Omit<EditBookFormSchema, 'seriesId'>, config: FormFieldConfig) => (
+      <View key={name} style={styles.fieldWrapper}>
         <Text style={styles.label}>
           {config.label}
           {config.required && ' *'}
@@ -56,13 +94,8 @@ export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefi
           name={name}
           render={({ field: { onChange, value } }) => (
             <TextInput
-              style={[
-                styles.input,
-                ...(config.maxWidth ? [{ maxWidth: config.maxWidth }] : []),
-                ...(config.height ? [{ height: config.height }] : []),
-                ...(errors[name] ? [styles.inputError] : []),
-              ]}
-              value={value || ''}
+              style={[styles.input, config.style, ...(errors[name] ? [styles.inputError] : [])]}
+              value={String(value || '')}
               onChangeText={onChange}
               placeholder={config.placeholder}
               keyboardType={config.keyboardType}
@@ -79,26 +112,28 @@ export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefi
 
   return (
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-      {/* テキスト入力フィールド */}
-      {Object.entries(formFieldConfigs).map(([fieldName, config]) =>
-        renderTextInputField(fieldName as keyof Omit<EditBookFormData, 'seriesId'>, config)
-      )}
+      <View style={styles.formContainer}>
+        {/* テキスト入力フィールド */}
+        {Object.entries(formFieldConfigs).map(([fieldName, config]) =>
+          renderTextInputField(fieldName as keyof Omit<EditBookFormSchema, 'seriesId'>, config)
+        )}
 
-      {/* シリーズ選択 */}
-      <View style={styles.fieldContainer}>
-        <Text style={styles.label}>シリーズ</Text>
-        <Controller
-          control={control}
-          name="seriesId"
-          render={({ field: { onChange, value } }) => (
-            <CustomSelect
-              items={selectItems}
-              value={value}
-              onValueChange={onChange}
-              placeholder="シリーズを選択"
-            />
-          )}
-        />
+        {/* シリーズ選択 */}
+        <View style={styles.fieldWrapper}>
+          <Text style={styles.label}>シリーズ</Text>
+          <Controller
+            control={control}
+            name="seriesId"
+            render={({ field: { onChange, value } }) => (
+              <CustomSelect
+                items={selectItems}
+                value={value}
+                onValueChange={onChange}
+                placeholder="シリーズを選択"
+              />
+            )}
+          />
+        </View>
       </View>
 
       {/* アクションボタン */}
@@ -124,9 +159,40 @@ export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefi
 };
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  formContainer: {
+    gap: 24,
+  },
+  fieldWrapper: {
+    gap: 2,
+  },
+  label: {
+    fontSize: FONT_SIZES.small,
+    fontWeight: '600',
+    color: COLORS.text,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: BORDER_RADIUS.medium,
+    padding: 12,
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.text,
+    backgroundColor: COLORS.card,
+    minHeight: 44,
+  },
+  inputError: {
+    borderColor: COLORS.error,
+  },
+  errorText: {
+    fontSize: FONT_SIZES.small,
+    color: COLORS.error,
+  },
   actionContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 0,
     paddingVertical: 24,
     gap: 12,
   },
@@ -163,63 +229,5 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.medium,
     fontWeight: '600',
     color: COLORS.primaryForeground,
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  fieldContainer: {
-    marginBottom: 24,
-  },
-  label: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: '600',
-    color: COLORS.text,
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: BORDER_RADIUS.medium,
-    padding: 12,
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.text,
-    backgroundColor: COLORS.card,
-    minHeight: 44,
-  },
-  inputError: {
-    borderColor: COLORS.error,
-  },
-  errorText: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.error,
-    marginTop: 4,
-  },
-  readOnlySection: {
-    marginTop: 32,
-    marginBottom: 20,
-    padding: 16,
-    backgroundColor: COLORS.muted,
-    borderRadius: BORDER_RADIUS.medium,
-  },
-  readOnlyTitle: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: '600',
-    color: COLORS.textLight,
-    marginBottom: 12,
-  },
-  readOnlyField: {
-    marginBottom: 8,
-  },
-  readOnlyLabel: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textLight,
-    fontWeight: '600',
-  },
-  readOnlyValue: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.text,
-    fontFamily: 'monospace',
-    marginTop: 2,
   },
 });

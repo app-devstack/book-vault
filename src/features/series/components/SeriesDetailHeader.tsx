@@ -7,13 +7,11 @@ import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
 import { router } from 'expo-router';
 
-export const SeriesDetailHeader = ({
-  onBack,
-  seriesTitle,
-}: {
-  onBack: () => void;
-  seriesTitle: string;
-}) => {
+export const SeriesDetailHeader = ({ seriesTitle }: { seriesTitle: string }) => {
+  const onBack = () => {
+    router.push('/');
+  };
+
   const handlePress = () => {
     router.push(`/register?search=${seriesTitle}`);
   };
