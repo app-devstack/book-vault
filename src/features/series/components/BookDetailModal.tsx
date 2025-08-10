@@ -224,7 +224,7 @@ const BookInfo = (book: Book) => {
       <Text style={styles.title}>{book.title}</Text>
 
       {/* 巻数 */}
-      {book.volume && <Badge style={{ alignSelf: 'flex-start' }}>{book.volume}巻</Badge>}
+      {book.volume !== null && <Badge style={{ alignSelf: 'flex-start' }}>{book.volume}巻</Badge>}
 
       {/* 著者名 */}
       {book.author && <Text style={styles.author}>{book.author}</Text>}
