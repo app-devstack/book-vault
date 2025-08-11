@@ -19,15 +19,18 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
   stats,
   onPress,
 }) => {
-  const latestBook = seriesBooks.reduce((latest, book) =>
-    new Date(book.purchaseDate) > new Date(latest.purchaseDate) ? book : latest
-  );
+  const latestBook =
+    seriesBooks.length > 0
+      ? seriesBooks.reduce((latest, book) =>
+          new Date(book.purchaseDate) > new Date(latest.purchaseDate) ? book : latest
+        )
+      : null;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.content}>
         <Image
-          source={{ uri: latestBook.imageUrl || '' }}
+          source={{ uri: latestBook?.imageUrl || '' }}
           style={styles.thumbnail}
           resizeMode="cover"
         />
@@ -38,7 +41,7 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
           </Text>
 
           <Text style={styles.author} numberOfLines={1}>
-            {seriesBooks[0].author}
+            {seriesBooks.length > 0 ? seriesBooks[0].author : '著者未設定'}
           </Text>
 
           <View style={styles.statsContainer}>

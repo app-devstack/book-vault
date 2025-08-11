@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import { ChevronLeft } from '@tamagui/lucide-icons';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useSeriesEditActions } from '@/features/series/hooks/useSeriesEditActions';
 import { useSeriesDeleteActions } from '@/hooks/screens/useSeriesDeleteActions';
 import { COLORS, SHADOWS } from '@/utils/colors';
+import { ChevronLeft } from '@tamagui/lucide-icons';
+import { useSeriesEditState } from '../hooks/useSeriesEditState';
 
-import { ActionButtons } from './ActionButtons';
-import { HeaderMenu } from './HeaderMenu';
-import { HEADER_CONSTANTS } from '../constants/headerConstants';
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { BORDER_RADIUS, SCREEN_PADDING } from '@/utils/constants';
 import { router } from 'expo-router';
+import { HEADER_CONSTANTS } from '../constants/headerConstants';
+import { ActionButtons } from './ActionButtons';
+import { EditButtons } from './EditButtons';
+import { EditableTitle } from './EditableTitle';
+import { HeaderMenu } from './HeaderMenu';
 
 interface SeriesDetailHeaderProps {
   seriesTitle: string;
@@ -23,58 +27,124 @@ export const SeriesDetailHeader = ({
   seriesId,
   bookCount,
 }: SeriesDetailHeaderProps) => {
+  // ===== State Management =====
   const [showMenu, setShowMenu] = useState(false);
-  
-  const {
-    showDeleteDialog,
-    handleDeleteSeries,
-    handleConfirmDelete,
-    handleCancelDelete,
-  } = useSeriesDeleteActions({ seriesId, seriesTitle });
 
-  const handleBack = () => {
+  // シリーズ削除関連のアクション
+  const { showDeleteDialog, handleDeleteSeries, handleConfirmDelete, handleCancelDelete } =
+    useSeriesDeleteActions({ seriesId, seriesTitle });
+
+  // シリーズ編集関連のアクション
+  const { isEditing, handleStartEdit, handleSaveEdit, handleCancelEdit, isUpdating } =
+    useSeriesEditActions({
+      seriesId,
+      initialTitle: seriesTitle,
+    });
+
+  // 編集中の値とバリデーション状態
+  const { editValue, setEditValue, resetEditValue, isValueChanged } = useSeriesEditState({
+    initialTitle: seriesTitle,
+    isEditing,
+  });
+
+  // ===== Navigation Handlers =====
+  /**
+   * ホーム画面に戻る
+   */
+  const navigateToHome = () => {
     router.push('/');
   };
 
-  const handleAddBook = () => {
+  /**
+   * 本の登録画面に移動（シリーズ名で検索）
+   */
+  const navigateToBookRegistration = () => {
     router.push(`/register?search=${seriesTitle}`);
   };
 
-  const handleMenuPress = () => {
+  // ===== Edit Handlers =====
+  /**
+   * タイトル編集を保存する
+   * 変更がない場合はキャンセル扱い
+   */
+  const saveEditedTitle = () => {
+    if (isValueChanged) {
+      handleSaveEdit(editValue);
+    } else {
+      cancelTitleEdit();
+    }
+  };
+
+  /**
+   * タイトル編集をキャンセルする
+   * 入力値をリセットし編集モードを終了
+   */
+  const cancelTitleEdit = () => {
+    resetEditValue();
+    handleCancelEdit();
+  };
+
+  // ===== Menu Handlers =====
+  /**
+   * ヘッダーメニューの表示切り替え
+   */
+  const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
-  const handleMenuDeletePress = () => {
+  /**
+   * メニューから編集を開始
+   * メニューを閉じてから編集モードに入る
+   */
+  const startEditFromMenu = () => {
+    setShowMenu(false);
+    handleStartEdit();
+  };
+
+  /**
+   * メニューから削除を開始
+   * メニューを閉じてから削除確認ダイアログを表示
+   */
+  const startDeleteFromMenu = () => {
     setShowMenu(false);
     handleDeleteSeries();
   };
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity 
-        style={styles.backButton} 
-        onPress={handleBack} 
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={navigateToHome}
         activeOpacity={0.7}
         accessibilityLabel="戻る"
       >
-        <ChevronLeft size={HEADER_CONSTANTS.ICONS.SIZE.MEDIUM} col={HEADER_CONSTANTS.ICONS.COLORS.PRIMARY} />
+        <ChevronLeft
+          size={HEADER_CONSTANTS.ICONS.SIZE.MEDIUM}
+          col={HEADER_CONSTANTS.ICONS.COLORS.PRIMARY}
+        />
       </TouchableOpacity>
 
       <View style={styles.headerText}>
-        <Text style={styles.headerTitle} numberOfLines={2}>
-          {seriesTitle}
-        </Text>
+        <EditableTitle
+          title={seriesTitle}
+          isEditing={isEditing}
+          onStartEdit={handleStartEdit}
+          editValue={editValue}
+          onEditValueChange={setEditValue}
+        />
       </View>
 
-      <ActionButtons 
-        onAddBook={handleAddBook}
-        onMenuPress={handleMenuPress}
-      />
+      {isEditing ? (
+        <EditButtons onSave={saveEditedTitle} onCancel={cancelTitleEdit} disabled={isUpdating} />
+      ) : (
+        <ActionButtons onAddBook={navigateToBookRegistration} onMenuPress={toggleMenu} />
+      )}
 
       <HeaderMenu
         visible={showMenu}
         onClose={() => setShowMenu(false)}
-        onDeletePress={handleMenuDeletePress}
+        onEditPress={startEditFromMenu}
+        onDeletePress={startDeleteFromMenu}
       />
 
       <ConfirmDialog
@@ -113,10 +183,5 @@ const styles = StyleSheet.create({
   },
   headerText: {
     flex: 1,
-  },
-  headerTitle: {
-    fontSize: FONT_SIZES.title,
-    fontWeight: 'bold',
-    color: COLORS.text,
   },
 });

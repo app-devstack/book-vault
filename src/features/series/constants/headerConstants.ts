@@ -5,8 +5,8 @@
 export const HEADER_CONSTANTS = {
   ICONS: {
     SIZE: {
-      SMALL: '$5' as const,
-      MEDIUM: '$6' as const,
+      SMALL: '$1' as const,
+      MEDIUM: '$2' as const,
     },
     COLORS: {
       PRIMARY: '#4A90E2',

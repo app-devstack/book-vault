@@ -62,6 +62,7 @@ export const HomeScreen = () => {
         data={seriesedBooks}
         renderItem={({ item: seriese }) => {
           const stats = getSeriesStats(seriese.books);
+          // if (seriese.books.length === 0) return null;
 
           return (
             <SeriesCard

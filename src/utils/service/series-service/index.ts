@@ -130,6 +130,31 @@ class SeriesService {
     }));
   }
 
+  async updateSeries(seriesId: string, updates: Partial<NewSeries>) {
+    try {
+      // タイトルがある場合はトリムする
+      const sanitizedUpdates = {
+        ...updates,
+        ...(updates.title && { title: updates.title.trim() }),
+        updatedAt: new Date(),
+      };
+
+      const [updatedSeries] = await db
+        .update(schema.series)
+        .set(sanitizedUpdates)
+        .where(eq(schema.series.id, seriesId))
+        .returning();
+
+      return updatedSeries;
+    } catch (error) {
+      const dbError = createDatabaseError(
+        `Failed to update series: ${error}`,
+        'シリーズの更新に失敗しました'
+      );
+      throw dbError;
+    }
+  }
+
   async deleteSeries(seriesId: string) {
     try {
       // シリーズに関連する書籍も一緒に削除される（ON DELETE CASCADE）

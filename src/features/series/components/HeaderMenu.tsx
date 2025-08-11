@@ -1,35 +1,41 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { Trash2 } from '@tamagui/lucide-icons';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
+import { Edit3, Trash2 } from '@tamagui/lucide-icons';
 import { HEADER_CONSTANTS } from '../constants/headerConstants';
 
 interface HeaderMenuProps {
   visible: boolean;
   onClose: () => void;
+  onEditPress: () => void;
   onDeletePress: () => void;
 }
 
-export const HeaderMenu = ({ visible, onClose, onDeletePress }: HeaderMenuProps) => {
+export const HeaderMenu = ({ visible, onClose, onEditPress, onDeletePress }: HeaderMenuProps) => {
   if (!visible) return null;
 
   return (
     <>
-      <TouchableOpacity 
-        style={styles.overlay} 
-        onPress={onClose}
-        activeOpacity={1}
-      />
+      <TouchableOpacity style={styles.overlay} onPress={onClose} activeOpacity={1} />
       <View style={styles.menuContainer}>
-        <TouchableOpacity 
-          style={styles.menuItem} 
-          onPress={onDeletePress}
-          activeOpacity={0.7}
-        >
-          <Trash2 size={HEADER_CONSTANTS.ICONS.SIZE.SMALL} col={HEADER_CONSTANTS.ICONS.COLORS.ERROR} />
-          <Text style={styles.menuItemText}>シリーズを削除</Text>
+        <TouchableOpacity style={styles.menuItem} onPress={onEditPress} activeOpacity={0.7}>
+          <Edit3
+            size={HEADER_CONSTANTS.ICONS.SIZE.SMALL}
+            col={HEADER_CONSTANTS.ICONS.COLORS.PRIMARY}
+          />
+          <Text style={styles.editMenuItemText}>タイトルを編集</Text>
+        </TouchableOpacity>
+
+        <View style={styles.menuDivider} />
+
+        <TouchableOpacity style={styles.menuItem} onPress={onDeletePress} activeOpacity={0.7}>
+          <Trash2
+            size={HEADER_CONSTANTS.ICONS.SIZE.SMALL}
+            col={HEADER_CONSTANTS.ICONS.COLORS.ERROR}
+          />
+          <Text style={styles.deleteMenuItemText}>シリーズを削除</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -63,7 +69,17 @@ const styles = StyleSheet.create({
     gap: 12,
     minWidth: HEADER_CONSTANTS.MENU.MIN_WIDTH,
   },
-  menuItemText: {
+  menuDivider: {
+    height: 1,
+    backgroundColor: COLORS.border,
+    marginHorizontal: 16,
+  },
+  editMenuItemText: {
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.text,
+    fontWeight: '500',
+  },
+  deleteMenuItemText: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.error,
     fontWeight: '500',
