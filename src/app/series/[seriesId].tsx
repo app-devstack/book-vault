@@ -43,7 +43,7 @@ export default function SeriesDetailPage() {
 
   return (
     <View style={styles.container}>
-      <SeriesDetailScreen seriesTitle={series.title} seriesBooks={books} />
+      <SeriesDetailScreen seriesTitle={series.title} seriesBooks={books} seriesId={seriesId} />
     </View>
   );
 }

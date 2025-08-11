@@ -2,6 +2,7 @@ import db from '@/db';
 import schema from '@/db/schema';
 import { NewSeries } from '@/db/types';
 import { createDatabaseError } from '@/types/errors';
+import { eq } from 'drizzle-orm';
 
 class SeriesService {
   // constructor(parameters) {}
@@ -127,6 +128,20 @@ class SeriesService {
       author: series.author,
       bookCount: series.books.length,
     }));
+  }
+
+  async deleteSeries(seriesId: string) {
+    try {
+      // シリーズに関連する書籍も一緒に削除される（ON DELETE CASCADE）
+      await db.delete(schema.series).where(eq(schema.series.id, seriesId));
+      return true;
+    } catch (error) {
+      const dbError = createDatabaseError(
+        `Failed to delete series: ${error}`,
+        'シリーズの削除に失敗しました'
+      );
+      throw dbError;
+    }
   }
 }
 

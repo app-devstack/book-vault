@@ -10,13 +10,18 @@ import { SeriesDetailHeader } from './components/SeriesDetailHeader';
 interface SeriesDetailScreenProps {
   seriesTitle: string;
   seriesBooks: Book[];
+  seriesId: string;
 }
 
-export const SeriesDetailScreen = ({ seriesTitle, seriesBooks }: SeriesDetailScreenProps) => {
+export const SeriesDetailScreen = ({ seriesTitle, seriesBooks, seriesId }: SeriesDetailScreenProps) => {
   return (
     <SafeAreaView style={styles.container}>
       {/* ヘッダー */}
-      <SeriesDetailHeader seriesTitle={seriesTitle} />
+      <SeriesDetailHeader 
+        seriesTitle={seriesTitle} 
+        seriesId={seriesId}
+        bookCount={seriesBooks.length}
+      />
 
       <FlatList
         data={seriesBooks}

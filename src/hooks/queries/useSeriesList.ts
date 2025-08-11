@@ -11,6 +11,16 @@ export const useSeriesList = () => {
     queryFn: seriesService.getAllSeriesWithBooks,
     ...QUERY_OPTIONS.DEFAULT,
     select: (data) =>
-      data.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()),
+      data.sort((a, b) => {
+        // 本が紐づいているシリーズを優先
+        const aHasBooks = a.books.length > 0;
+        const bHasBooks = b.books.length > 0;
+        
+        if (aHasBooks && !bHasBooks) return -1;
+        if (!aHasBooks && bHasBooks) return 1;
+        
+        // 同じグループ内では更新日時順
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      }),
   });
 };
