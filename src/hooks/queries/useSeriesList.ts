@@ -12,7 +12,15 @@ export const useSeriesList = () => {
     ...QUERY_OPTIONS.DEFAULT,
     select: (data) =>
       data.sort((a, b) => {
-        // 本が紐づいているシリーズを優先
+        // displayOrderが設定されている場合は最優先でソート
+        const aOrder = a.displayOrder ?? 999999;
+        const bOrder = b.displayOrder ?? 999999;
+
+        if (aOrder !== bOrder) {
+          return aOrder - bOrder;
+        }
+
+        // displayOrderが同じ場合は本が紐づいているシリーズを優先
         const aHasBooks = a.books.length > 0;
         const bHasBooks = b.books.length > 0;
 

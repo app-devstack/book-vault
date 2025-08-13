@@ -8,7 +8,7 @@ class SeriesService {
   // constructor(parameters) {}
   async getAllSeries() {
     const items = await db.query.series.findMany({
-      orderBy: (series, { desc }) => [desc(series.createdAt)],
+      orderBy: (series, { asc, desc }) => [asc(series.displayOrder), desc(series.createdAt)],
       with: {
         books: true, // シリーズに関連する書籍情報を含める
       },
@@ -83,7 +83,7 @@ class SeriesService {
 
   async getAllSeriesWithBooks() {
     const items = await db.query.series.findMany({
-      orderBy: (series, { desc }) => [desc(series.updatedAt)],
+      orderBy: (series, { asc, desc }) => [asc(series.displayOrder), desc(series.createdAt)],
       with: {
         books: {
           orderBy: (books, { desc }) => [desc(books.volume), desc(books.createdAt)],
@@ -112,6 +112,7 @@ class SeriesService {
         id: true,
         title: true,
         author: true,
+        displayOrder: true, // 追加
       },
       with: {
         books: {
@@ -127,6 +128,7 @@ class SeriesService {
       title: series.title,
       author: series.author,
       bookCount: series.books.length,
+      displayOrder: series.displayOrder, // 追加
     }));
   }
 
@@ -164,6 +166,41 @@ class SeriesService {
       const dbError = createDatabaseError(
         `Failed to delete series: ${error}`,
         'シリーズの削除に失敗しました'
+      );
+      throw dbError;
+    }
+  }
+
+  /**
+   * シリーズの表示順序を更新する
+   */
+  async updateSeriesDisplayOrder(updatedSeries: { id: string; displayOrder: number }[]) {
+    try {
+      console.log('updateSeriesDisplayOrder called with:', updatedSeries);
+
+      if (updatedSeries.length === 0) {
+        console.log('No series to update, returning early');
+        return;
+      }
+
+      // 各シリーズの表示順序を個別に更新（シンプル実装）
+      for (const { id, displayOrder } of updatedSeries) {
+        console.log(`Updating series ${id} to displayOrder ${displayOrder}`);
+        await db
+          .update(schema.series)
+          .set({
+            displayOrder,
+            // updatedAt: new Date(),
+          })
+          .where(eq(schema.series.id, id));
+      }
+
+      console.log('All series display orders updated successfully');
+      return true;
+    } catch (error) {
+      const dbError = createDatabaseError(
+        `Failed to update series display order: ${error}`,
+        'シリーズ表示順序の更新に失敗しました'
       );
       throw dbError;
     }
