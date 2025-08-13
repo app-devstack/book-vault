@@ -78,6 +78,7 @@ export default function RegisterDetailModal({
     author: option.author,
     description: null,
     thumbnail: null,
+    displayOrder: 0,
     googleBooksSeriesId: null,
     createdAt: new Date(),
     updatedAt: new Date(),

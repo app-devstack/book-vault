@@ -11,6 +11,7 @@ interface SeriesCardProps {
   seriesBooks: Book[];
   stats: SeriesStats;
   onPress: () => void;
+  isDragMode?: boolean;
 }
 
 export const SeriesCard: React.FC<SeriesCardProps> = ({
@@ -18,6 +19,7 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
   seriesBooks,
   stats,
   onPress,
+  isDragMode = false,
 }) => {
   const latestBook =
     seriesBooks.length > 0
@@ -27,7 +29,12 @@ export const SeriesCard: React.FC<SeriesCardProps> = ({
       : null;
 
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={isDragMode ? undefined : onPress}
+      activeOpacity={isDragMode ? 1 : 0.8}
+      disabled={isDragMode}
+    >
       <View style={styles.content}>
         <Image
           source={{ uri: latestBook?.imageUrl || '' }}
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.card,
     borderRadius: BORDER_RADIUS.xlarge,
-    marginBottom: 16,
+    // marginBottom: 16,
     borderWidth: 1,
     borderColor: COLORS.border,
     ...SHADOWS.medium,

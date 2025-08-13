@@ -1,19 +1,81 @@
-import { COLORS, GRADIENTS, SHADOWS } from '@/utils/colors';
-import { BORDER_RADIUS, FONT_SIZES, SCREEN_PADDING } from '@/utils/constants';
-import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { COLORS } from '@/utils/colors';
+import { FONT_SIZES } from '@/utils/constants';
+import React, { useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import EmptyBooksState from '@/features/home/components/EmptyBooksState';
-import { SeriesCard } from '@/features/home/components/SeriesCard';
+import { SeriesEditMode } from '@/features/home/components/SeriesEditMode';
+import { SeriesList } from '@/features/home/components/SeriesList';
+import { useUpdateSeriesOrder } from '@/hooks/mutations/useUpdateSeriesOrder';
 import { useHomeScreen } from '@/hooks/screens/useHomeScreen';
 import { router } from 'expo-router';
+import { SeriesWithBooks } from './types';
 
 export const HomeScreen = () => {
   const { seriesedBooks, getSeriesStats, totalStats, isLoading, error } = useHomeScreen();
+  const { mutate: updateOrder, isPending: isUpdating } = useUpdateSeriesOrder();
+
+  const [isEditMode, setIsEditMode] = useState(false);
+  // 編集中の一時的な順序のみを管理（ドラッグ中の状態）
+  const [tempDragOrder, setTempDragOrder] = useState<SeriesWithBooks[]>([]);
 
   const onSeriesPress = (seriesId: string) => {
-    router.push(`/series/${seriesId}`);
+    if (!isEditMode) {
+      router.push(`/series/${seriesId}`);
+    }
+  };
+
+  // 編集モード開始：現在の順序をドラッグ用の一時状態にコピー
+  const handleEditPress = () => {
+    setTempDragOrder(seriesedBooks || []);
+    setIsEditMode(true);
+  };
+
+  // ドラッグ終了：一時的な順序を更新（UIのみ）
+  const onDragEnd = ({ data }: { data: SeriesWithBooks[] }) => {
+    console.log(
+      'Drag ended, new order:',
+      data.map((item, index) => ({ title: item.title, index }))
+    );
+    setTempDragOrder(data);
+  };
+
+  // 保存：楽観的更新でUI即座に反映、エラー時は自動ロールバック
+  const onSave = () => {
+    const updatedOrder = tempDragOrder.map((item, index) => ({
+      id: item.id,
+      displayOrder: index,
+    }));
+
+    console.log('Saving series order:', updatedOrder);
+
+    // エラー時の復帰用にコピーを保存
+    const tempOrderBackup = [...tempDragOrder];
+
+    // 編集モード終了（楽観的更新でUIは既に反映済み）
+    setIsEditMode(false);
+    setTempDragOrder([]); // 一時状態をクリア
+
+    // 実際のデータベース更新を実行
+    updateOrder(updatedOrder, {
+      onSuccess: () => {
+        console.log('Series order saved successfully');
+        // 楽観的更新により既にUIは反映済み
+      },
+      onError: (error) => {
+        console.error('Failed to save series order:', error);
+        // エラー時は楽観的更新がロールバックを処理
+        // 編集モードに戻す
+        setIsEditMode(true);
+        setTempDragOrder(tempOrderBackup);
+      },
+    });
+  };
+
+  // キャンセル：編集モード終了、一時状態破棄
+  const onCancel = () => {
+    setTempDragOrder([]);
+    setIsEditMode(false);
   };
 
   // ローディング状態
@@ -40,43 +102,27 @@ export const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ListHeaderComponent={() => (
-          <LinearGradient
-            colors={GRADIENTS.primary}
-            style={styles.headerCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <Text style={styles.headerTitle}>📚 本ライブラリ</Text>
-            <Text style={styles.headerSubtitle}>
-              {totalStats.seriesCount}シリーズ • {totalStats.bookCount}冊
-            </Text>
-            {/* <View style={styles.totalPriceContainer}>
-                    <Text style={styles.totalPriceText}>
-                      総額: ¥{totalStats.totalPrice.toLocaleString()}
-                    </Text>
-                  </View> */}
-          </LinearGradient>
-        )}
-        data={seriesedBooks}
-        renderItem={({ item: seriese }) => {
-          const stats = getSeriesStats(seriese.books);
-          // if (seriese.books.length === 0) return null;
-
-          return (
-            <SeriesCard
-              seriesTitle={seriese.title}
-              seriesBooks={seriese.books}
-              stats={stats}
-              onPress={() => onSeriesPress(seriese.id)}
-            />
-          );
-        }}
-        keyExtractor={(seriese) => seriese.id}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-      />
+      {isEditMode ? (
+        // 編集モード: 並び替え専用画面
+        <SeriesEditMode
+          data={tempDragOrder} // 一時的なドラッグ順序を使用
+          onDragEnd={onDragEnd}
+          getSeriesStats={getSeriesStats}
+          onCancel={onCancel}
+          onSave={onSave}
+          isUpdating={isUpdating}
+        />
+      ) : (
+        // 通常モード: 閲覧・情報豊富な画面
+        <SeriesList
+          data={seriesedBooks} // 楽観的更新でリアルタイム反映済み
+          onSeriesPress={onSeriesPress}
+          getSeriesStats={getSeriesStats}
+          seriesCount={totalStats.seriesCount}
+          bookCount={totalStats.bookCount}
+          onEditPress={handleEditPress}
+        />
+      )}
     </View>
   );
 };
@@ -85,40 +131,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-  },
-  listContent: {
-    padding: SCREEN_PADDING,
-    paddingBottom: 20,
-  },
-
-  headerCard: {
-    borderRadius: BORDER_RADIUS.xlarge + 4,
-    padding: 24,
-    marginBottom: 24,
-    alignItems: 'center',
-    ...SHADOWS.large,
-  },
-  headerTitle: {
-    fontSize: FONT_SIZES.hero,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: FONT_SIZES.large,
-    color: 'rgba(255,255,255,0.9)',
-    marginBottom: 12,
-  },
-  totalPriceContainer: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: BORDER_RADIUS.medium,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
-  totalPriceText: {
-    fontSize: FONT_SIZES.medium,
-    color: 'white',
-    fontWeight: 'bold',
   },
   centerContainer: {
     justifyContent: 'center',
