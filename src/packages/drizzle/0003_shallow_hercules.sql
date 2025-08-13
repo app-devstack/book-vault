@@ -1,0 +1,1 @@
+ALTER TABLE `series` ADD `display_order` integer DEFAULT 0 NOT NULL;

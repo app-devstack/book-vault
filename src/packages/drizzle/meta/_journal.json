@@ -22,6 +22,13 @@
       "when": 1749831067664,
       "tag": "0002_fancy_ronan",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1754961147229,
+      "tag": "0003_shallow_hercules",
+      "breakpoints": true
     }
   ]
 }
