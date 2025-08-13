@@ -3,6 +3,7 @@ import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 import React from 'react';
 import { Alert, Button, StyleSheet, View } from 'react-native';
+import { DATABASE_NAME } from '..';
 
 export default function ResetButton() {
   // 開発環境でのみ表示
@@ -10,7 +11,7 @@ export default function ResetButton() {
 
   const completeReset = async () => {
     try {
-      const dbName = 'your-database.db'; // 実際のDB名
+      const dbName = DATABASE_NAME;
 
       console.log('🔄 データベースリセット開始...');
 
