@@ -105,33 +105,6 @@ class SeriesService {
     return item;
   }
 
-  async getSeriesOptions() {
-    const items = await db.query.series.findMany({
-      orderBy: (series, { asc }) => [asc(series.title)],
-      columns: {
-        id: true,
-        title: true,
-        author: true,
-        displayOrder: true, // 追加
-      },
-      with: {
-        books: {
-          columns: {
-            id: true,
-          },
-        },
-      },
-    });
-
-    return items.map((series) => ({
-      id: series.id,
-      title: series.title,
-      author: series.author,
-      bookCount: series.books.length,
-      displayOrder: series.displayOrder, // 追加
-    }));
-  }
-
   async updateSeries(seriesId: string, updates: Partial<NewSeries>) {
     try {
       // タイトルがある場合はトリムする

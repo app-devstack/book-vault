@@ -2,7 +2,7 @@ import { NewBook } from '@/db/types';
 import { useAddBook } from '@/hooks/mutations/useAddBook';
 import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
 import { useBookSearch } from '@/hooks/queries/useBookSearch';
-import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
+import { useSeriesList } from '@/hooks/queries/useSeriesList';
 import { BookSearchResult } from '@/types/book';
 import { useDebounce } from '@uidotdev/usehooks';
 import { useLocalSearchParams } from 'expo-router';
@@ -34,7 +34,7 @@ export const useBookRegistration = () => {
 
   // クエリとミューテーション
   const searchQuery = useBookSearch(debouncedSearchQuery);
-  const seriesOptionsQuery = useSeriesOptions();
+  const seriesQuery = useSeriesList();
   const addBookMutation = useAddBook();
   const createSeriesMutation = useCreateSeries();
 
@@ -120,7 +120,7 @@ export const useBookRegistration = () => {
     selectBook,
 
     // シリーズ関連
-    seriesOptions: seriesOptionsQuery.data || [],
+    series: seriesQuery.data || [],
     selectedSeriesId: formData.selectedSeriesId,
     selectSeries,
     createSeries,
@@ -135,6 +135,6 @@ export const useBookRegistration = () => {
     isRegistering: addBookMutation.isPending,
 
     // エラー状態
-    error: searchQuery.error || seriesOptionsQuery.error,
+    error: searchQuery.error || seriesQuery.error,
   };
 };

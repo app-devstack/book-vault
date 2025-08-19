@@ -3,7 +3,7 @@ import Badge from '@/components/ui/Badge';
 import { NewSeries } from '@/db/types';
 import { SeriesSelector } from '@/features/register/components/SeriesSelector';
 import { useCreateSeries } from '@/hooks/mutations/useCreateSeries';
-import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
+import { useSeriesList } from '@/hooks/queries/useSeriesList';
 import { useSafeState } from '@/hooks/useSafeState';
 import { useSharedUrl } from '@/hooks/useSharedUrl';
 import { BookSearchResult } from '@/types/book';
@@ -66,13 +66,13 @@ export default function RegisterDetailModal({
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const { safeSetState } = useSafeState();
 
-  const seriesOptionsQuery = useSeriesOptions();
+  const seriesQuery = useSeriesList();
   const createSeriesMutation = useCreateSeries();
 
   const { sharedUrl, isLoading: isSharedUrlLoading, clearSharedUrl } = useSharedUrl();
 
   // Convert SeriesOption[] to Series[] for SeriesSelector
-  const seriesedBooks = (seriesOptionsQuery.data || []).map((option) => ({
+  const seriesedBooks = (seriesQuery.data || []).map((option) => ({
     id: option.id,
     title: option.title,
     author: option.author,

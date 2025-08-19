@@ -1,7 +1,7 @@
 import { Text } from '@/components/Text';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { BookWithRelations } from '@/db/types';
-import { useSeriesOptions } from '@/hooks/queries/useSeriesOptions';
+import { useSeriesList } from '@/hooks/queries/useSeriesList';
 import { COLORS, SHADOWS } from '@/utils/colors';
 import { BORDER_RADIUS, FONT_SIZES } from '@/utils/constants';
 import React, { useCallback, useMemo } from 'react';
@@ -59,7 +59,7 @@ const formFieldConfigs: Record<keyof Omit<EditBookFormSchema, 'seriesId'>, FormF
 };
 
 export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefined }) => {
-  const { data: seriesOptions } = useSeriesOptions();
+  const { data: series } = useSeriesList();
 
   // カスタムフックの利用
   const form = useEditBookForm(book);
@@ -74,12 +74,12 @@ export const EditBookForm = ({ book }: { book: BookWithRelations | null | undefi
   // メモ化された値
   const selectItems = useMemo(() => {
     return (
-      seriesOptions?.map((series) => ({
+      series?.map((series) => ({
         value: series.id,
         label: series.title,
       })) ?? []
     );
-  }, [seriesOptions]);
+  }, [series]);
 
   // レンダリングヘルパー
   const renderTextInputField = useCallback(
