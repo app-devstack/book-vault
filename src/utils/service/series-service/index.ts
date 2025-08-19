@@ -2,7 +2,7 @@ import db from '@/db';
 import schema from '@/db/schema';
 import { NewSeries } from '@/db/types';
 import { createDatabaseError } from '@/types/errors';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 class SeriesService {
   // constructor(parameters) {}
@@ -156,19 +156,44 @@ class SeriesService {
         return;
       }
 
-      // 各シリーズの表示順序を個別に更新（シンプル実装）
-      for (const { id, displayOrder } of updatedSeries) {
-        console.log(`Updating series ${id} to displayOrder ${displayOrder}`);
-        await db
-          .update(schema.series)
-          .set({
-            displayOrder,
-            // updatedAt: new Date(),
-          })
-          .where(eq(schema.series.id, id));
+      // 現在のdisplayOrderを全件取得
+      const currentSeries = await db
+        .select({
+          id: schema.series.id,
+          displayOrder: schema.series.displayOrder,
+        })
+        .from(schema.series);
+
+      // 現在の値とのdiffを取得（変更があったもののみ）
+      const currentOrderMap = new Map(currentSeries.map((s) => [s.id, s.displayOrder]));
+
+      const changedSeries = updatedSeries.filter(
+        (updated) => currentOrderMap.get(updated.id) !== updated.displayOrder
+      );
+
+      if (changedSeries.length === 0) {
+        console.log('No changes detected, skipping database update');
+        return true;
       }
 
-      console.log('All series display orders updated successfully');
+      console.log(`Updating ${changedSeries.length} out of ${updatedSeries.length} series`);
+
+      // VALUES句とJOINを使った一括更新（CASE文よりも効率的）
+      const valuesClause = changedSeries.map((s) => `('${s.id}', ${s.displayOrder})`).join(', ');
+
+      /*
+      シリーズの一括更新を行うSQL文
+      ※現状では、drizzleがVALUES句を使った一括更新をサポートしていないため、直接SQLを実行している
+    */
+      db.run(
+        sql.raw(`
+      UPDATE series
+      SET displayOrder = new_values.display_order
+      FROM (VALUES ${valuesClause}) AS new_values(id, display_order)
+      WHERE series.id = new_values.id
+    `));
+
+      console.log('Series display orders updated successfully');
       return true;
     } catch (error) {
       const dbError = createDatabaseError(
