@@ -1,15 +1,23 @@
 import { BookSearchResult } from '@/types/book';
+import { QUERY_KEYS, QUERY_OPTIONS } from '@/utils/constants/query';
 import { transformBookSearchItem } from '@/utils/googleBooks';
 import { GoogleBooksResponse } from '@/utils/googleBooks/types';
-import { QUERY_KEYS, QUERY_OPTIONS } from '@/utils/constants/query';
 import { useQuery } from '@tanstack/react-query';
 
 const fetchBooks = async (query: string): Promise<GoogleBooksResponse> => {
-  const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
-      query
-    )}&langRestrict=ja`
-  );
+  // const encodedQuery = encodeURIComponent(query);
+  const baseUrl = 'https://www.googleapis.com/books/v1/volumes';
+  const params = {
+    q: `intitle:${query}`,
+    langRestrict: 'ja',
+    maxResults: '20',
+  };
+
+  const searchParams = Object.entries(params)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+
+  const response = await fetch(`${baseUrl}?${searchParams}`);
   if (!response.ok) {
     throw new Error('データの取得に失敗しました');
   }
@@ -37,6 +45,32 @@ export const useBookSearch = (query: string) => {
     },
     ...QUERY_OPTIONS.SEARCH,
     enabled: query.length >= 2,
-    select: (data: BookSearchResult[]) => data.filter((book) => book.title && book.author),
+    select: sortByMatchScore(query),
   });
+};
+
+const sortByMatchScore = (query: string) => (data: BookSearchResult[]) =>
+  data
+    .filter((book) => book.title && book.author)
+    .sort((a, b) => {
+      const scoreA = calculateMatchScore(query, a.title);
+      const scoreB = calculateMatchScore(query, b.title);
+      return scoreB - scoreA;
+    });
+
+/**
+ * query文字列がtitle文字列にどの程度含まれているかの割合を計算
+ */
+const calculateMatchScore = (query: string, title: string): number => {
+  const queryLower = query.toLowerCase();
+  const titleLower = title.toLowerCase();
+
+  if (!queryLower || !titleLower) return 0;
+
+  // query文字列がタイトルに含まれている場合の含有率を計算
+  if (titleLower.includes(queryLower)) {
+    return queryLower.length / titleLower.length;
+  }
+
+  return 0;
 };
