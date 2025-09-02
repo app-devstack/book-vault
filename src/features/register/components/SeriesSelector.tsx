@@ -17,6 +17,7 @@ interface SeriesSelectorProps {
   placeholder?: string;
   initialTitle?: string;
   initialAuthor?: string;
+  lastSelectedSeriesId?: string | null;
 }
 
 export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
@@ -27,13 +28,20 @@ export const SeriesSelector: React.FC<SeriesSelectorProps> = ({
   placeholder = 'シリーズを選択',
   initialTitle = '',
   initialAuthor = '',
+  lastSelectedSeriesId,
 }) => {
   const [series, setSeries] = useState<Series[]>(seriesProps);
 
   useEffect(() => {
-    // propsで渡されたシリーズデータを使用し、重複取得を避ける
-    setSeries(seriesProps);
-  }, [seriesProps]);
+    // 前回選択値を一番上に配置するソート処理
+    const sortedSeries = lastSelectedSeriesId 
+      ? [
+          ...seriesProps.filter(s => s.id === lastSelectedSeriesId),
+          ...seriesProps.filter(s => s.id !== lastSelectedSeriesId)
+        ]
+      : seriesProps;
+    setSeries(sortedSeries);
+  }, [seriesProps, lastSelectedSeriesId]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCreationModalVisible, setIsCreationModalVisible] = useState(false);

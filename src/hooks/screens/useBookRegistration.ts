@@ -13,6 +13,7 @@ interface BookRegistrationForm {
   selectedBook: BookSearchResult | null;
   selectedSeriesId: string | null;
   targetURL: string;
+  lastSelectedSeriesId: string | null;
 }
 
 const SEARCH_DEBOUNCE_DELAY = 500;
@@ -27,6 +28,7 @@ export const useBookRegistration = () => {
     selectedBook: null,
     selectedSeriesId: null,
     targetURL: '',
+    lastSelectedSeriesId: null,
   });
 
   // デバウンスされた検索クエリ
@@ -59,7 +61,11 @@ export const useBookRegistration = () => {
 
   // シリーズ選択
   const selectSeries = useCallback((seriesId: string | null) => {
-    setFormData((prev) => ({ ...prev, selectedSeriesId: seriesId }));
+    setFormData((prev) => ({
+      ...prev,
+      selectedSeriesId: seriesId,
+      lastSelectedSeriesId: seriesId,
+    }));
   }, []);
 
   // URL設定
@@ -93,12 +99,13 @@ export const useBookRegistration = () => {
     await addBookMutation.mutateAsync(bookData);
 
     // フォームリセット
-    setFormData({
+    setFormData((prev) => ({
       searchQuery: '',
       selectedBook: null,
       selectedSeriesId: null,
       targetURL: '',
-    });
+      lastSelectedSeriesId: prev.lastSelectedSeriesId,
+    }));
   }, [formData, addBookMutation]);
 
   // 検索結果クリア
@@ -136,5 +143,8 @@ export const useBookRegistration = () => {
 
     // エラー状態
     error: searchQuery.error || seriesQuery.error,
+
+    // 前回選択シリーズ
+    lastSelectedSeriesId: formData.lastSelectedSeriesId,
   };
 };

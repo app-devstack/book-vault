@@ -25,6 +25,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useRegisterContext } from './providers/registerProvider';
 
 // アニメーション用定数
 const ANIMATION_CONFIG = {
@@ -68,6 +69,7 @@ export default function RegisterDetailModal({
 
   const seriesQuery = useSeriesList();
   const createSeriesMutation = useCreateSeries();
+  const { lastSelectedSeriesId } = useRegisterContext();
 
   const { sharedUrl, isLoading: isSharedUrlLoading, clearSharedUrl } = useSharedUrl();
 
@@ -257,6 +259,7 @@ export default function RegisterDetailModal({
               placeholder="既存シリーズから選択 または 新規作成"
               initialTitle={book?.title ? book.title.split(' ')[0] : ''}
               initialAuthor={book?.author || ''}
+              lastSelectedSeriesId={lastSelectedSeriesId}
             />
           </View>
 
