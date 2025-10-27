@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import RegisterGmailContents from '@/features/register/components/registerGmailContents';
+import RegisterManualContents from '@/features/register/components/registerManualContents';
 import RegisterSearchContents from '@/features/register/components/registerSearchContents';
 import { COLORS } from '@/utils/colors';
 import { SCREEN_PADDING } from '@/utils/constants';
@@ -7,7 +7,7 @@ import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function RegisterScreen() {
-  const GMAIL_TAB = 'gmail';
+  const MANUAL_TAB = 'manual';
   const SEARCH_TAB = 'search';
 
   const defaultValue = SEARCH_TAB;
@@ -18,7 +18,7 @@ export default function RegisterScreen() {
       <View style={styles.tabSelector}>
         <Tabs defaultValue={defaultValue}>
           <TabsList>
-            <TabsTrigger value={GMAIL_TAB}>📧 Gmail連携</TabsTrigger>
+            <TabsTrigger value={MANUAL_TAB}>🐛 手動登録</TabsTrigger>
             <TabsTrigger value={SEARCH_TAB}>🔍 タイトル検索</TabsTrigger>
           </TabsList>
 
@@ -27,8 +27,8 @@ export default function RegisterScreen() {
             contentContainerStyle={styles.contentContainer}
             showsVerticalScrollIndicator={false}
           >
-            <TabsContent value={GMAIL_TAB}>
-              <RegisterGmailContents />
+            <TabsContent value={MANUAL_TAB}>
+              <RegisterManualContents />
             </TabsContent>
 
             {/* google本検索 */}
